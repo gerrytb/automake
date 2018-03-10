@@ -27,11 +27,11 @@ https://bugzilla.redhat.com/show_bug.cgi?id=1140725
  lib/install-sh | 21 ++++++++++++++-------
  1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/lib/install-sh b/lib/install-sh
-index 0360b79..c143b86 100755
---- a/lib/install-sh
-+++ b/lib/install-sh
-@@ -324,34 +324,41 @@ do
+Index: automake-1.16/lib/install-sh
+===================================================================
+--- automake-1.16.orig/lib/install-sh	2018-03-10 16:38:48.578075866 -0500
++++ automake-1.16/lib/install-sh	2018-03-10 16:38:48.550076195 -0500
+@@ -332,34 +332,41 @@
              # is incompatible with FreeBSD 'install' when (umask & 300) != 0.
              ;;
            *)

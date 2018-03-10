@@ -8,11 +8,11 @@ Debian systems.
  bin/automake.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/bin/automake.in b/bin/automake.in
-index d356336..b917d32 100644
---- a/bin/automake.in
-+++ b/bin/automake.in
-@@ -42,7 +42,7 @@ BEGIN
+Index: automake-1.16/bin/automake.in
+===================================================================
+--- automake-1.16.orig/bin/automake.in	2018-03-10 16:51:25.061272857 -0500
++++ automake-1.16/bin/automake.in	2018-03-10 16:51:25.029273230 -0500
+@@ -41,7 +41,7 @@
    # it turns up other systems need the same thing.  After all,
    # if SHELL is used, ./configure's SHELL is always better than
    # the user's SHELL (which may be something like tcsh).

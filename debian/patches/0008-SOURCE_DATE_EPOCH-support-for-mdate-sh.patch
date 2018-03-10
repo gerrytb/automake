@@ -8,11 +8,11 @@ matter what file mtime says.
  lib/mdate-sh | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/lib/mdate-sh b/lib/mdate-sh
-index 191653f..ff403da 100755
---- a/lib/mdate-sh
-+++ b/lib/mdate-sh
-@@ -88,6 +88,16 @@ fi
+Index: automake-1.16/lib/mdate-sh
+===================================================================
+--- automake-1.16.orig/lib/mdate-sh	2018-03-10 17:31:31.684014564 -0500
++++ automake-1.16/lib/mdate-sh	2018-03-10 17:31:31.652014961 -0500
+@@ -92,6 +92,16 @@
  
  save_arg1=$1
  

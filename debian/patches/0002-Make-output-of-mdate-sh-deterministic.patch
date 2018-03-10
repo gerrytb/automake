@@ -18,13 +18,13 @@ Signed-off-by: Reiner Herrmann <reiner at reiner-h.de>
  lib/mdate-sh | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/lib/mdate-sh b/lib/mdate-sh
-index f80075c..191653f 100755
---- a/lib/mdate-sh
-+++ b/lib/mdate-sh
-@@ -74,6 +74,10 @@ export LC_ALL
- LC_TIME=C
- export LC_TIME
+Index: automake-1.16/lib/mdate-sh
+===================================================================
+--- automake-1.16.orig/lib/mdate-sh	2018-03-10 16:38:26.482335289 -0500
++++ automake-1.16/lib/mdate-sh	2018-03-10 16:38:26.450335665 -0500
+@@ -78,6 +78,10 @@
+ TZ=UTC0
+ export TZ
  
 +# Use UTC to get reproducible result
 +TZ=UTC
