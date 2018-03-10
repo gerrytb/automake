@@ -15,8 +15,8 @@ index da0aa29..b6457aa 100644
  @c %**start of header
 -@setfilename automake.info
 -@settitle automake
-+@setfilename automake-1.15.info
-+@settitle automake-1.15
++@setfilename automake-1.16.info
++@settitle automake-1.16
  @documentencoding UTF-8
  @documentlanguage en
  @setchapternewpage off
@@ -25,15 +25,15 @@ index da0aa29..b6457aa 100644
  @dircategory Software development
  @direntry
 -* Automake: (automake).         Making GNU standards-compliant Makefiles.
-+* Automake: (automake-1.15).         Making GNU standards-compliant Makefiles.
++* Automake: (automake-1.16).         Making GNU standards-compliant Makefiles.
  @end direntry
  
  @dircategory Individual utilities
  @direntry
 -* aclocal-invocation: (automake)aclocal Invocation.   Generating aclocal.m4.
 -* automake-invocation: (automake)automake Invocation. Generating Makefile.in.
-+* aclocal-invocation: (automake-1.15)aclocal Invocation.  Generating aclocal.m4.
-+* automake-invocation: (automake-1.15)automake Invocation. Generating Makefile.in.
++* aclocal-invocation: (automake-1.16)aclocal Invocation.  Generating aclocal.m4.
++* automake-invocation: (automake-1.16)automake Invocation. Generating Makefile.in.
  @end direntry
  
  @titlepage

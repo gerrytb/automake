@@ -1,4 +1,4 @@
-Source: automake-1.15
+Source: automake-1.16
 Section: devel
 Priority: optional
 Maintainer: Eric Dorland <eric@debian.org>
@@ -43,7 +43,7 @@ Vcs-Browser: https://anonscm.debian.org/gitweb/?p=users/eric/automake-1.15.git
 Package: automake
 Architecture: all
 Multi-Arch: foreign
-Provides: automake-1.15, automaken
+Provides: automake-1.16, automaken
 Depends: autoconf (>= 2.65), autotools-dev (>= 20020320.1), ${misc:Depends}
 Suggests: autoconf-doc, gnu-standards
 Conflicts: automake (<< 1:1.4-p5-1),
@@ -62,6 +62,6 @@ Description: Tool for generating GNU Standards-compliant Makefiles
  (with rules being thrown in occasionally).  The generated
  `Makefile.in's are compliant with the GNU Makefile standards.
  .
- Automake 1.15 fails to work in a number of situations that Automake
- 1.4, 1.6, 1.7, 1.8, 1.9, 1.10, 1.11 and 1.14 did, so previous versions are
- available as separate packages.
+ Automake 1.16 fails to work in a number of situations that Automake
+ 1.4, 1.6, 1.7, 1.8, 1.9, 1.10, 1.11, 1.14, and 1.15 did, so some
+ previous versions are available as separate packages.
