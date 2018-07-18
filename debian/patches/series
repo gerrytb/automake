@@ -1,6 +1,5 @@
 0001-texi-rename.patch
 0002-Make-output-of-mdate-sh-deterministic.patch
-0003-install-sh-avoid-low-risk-race-in-tmp.patch
 0004-Use-system-help2man-if-it-is-available.patch
 0005-Disable-t-check12.sh-and-t-check12-w.sh.patch
 0006-Drop-SHELL.patch
