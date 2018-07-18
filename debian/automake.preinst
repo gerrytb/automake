@@ -21,7 +21,7 @@ if [ "$1" = "upgrade" ]; then
     fi
     if dpkg --compare-versions "$2" ge "1:1.15" && \
         dpkg --compare-versions "$2" lt "1:1.16"; then
-        update-alternatives --remove automake /usr/bin/automake-1.14
+        update-alternatives --remove automake /usr/bin/automake-1.15
     fi
 fi
 
