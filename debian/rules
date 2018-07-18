@@ -7,7 +7,7 @@ version=1.16
 infodir=doc
 
 %:
-	dh $@ --without autoreconf
+	dh $@ --without autoreconf --no-parallel
 
 ifeq ($(DEB_BUILD_PROFILE),stage1)
 MAKEINFO=true
