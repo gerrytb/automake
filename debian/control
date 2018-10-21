@@ -12,6 +12,7 @@ Build-Depends-Indep: autoconf (>= 2.65),
                      libtool-bin,
                      pkg-config,
                      texinfo (>= 4.9),
+Rules-Requires-Root: no
 Homepage: https://www.gnu.org/software/automake/
 Vcs-Git: https://salsa.debian.org/eric/automake-1.16.git
 Vcs-Browser: https://salsa.debian.org/eric/automake-1.16
