@@ -1,3 +1,5 @@
 #!/bin/sh -e
 
+trap "cp ./test-suite.log $AUTOPKGTEST_ARTIFACTS" EXIT
+
 make check
