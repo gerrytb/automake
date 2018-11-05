@@ -5,6 +5,7 @@ include /usr/share/dpkg/default.mk
 package=automake
 version=1.16
 infodir=doc
+source_date = $(shell date -d "@$(SOURCE_DATE_EPOCH)")
 
 %:
 	dh $@ --without autoreconf --no-parallel
@@ -20,6 +21,11 @@ override_dh_auto_test:
 override_dh_auto_configure:
 	./bootstrap
 	dh_auto_configure
+ifneq ($(DEB_BUILD_PROFILE),stage1)
+# Touch with SOURCE_DATE_EPOCH so version.texi is generated with a stable
+# date.
+	touch -d "$(source_date)" doc/automake.texi
+endif
 
 override_dh_auto_build:
 ifeq ($(DEB_BUILD_PROFILE),stage1)
