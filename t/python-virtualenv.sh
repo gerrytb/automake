@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2011-2018 Free Software Foundation, Inc.
+# Copyright (C) 2011-2020 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -124,10 +124,8 @@ check_install ()
 
   test -f      "$py_site"/am_foo.py
   py_installed "$py_site"/am_foo.pyc
-  py_installed "$py_site"/am_foo.pyo
   py_installed "$py_site"/am_virtenv/__init__.py
   py_installed "$py_site"/am_virtenv/__init__.pyc
-  py_installed "$py_site"/am_virtenv/__init__.pyo
   test -f      "$py_site"/libquux.a
   test -f      "$py_site"/am_virtenv/libzardoz.a
 }
@@ -138,10 +136,8 @@ check_uninstall ()
 
   test ! -e          "$py_site"/am_foo.py
   py_installed --not "$py_site"/am_foo.pyc
-  py_installed --not "$py_site"/am_foo.pyo
   test ! -e          "$py_site"/am_virtenv/__init__.py
   py_installed --not "$py_site"/am_virtenv/__init__.pyc
-  py_installed --not "$py_site"/am_virtenv/__init__.pyo
   test ! -e          "$py_site"/libquux.a
   test ! -e          "$py_site"/am_virtenv/libzardoz.a
 }
