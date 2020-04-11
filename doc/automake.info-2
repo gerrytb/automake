@@ -1,11 +1,11 @@
 This is automake.info, produced by makeinfo version 6.5 from
 automake.texi.
 
-This manual is for GNU Automake (version 1.16.1, 26 February 2018), a
+This manual is for GNU Automake (version 1.16.2, 1 February 2020), a
 program that creates GNU standards-compliant Makefiles from template
 files.
 
-   Copyright © 1995-2018 Free Software Foundation, Inc.
+   Copyright © 1995–2020 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -238,7 +238,7 @@ Note that the ‘dist-hook’ recipe shouldn’t assume that the regular files
 in the distribution directory are writable; this might not be the case
 if one is packaging from a read-only source tree, or when a ‘make
 distcheck’ is being done.  For similar reasons, the recipe shouldn’t
-assume that the subdirectories put into the distribution directory as
+assume that the subdirectories put into the distribution directory as an
 effect of having them listed in ‘EXTRA_DIST’ are writable.  So, if the
 ‘dist-hook’ recipe wants to modify the content of an existing file (or
 ‘EXTRA_DIST’ subdirectory) in the distribution directory, it should
@@ -283,8 +283,8 @@ takes the following steps:
      ‘srcdir’ and all its content made _read-only_;
    • runs the test suite (with ‘make check’) on this fresh build;
    • installs the package in a temporary directory (with ‘make
-     install’), and tries runs the test suite on the resulting
-     installation (with ‘make installcheck’);
+     install’), and runs the test suite on the resulting installation
+     (with ‘make installcheck’);
    • checks that the package can be correctly uninstalled (by ‘make
      uninstall’) and cleaned (by ‘make distclean’);
    • finally, makes another tarball to ensure the distribution is
@@ -295,7 +295,7 @@ note that the exact location and the exact structure of such a directory
 (where the read-only sources are placed, how the temporary build and
 install directories are named and how deeply they are nested, etc.)  is
 to be considered an implementation detail, which can change at any time;
-so do not reply on it.
+so do not rely on it.
 
 DISTCHECK_CONFIGURE_FLAGS
 -------------------------
@@ -316,8 +316,8 @@ general, you shouldn’t define ‘AM_DISTCHECK_CONFIGURE_FLAGS’.  However,
 there might be few scenarios in which the use of this variable is
 justified.  GNU ‘m4’ offers an example.  GNU ‘m4’ configures by default
 with its experimental and seldom used "changeword" feature disabled; so
-in its case it is useful to have ‘make distcheck’ run configure with the
-‘--with-changeword’ option, to ensure that the code for changeword
+in this case it is useful to have ‘make distcheck’ run configure with
+the ‘--with-changeword’ option, to ensure that the code for changeword
 support still compiles correctly.  GNU ‘m4’ also employs the
 ‘AM_DISTCHECK_CONFIGURE_FLAGS’ variable to stress-test the use of
 ‘--program-prefix=g’, since at one point the ‘m4’ build system had a bug
@@ -369,11 +369,11 @@ following definition instead:
 
    The above definition is not the default because it’s usually an error
 if your Makefiles cause some distributed files to be rebuilt when the
-user build the package.  (Think about the user missing the tool required
-to build the file; or if the required tool is built by your package,
-consider the cross-compilation case where it can’t be run.)  There is an
-entry in the FAQ about this (*note Errors with distclean::), make sure
-you read it before playing with ‘distcleancheck_listfiles’.
+user builds the package.  (Think about the user missing the tool
+required to build the file; or if the required tool is built by your
+package, consider the cross-compilation case where it can’t be run.)
+There is an entry in the FAQ about this (*note Errors with distclean::);
+make sure you read it before playing with ‘distcleancheck_listfiles’.
 
 distuninstallcheck
 ------------------
@@ -443,6 +443,16 @@ distributions in various formats.  Their targets are:
      corresponding functionality will be removed altogether in Automake
      2.0.
 
+‘dist-zstd’
+     Generate a ‘zstd’ tar archive of the distribution.  By default,
+     this rule makes ‘zstd’ use a compression option of ‘-19’.  To make
+     it use a different one, set the ‘ZSTD_OPT’ environment variable.
+     For example, run this command to use the default compression ratio,
+     but with a progress indicator: ‘make dist-zstd ZSTD_OPT=-19v’.
+     However, note that for compatibility with zstd itself, you may
+     instead set the ‘ZSTD_CLEVEL’ environment variable, in which case,
+     any ‘ZSTD_OPT’ setting is ignored.
+
    The rule ‘dist’ (and its historical synonym ‘dist-all’) will create
 archives in all the enabled formats (*note List of Automake options::
 for how to change this list).  By default, only the ‘dist-gzip’ target
@@ -494,7 +504,7 @@ constitutes its _testsuite_.
 
    A _test harness_ (also _testsuite harness_) is a program or software
 component that executes all (or part of) the defined test cases,
-analyzes their outcomes, and report or register these outcomes
+analyzes their outcomes, and reports or registers these outcomes
 appropriately.  Again, the details of how this is accomplished (and how
 the developer and user can influence it or interface with it) varies
 wildly, and we’ll attempt no precise definition.
@@ -509,7 +519,7 @@ Windows-specific feature makes no sense on a GNU/Linux system).  In this
 case, accordingly to the definition above, the tests can neither be
 considered passed nor failed; instead, they are _skipped_ – i.e., they
 are not run, or their result is anyway ignored for what concerns the
-count of failures an successes.  Skips are usually explicitly reported
+count of failures and successes.  Skips are usually explicitly reported
 though, so that the user will be aware that not all of the testsuite has
 really run.
 
@@ -525,7 +535,7 @@ special kind of failure called _unexpected pass_ (or _xpass_).
    Many testing environments and frameworks distinguish between test
 failures and hard errors.  As we’ve seen, a test failure happens when
 some invariant or expected behaviour of the software under test is not
-met.  An _hard error_ happens when e.g., the set-up of a test case
+met.  A _hard error_ happens when e.g., the set-up of a test case
 scenario fails, or when some other unexpected or highly undesirable
 condition is encountered (for example, the program under test
 experiences a segmentation fault).
@@ -571,7 +581,7 @@ protocol-less tests, since we cover test protocols in a later section
 
    When no test protocol is in use, an exit status of 0 from a test
 script will denote a success, an exit status of 77 a skipped test, an
-exit status of 99 an hard error, and any other exit status will denote a
+exit status of 99 a hard error, and any other exit status will denote a
 failure.
 
    You may define the variable ‘XFAIL_TESTS’ to a list of tests (usually
@@ -594,7 +604,7 @@ number, identifier and/or brief description specific for the single test
 case is expected to be printed in addition to the name of the test
 script.  The possible results (whose meanings should be clear from the
 previous *note Generalities about Testing::) are ‘PASS’, ‘FAIL’, ‘SKIP’,
-‘XFAIL’, ‘XPASS’ and ‘ERROR’.  Here is an example of output from an
+‘XFAIL’, ‘XPASS’ and ‘ERROR’.  Here is an example of output from a
 hypothetical testsuite that uses both plain and TAP tests:
      PASS: foo.sh
      PASS: zardoz.tap 1 - Daemon started
@@ -668,7 +678,7 @@ Serial Test Harness::).
 
    Automake ensures that each file listed in ‘TESTS’ is built before it
 is run; you can list both source and derived programs (or scripts) in
-‘TESTS’; the generated rule will look both in ‘srcdir’ and ‘.’.  For
+‘TESTS’; the generated rule will look both in ‘srcdir’ and ’‘..’’.  For
 instance, you might want to run a C program as a test.  To do this you
 would list its name in ‘TESTS’ and also in ‘check_PROGRAMS’, and then
 specify it as you would any other program.
@@ -690,7 +700,7 @@ File: automake.info,  Node: Serial Test Harness,  Next: Parallel Test Harness,  
 
 First, note that today the use of this harness is strongly discouraged
 in favour of the parallel test harness (*note Parallel Test Harness::).
-Still, there are _few_ situations when the advantages offered by the
+Still, there are a _few_ situations when the advantages offered by the
 parallel harness are irrelevant, and when test concurrency can even
 cause tricky problems.  In those cases, it might make sense to still use
 the serial harness, for simplicity and reliability (we still suggest
@@ -718,9 +728,9 @@ more elegant way to achieve the same effect, with the further benefit of
 freeing the ‘TESTS_ENVIRONMENT’ variable for the user (*note Parallel
 Test Harness::).
 
-   Another, less serious limit of the serial harness is that it doesn’t
-really distinguish between simple failures and hard errors; this is due
-to historical reasons only, and might be fixed in future Automake
+   Another, less serious limitation of the serial harness is that it
+doesn’t really distinguish between simple failures and hard errors; this
+is due to historical reasons only, and might be fixed in future Automake
 versions.
 
 
@@ -822,9 +832,9 @@ several ways to limit the set of tests that are run:
      Note however that the command above will unconditionally overwrite
      the ‘test-suite.log’ file, thus clobbering the recorded results of
      any previous testsuite run.  This might be undesirable for packages
-     whose testsuite takes long time to execute.  Luckily, this problem
-     can easily be avoided by overriding also ‘TEST_SUITE_LOG’ at
-     runtime; for example,
+     whose testsuite takes a long time to execute.  Luckily, this
+     problem can easily be avoided by also overriding ‘TEST_SUITE_LOG’
+     at runtime; for example,
 
           env TEST_SUITE_LOG=partial.log TESTS="..." make -e check
 
@@ -883,7 +893,7 @@ testing during development.  To further speed up the edit-compile-test
 cycle, it may even be useful to specify compiled programs in
 ‘EXTRA_PROGRAMS’ instead of with ‘check_PROGRAMS’, as the former allows
 intertwined compilation and test execution (but note that
-‘EXTRA_PROGRAMS’ are not cleaned automatically, *note Uniform::).
+‘EXTRA_PROGRAMS’ are not cleaned automatically; *note Uniform::).
 
    The variables ‘TESTS’ and ‘XFAIL_TESTS’ may contain conditional parts
 as well as configure substitutions.  In the latter case, however,
@@ -942,9 +952,9 @@ and analyzed is left to the individual drivers.  Some drivers might only
 consider the test script exit status (this is done for example by the
 default test driver used by the parallel test harness, described in the
 previous section).  Other drivers might implement more complex and
-advanced test protocols, which might require them to parse and
-interpreter the output emitted by the test script they’re running
-(examples of such protocols are TAP and SubUnit).
+advanced test protocols, which might require them to parse and interpret
+the output emitted by the test script they’re running (examples of such
+protocols are TAP and SubUnit).
 
    It’s very important to note that, even when using custom test
 drivers, most of the infrastructure described in the previous section
@@ -1009,7 +1019,7 @@ in the future, to accommodate for new features or to satisfy additional
 portability requirements.
 
    The main characteristic of these APIs is that they are designed to
-share as much infrastructure, semantics, and implementation details as
+share as much infrastructure, semantics, and implementation detail as
 possible with the parallel test harness and its default driver.
 
 * Menu:
@@ -1130,9 +1140,9 @@ in the future.  The list of currently recognized metadata follows.
      Currently, the value of this field is needed only to be reported
      (more or less verbatim) in the generated global log file
      ‘$(TEST_SUITE_LOG)’, so it’s quite free-form.  For example, a test
-     script which run 10 test cases, 6 of which pass and 4 of which are
+     script which runs 10 test cases, 6 of which pass and 4 of which are
      skipped, could reasonably have a ‘PASS/SKIP’ value for this field,
-     while a test script which run 19 successful tests and one failed
+     while a test script which runs 19 successful tests and one failed
      test could have an ‘ALMOST PASSED’ value.  What happens when two or
      more ‘:test-global-result:’ fields are present in the same ‘.trs’
      file is undefined behaviour.
@@ -1151,7 +1161,7 @@ lines:
 Then the corresponding test script will be re-run by ‘make check’, will
 contribute with _five_ test results to the testsuite summary (three of
 these tests being successful, one failed, and one skipped), and the
-content of the corresponding ‘.log’ file will _not_ be copied in the
+content of the corresponding ‘.log’ file will _not_ be copied into the
 global log file ‘test-suite.log’.
 
 
@@ -1209,11 +1219,10 @@ this is accomplished can vary among different test harnesses.  The
 Automake harness will present the results on the console in the usual
 fashion (*note Testsuite progress on console::), and will use the ‘.trs’
 files (*note Basics of test metadata::) to store the test results and
-related metadata.  Apart from that, it will try to remain as much
-compatible as possible with pre-existing and widespread utilities, such
-as the ‘prove’ utility
-(http://search.cpan.org/~andya/Test-Harness/bin/prove), at least for the
-simpler usages.
+related metadata.  Apart from that, it will try to remain as compatible
+as possible with pre-existing and widespread utilities, such as the
+‘prove’ utility (http://search.cpan.org/~andya/Test-Harness/bin/prove),
+at least for the simpler usages.
 
    TAP started its life as part of the test harness for Perl, but today
 it has been (mostly) standardized, and has various independent
@@ -1223,9 +1232,9 @@ protocol, please refer to the documentation of ‘Test::Harness::TAP’
 (http://search.cpan.org/~petdance/Test-Harness/lib/Test/Harness/TAP.pod).
 
    The most relevant real-world usages of TAP are obviously in the
-testsuites of ‘perl’ and of many perl modules.  Still, also other
-important third-party packages, such as ‘git’ (http://git-scm.com/), use
-TAP in their testsuite.
+testsuites of ‘perl’ and of many perl modules.  Still, other important
+third-party packages, such as ‘git’ (http://git-scm.com/), also use TAP
+in their testsuite.
 
 
 File: automake.info,  Node: Use TAP with the Automake test harness,  Next: Incompatibilities with other TAP parsers and drivers,  Prev: Introduction to TAP,  Up: Using the TAP test protocol
@@ -1243,8 +1252,8 @@ the awk program found by ‘AM_INIT_AUTOMAKE’ to run your TAP-producing
 tests.  See the example below for clarification.
 
    Apart from the options common to all the Automake test drivers (*note
-Command-line arguments for test drivers::), the ‘tap-driver.sh’ supports
-the following options, whose names are chosen for enhanced compatibility
+Command-line arguments for test drivers::), ‘tap-driver.sh’ supports the
+following options, whose names are chosen for enhanced compatibility
 with the ‘prove’ utility.
 
 ‘--ignore-exit’
@@ -1253,9 +1262,10 @@ with the ‘prove’ utility.
      exits with a non-zero status.  This option has effect also on
      non-zero exit statuses due to termination by a signal.
 ‘--comments’
-     Instruct the test driver to display TAP diagnostic (i.e., lines
+     Instruct the test driver to display TAP diagnostics (i.e., lines
      beginning with the ‘#’ character) in the testsuite progress output
-     too; by default, TAP diagnostic is only copied to the ‘.log’ file.
+     too; by default, TAP diagnostics are only copied to the ‘.log’
+     file.
 ‘--no-comments’
      Revert the effects of ‘--comments’.
 ‘--merge’
@@ -1270,13 +1280,13 @@ with the ‘prove’ utility.
 ‘--no-merge’
      Revert the effects of ‘--merge’.
 ‘--diagnostic-string=STRING’
-     Change the string that introduces TAP diagnostic from the default
+     Change the string that introduces TAP diagnostics from the default
      value of “‘#’” to ‘STRING’.  This can be useful if your TAP-based
      test scripts produce verbose output on which they have limited
      control (because, say, the output comes from other tools invoked in
      the scripts), and it might contain text that gets spuriously
-     interpreted as TAP diagnostic: such an issue can be solved by
-     redefining the string that activates TAP diagnostic to a value you
+     interpreted as TAP diagnostics: such an issue can be solved by
+     redefining the string that activates TAP diagnostics to a value you
      know won’t appear by chance in the tests’ output.  Note however
      that this feature is non-standard, as the “official” TAP protocol
      does not allow for such a customization; so don’t use it if you can
@@ -1360,7 +1370,7 @@ File: automake.info,  Node: Incompatibilities with other TAP parsers and drivers
 -----------------------------------------------------------
 
 For implementation or historical reasons, the TAP driver and harness as
-implemented by Automake have some minors incompatibilities with the
+implemented by Automake have some minor incompatibilities with the
 mainstream versions, which you should be aware of.
 
    • A ‘Bail out!’ directive doesn’t stop the whole testsuite, but only
@@ -1369,10 +1379,10 @@ mainstream versions, which you should be aware of.
      (and code sharing) with the “hard error” concept of the default
      testsuite driver.
    • The ‘version’ and ‘pragma’ directives are not supported.
-   • The ‘--diagnostic-string’ option of our driver allows to modify the
-     string that introduces TAP diagnostic from the default value of
-     “‘#’”.  The standard TAP protocol has currently no way to allow
-     this, so if you use it your diagnostic will be lost to more
+   • The ‘--diagnostic-string’ option of our driver allows modification
+     of the string that introduces TAP diagnostics from the default
+     value of “‘#’”.  The standard TAP protocol currently has no way to
+     allow this, so if you use it your diagnostic will be lost to more
      compliant tools like ‘prove’ and ‘Test::Harness’
    • And there are probably some other small and yet undiscovered
      incompatibilities, especially in corner cases or with rare usages.
@@ -1480,7 +1490,7 @@ automatic rebuilding rules are only enabled in maintainer mode.
 variables ‘CONFIGURE_DEPENDENCIES’ and ‘CONFIG_STATUS_DEPENDENCIES’ can
 be used to list these extra dependencies.  These variables should be
 defined in all ‘Makefile’s of the tree (because these two rebuild rules
-are output in all them), so it is safer and easier to ‘AC_SUBST’ them
+are output in all of them), so it is safer and easier to ‘AC_SUBST’ them
 from ‘configure.ac’.  For instance, the following statement will cause
 ‘configure’ to be rerun each time ‘version.sh’ is changed.
 
@@ -1576,7 +1586,7 @@ take precedence over those specified on the command line.
 level and warning categories.  As a general rule, strictness-implied
 warnings are overridden by those specified by explicit options.  For
 example, even if ‘portability’ warnings are disabled by default in
-‘foreign’ strictness, an usage like this will end up enabling them:
+‘foreign’ strictness, a usage like this will end up enabling them:
 
      AUTOMAKE_OPTIONS = -Wportability foreign
 
@@ -1625,6 +1635,9 @@ File: automake.info,  Node: List of Automake options,  Prev: Options generalitie
 ‘dist-zip’
      Hook ‘dist-zip’ to ‘dist’.
 
+‘dist-zstd’
+     Hook ‘dist-zstd’ to ‘dist’.
+
 ‘dist-shar’
      Hook ‘dist-shar’ to ‘dist’.  Use of this option is deprecated, as
      the ‘shar’ format is obsolescent and problematic.  Support for it
@@ -1640,7 +1653,7 @@ File: automake.info,  Node: List of Automake options,  Prev: Options generalitie
      ‘make dist’.  Such long file names are generally considered not to
      be portable in tarballs.  See the ‘tar-v7’ and ‘tar-ustar’ options
      below.  This option should be used in the top-level ‘Makefile.am’
-     or as an argument of ‘AM_INIT_AUTOMAKE’ in ‘configure.ac’, it will
+     or as an argument of ‘AM_INIT_AUTOMAKE’ in ‘configure.ac’; it will
      be ignored otherwise.  It will also be ignored in sub-packages of
      nested packages (*note Subpackages::).
 
@@ -1755,8 +1768,8 @@ File: automake.info,  Node: List of Automake options,  Prev: Options generalitie
      These three mutually exclusive options select the tar format to use
      when generating tarballs with ‘make dist’.  (The tar file created
      is then compressed according to the set of ‘no-dist-gzip’,
-     ‘dist-bzip2’, ‘dist-lzip’, ‘dist-xz’ and ‘dist-tarZ’ options in
-     use.)
+     ‘dist-bzip2’, ‘dist-lzip’, ‘dist-xz’, ‘dist-zstd’ and ‘dist-tarZ’
+     options in use.)
 
      These options must be passed as arguments to ‘AM_INIT_AUTOMAKE’
      (*note Macros::) because they can require additional configure
@@ -1767,7 +1780,7 @@ File: automake.info,  Node: List of Automake options,  Prev: Options generalitie
      default.  This antiquated format is understood by all tar
      implementations and supports file names with up to 99 characters.
      When given longer file names some tar implementations will diagnose
-     the problem while other will generate broken tarballs or use
+     the problem while others will generate broken tarballs or use
      non-portable extensions.  Furthermore, the V7 format cannot store
      empty directories.  When using this format, consider using the
      ‘filename-length-max=99’ option to catch file names too long.
@@ -1775,22 +1788,22 @@ File: automake.info,  Node: List of Automake options,  Prev: Options generalitie
      ‘tar-ustar’ selects the ustar format defined by POSIX 1003.1-1988.
      This format is old enough to be portable: As of 2018, it is
      supported by the native ‘tar’ command on GNU, FreeBSD, NetBSD,
-     OpenBSD, AIX, HP-UX, Solaris, at least.  It fully supports empty
-     directories.  It can store file names with up to 256 characters,
-     provided that the file name can be split at directory separator in
-     two parts, first of them being at most 155 bytes long.  So, in most
-     cases the maximum file name length will be shorter than 256
-     characters.
+     OpenBSD, AIX, HP-UX, and Solaris, at least.  It fully supports
+     empty directories.  It can store file names with up to 256
+     characters, provided that the file name can be split at directory
+     separator in two parts, first of them being at most 155 bytes long.
+     So, in most cases the maximum file name length will be shorter than
+     256 characters.
 
      ‘tar-pax’ selects the new pax interchange format defined by POSIX
      1003.1-2001.  It does not limit the length of file names.  However,
      this format is very young and should probably be restricted to
      packages that target only very modern platforms.  As of 2018, this
      format is supported by the native ‘tar’ command only on GNU,
-     FreeBSD, OpenBSD system; it is not supported by the native ‘tar’
-     command on NetBSD, AIX, HP-UX, Solaris.  There are moves to change
-     the pax format in an upward-compatible way, so this option may
-     refer to a more recent version in the future.
+     FreeBSD, and OpenBSD systems; it is not supported by the native
+     ‘tar’ command on NetBSD, AIX, HP-UX, or Solaris.  There are moves
+     to change the pax format in an upward-compatible way, so this
+     option may refer to a more recent version in the future.
 
      *Note Controlling the Archive Format: (tar)Formats, for further
      discussion about tar formats.
@@ -1801,8 +1814,8 @@ File: automake.info,  Node: List of Automake options,  Prev: Options generalitie
 
 VERSION
      A version number (e.g., ‘0.30’) can be specified.  If Automake is
-     not newer than the version specified, creation of the ‘Makefile.in’
-     will be suppressed.
+     not the same version or newer than the version specified, creation
+     of the ‘Makefile.in’ will be suppressed.
 
 ‘-WCATEGORY’ or ‘--warnings=CATEGORY’
      These options behave exactly like their command-line counterpart
@@ -1984,7 +1997,7 @@ File: automake.info,  Node: Conditionals,  Next: Silencing Make,  Prev: Include,
 20 Conditionals
 ***************
 
-Automake supports a simple type of conditionals.
+Automake supports a simple type of conditional.
 
    These conditionals are not the same as conditionals in GNU Make.
 Automake conditionals are checked at configure time by the ‘configure’
@@ -2013,8 +2026,8 @@ in the ‘configure.ac’ file (*note Macros::).
  -- Macro: AM_CONDITIONAL (CONDITIONAL, CONDITION)
      The conditional name, CONDITIONAL, should be a simple string
      starting with a letter and containing only letters, digits, and
-     underscores.  It must be different from ‘TRUE’ and ‘FALSE’ that are
-     reserved by Automake.
+     underscores.  It must be different from ‘TRUE’ and ‘FALSE’, which
+     are reserved by Automake.
 
      The shell CONDITION (suitable for use in a shell ‘if’ statement) is
      evaluated when ‘configure’ is run.  Note that you must arrange for
@@ -2193,9 +2206,9 @@ in this respect, providing more elaborate and flexible idioms.
      embodies an “all or nothing” strategy, i.e., either everything is
      silenced, or nothing is; this lack of granularity can sometimes be
      a fatal flaw.  Moreover, when the ‘-s’ flag is used, the ‘make’
-     output might turn out to be too much terse; in case of errors, the
-     user won’t be able to easily see what rule or command have caused
-     them, or even, in case of tools with poor error reporting, what the
+     output might turn out to be too terse; in case of errors, the user
+     won’t be able to easily see what rule or command have caused them,
+     or even, in case of tools with poor error reporting, what the
      errors were!
 
    • ‘make >/dev/null || make’
@@ -2208,7 +2221,7 @@ in this respect, providing more elaborate and flexible idioms.
 
      However, calling ‘make’ two times in a row might hide errors
      (especially intermittent ones), or subtly change the expected
-     semantic of the ‘make’ calls — things these which can clearly make
+     semantics of the ‘make’ calls — these things can clearly make
      debugging and error assessment very difficult.
 
    • ‘make --no-print-directory’
@@ -2344,7 +2357,7 @@ configure time, and cannot be overridden at make time.  Future versions
 of POSIX are likely to require nested variable expansion, so this minor
 limitation should go away with time.
 
-   To extend the silent mode to your own rules, you have few choices:
+   To extend the silent mode to your own rules, you have a few choices:
 
    • You can use the predefined variable ‘AM_V_GEN’ as a prefix to
      commands that should output a status line in silent mode, and
@@ -2354,7 +2367,7 @@ limitation should go away with time.
 
    • You can silence a recipe unconditionally with ‘@’, and then use the
      predefined variable ‘AM_V_P’ to know whether make is being run in
-     silent or verbose mode, adjust the verbose information your recipe
+     silent or verbose mode; adjust the verbose information your recipe
      displays accordingly:
 
           generate-headers:
@@ -2546,7 +2559,7 @@ in mind that the exec/data distinction is based on the installation
 directory, not on the primary used (*note The Two Parts of Install::).
 So a ‘foo_SCRIPTS’ will be installed by ‘install-data’, and a
 ‘barexec_SCRIPTS’ will be installed by ‘install-exec’.  You should
-define your hooks consequently.
+define your hooks accordingly.
 
 
 File: automake.info,  Node: Third-Party Makefiles,  Prev: Extending,  Up: Not Enough
@@ -2622,9 +2635,9 @@ third-party ‘Makefile’s support them.
 
    If you have ever used Gettext in a project, this is a good example of
 how third-party ‘Makefile’s can be used with Automake.  The ‘Makefile’s
-‘gettextize’ puts in the ‘po/’ and ‘intl/’ directories are handwritten
-‘Makefile’s that implement all of these targets.  That way they can be
-added to ‘SUBDIRS’ in Automake packages.
+that ‘gettextize’ puts in the ‘po/’ and ‘intl/’ directories are
+handwritten ‘Makefile’s that implement all of these targets.  That way
+they can be added to ‘SUBDIRS’ in Automake packages.
 
    Directories that are only listed in ‘DIST_SUBDIRS’ but not in
 ‘SUBDIRS’ need only the ‘distclean’, ‘maintainer-clean’, and ‘distdir’
@@ -2647,12 +2660,12 @@ support VPATH builds.  This in turns means that ‘make distcheck’ will
 not work, because it relies on VPATH builds.  Some people can live
 without this (actually, many Automake users have never heard of ‘make
 distcheck’).  Other people may prefer to revamp the existing ‘Makefile’s
-to support VPATH.  Doing so does not necessarily require Automake, only
+to support VPATH.  Doing so does not necessarily require Automake; only
 Autoconf is needed (*note Build Directories: (autoconf)Build
 Directories.).  The necessary substitutions: ‘@srcdir@’, ‘@top_srcdir@’,
 and ‘@top_builddir@’ are defined by ‘configure’ when it processes a
 ‘Makefile’ (*note Preset Output Variables: (autoconf)Preset Output
-Variables.), they are not computed by the Makefile like the
+Variables.); they are not computed by the Makefile like the
 aforementioned ‘$(distdir)’ and ‘$(top_distdir)’ variables.
 
    It is sometimes inconvenient to modify a third-party ‘Makefile’ to
@@ -2747,7 +2760,7 @@ package.
 This means you can install several versions of Automake in the same
 ‘$prefix’, and can select an arbitrary Automake version by running
 ‘automake-1.6’ or ‘automake-1.7’ without juggling with ‘$PATH’.
-Furthermore, ‘Makefile’’s generated by Automake 1.6 will use
+Furthermore, ‘Makefile’s generated by Automake 1.6 will use
 ‘automake-1.6’ explicitly in their rebuild rules.
 
    The number ‘1.6’ in ‘automake-1.6’ is Automake’s API version, not
@@ -2782,7 +2795,7 @@ the places where ‘-hook’’s are run), the command line interface of
 What is not in the API
 ======================
 
-Every undocumented variable, target, or command line option, is not part
+Every undocumented variable, target, or command line option is not part
 of the API.  You should avoid using them, as they could change from one
 version to the other (even in bug fix releases, if this helps to fix a
 bug).
@@ -2797,7 +2810,7 @@ File: automake.info,  Node: Upgrading,  Next: FAQ,  Prev: API Versioning,  Up: T
 26 Upgrading a Package to a Newer Automake Version
 **************************************************
 
-Automake maintains three kind of files in a package.
+Automake maintains three kinds of files in a package.
 
    • ‘aclocal.m4’
    • ‘Makefile.in’s
@@ -2813,7 +2826,7 @@ by ‘automake’, and rely on the definitions of the M4 macros put in
 regenerate all of them when upgrading to a newer Automake release.  The
 usual way to do that is
 
-     aclocal # with any option needed (such a -I m4)
+     aclocal # with any option needed (such as -I m4)
      autoconf
      automake --add-missing --force-missing
 
@@ -2825,7 +2838,7 @@ or more conveniently:
 overridden by new versions (*note automake Invocation::).
 
    It is important to regenerate all of these files each time Automake
-is upgraded, even between bug fixes releases.  For instance, it is not
+is upgraded, even between bug fix releases.  For instance, it is not
 unusual for a bug fix to involve changes to both the rules generated in
 ‘Makefile.in’ and the supporting M4 macros copied to ‘aclocal.m4’.
 
@@ -2876,13 +2889,14 @@ Packages made with Autoconf and Automake ship with some generated files
 like ‘configure’ or ‘Makefile.in’.  These files were generated on the
 developer’s machine and are distributed so that end-users do not have to
 install the maintainer tools required to rebuild them.  Other generated
-files like Lex scanners, Yacc parsers, or Info documentation, are
-usually distributed on similar grounds.
+files like Lex scanners, Yacc parsers, or Info documentation are usually
+distributed on similar grounds.
 
-   Automake output rules in ‘Makefile’s to rebuild these files.  For
-instance, ‘make’ will run ‘autoconf’ to rebuild ‘configure’ whenever
-‘configure.ac’ is changed.  This makes development safer by ensuring a
-‘configure’ is never out-of-date with respect to ‘configure.ac’.
+   Automake output generates rules in ‘Makefile’s to rebuild these
+files.  For instance, ‘make’ will run ‘autoconf’ to rebuild ‘configure’
+whenever ‘configure.ac’ is changed.  This makes development safer by
+ensuring a ‘configure’ is never out-of-date with respect to
+‘configure.ac’.
 
    As generated files shipped in packages are up-to-date, and because
 ‘tar’ preserves times-tamps, these rebuild rules are not triggered when
@@ -2900,7 +2914,7 @@ to that of the revision that is being checked out.
 
    However, during ‘cvs update’, files will have the date of the update,
 not the original timestamp of this revision.  This is meant to make sure
-that ‘make’ notices sources files have been updated.
+that ‘make’ notices that sources files have been updated.
 
    This timestamp shift is troublesome when both sources and generated
 files are kept under CVS.  Because CVS processes files in lexical order,
@@ -2920,15 +2934,15 @@ All Files in CVS
 ................
 
    • The CVS repository contains all distributed files so you know
-     exactly what is distributed, and you can checkout any prior version
-     entirely.
+     exactly what is distributed, and you can check out any prior
+     version entirely.
 
    • Maintainers can see how generated files evolve (for instance, you
      can see what happens to your ‘Makefile.in’s when you upgrade
      Automake and make sure they look OK).
 
-   • Users do not need the autotools to build a checkout of the project,
-     it works just like a released tarball.
+   • Users do not need Autotools to build a check-out of the project; it
+     works just like a released tarball.
 
    • If users use ‘cvs update’ to update their copy, instead of ‘cvs
      checkout’ to fetch a fresh one, timestamps will be inaccurate.
@@ -2945,12 +2959,12 @@ All Files in CVS
 
      Maintainers interested in keeping their package buildable from a
      CVS checkout even for those users that lack maintainer-specific
-     tools might want to provide an helper script (or to enhance their
+     tools might want to provide a helper script (or to enhance their
      existing bootstrap script) to fix the timestamps after a ‘cvs
      update’ or a ‘git checkout’, to prevent spurious rebuilds.  In case
      of a project committing the Autotools-generated files, as well as
-     the generated ‘.info’ files, such script might look something like
-     this:
+     the generated ‘.info’ files, such a script might look something
+     like this:
 
           #!/bin/sh
           # fix-timestamp.sh: prevents useless rebuilds after "cvs update"
@@ -2971,7 +2985,7 @@ All Files in CVS
           touch doc/*.info
 
    • In distributed development, developers are likely to have different
-     version of the maintainer tools installed.  In this case rebuilds
+     versions of the maintainer tools installed.  In this case rebuilds
      triggered by timestamp lossage will lead to spurious changes to
      generated files.  There are several solutions to this:
 
@@ -3009,7 +3023,7 @@ generated files in CVS, i.e., do not CVS-control files that are
 
    This way developers are not annoyed by changes to generated files.
 It does not matter if they all have different versions (assuming they
-are compatible, of course).  And finally, timestamps are not lost,
+are compatible, of course).  And finally, timestamps are not lost;
 changes to sources files can’t be missed as in the
 ‘Makefile.am’/‘Makefile.in’ example discussed earlier.
 
@@ -3021,7 +3035,7 @@ But, after all, CVS’s job is versioning, not distribution.
    Allowing developers to use different versions of their tools can also
 hide bugs during distributed development.  Indeed, developers will be
 using (hence testing) their own generated files, instead of the
-generated files that will be released actually.  The developer who
+generated files that will be actually released.  The developer who
 prepares the tarball might be using a version of the tool that produces
 bogus output (for instance a non-portable C file), something other
 developers could have noticed if they weren’t using their own versions
@@ -3038,7 +3052,7 @@ or update files in your package.
 
    These files, whether they are kept under CVS or not, raise similar
 concerns about version mismatch between developers’ tools.  The Gettext
-manual has a section about this, see *note CVS Issues: (gettext)CVS
+manual has a section about this; see *note CVS Issues: (gettext)CVS
 Issues.
 
 
@@ -3053,9 +3067,9 @@ File: automake.info,  Node: maintainer-mode,  Next: Wildcards,  Prev: CVS,  Up: 
 The ‘missing’ script is a wrapper around several maintainer tools,
 designed to warn users if a maintainer tool is required but missing.
 Typical maintainer tools are ‘autoconf’, ‘automake’, ‘bison’, etc.
-Because file generated by these tools are shipped with the other sources
-of a package, these tools shouldn’t be required during a user build and
-they are not checked for in ‘configure’.
+Because files generated by these tools are shipped with the other
+sources of a package, these tools shouldn’t be required during a user
+build and they are not checked for in ‘configure’.
 
    However, if for some reason a rebuild rule is triggered and involves
 a missing tool, ‘missing’ will notice it and warn the user, even
@@ -3065,22 +3079,23 @@ user-friendly than just having the rebuild rules spewing out a terse
 error message like ‘sh: TOOL: command not found’.  Similarly, ‘missing’
 will warn the user if it detects that a maintainer tool it attempted to
 use seems too old (be warned that diagnosing this correctly is typically
-more difficult that detecting missing tools, and requires cooperation
+more difficult than detecting missing tools, and requires cooperation
 from the tool itself, so it won’t always work).
 
    If the required tool is installed, ‘missing’ will run it and won’t
-attempt to continue after failures.  This is correct during development:
-developers love fixing failures.  However, users with missing or too old
-maintainer tools may get an error when the rebuild rule is spuriously
-triggered, halting the build.  This failure to let the build continue is
-one of the arguments of the ‘AM_MAINTAINER_MODE’ advocates.
+attempt to continue after failures.  This is correct behavior during
+development: developers love fixing failures.  However, users with
+missing or too old maintainer tools may get an error when the rebuild
+rule is spuriously triggered, halting the build.  This failure to let
+the build continue is one of the arguments of the ‘AM_MAINTAINER_MODE’
+advocates.
 
 ‘AM_MAINTAINER_MODE’
 --------------------
 
 ‘AM_MAINTAINER_MODE’ allows you to choose whether the so called "rebuild
 rules" should be enabled or disabled.  With
-‘AM_MAINTAINER_MODE([enable])’, they are enabled by default, otherwise
+‘AM_MAINTAINER_MODE([enable])’, they are enabled by default; otherwise
 they are disabled by default.  In the latter case, if you have
 ‘AM_MAINTAINER_MODE’ in ‘configure.ac’, and run ‘./configure && make’,
 then ‘make’ will *never* attempt to rebuild ‘configure’, ‘Makefile.in’s,
@@ -3093,7 +3108,7 @@ update.
 ‘configure’.
 
    People use ‘AM_MAINTAINER_MODE’ either because they do not want their
-users (or themselves) annoyed by timestamps lossage (*note CVS::), or
+users (or themselves) annoyed by timestamp lossage (*note CVS::), or
 because they simply can’t stand the rebuild rules and prefer running
 maintainer tools explicitly.
 
@@ -3104,7 +3119,7 @@ that need exotic tools that users may not have available.
    Several years ago François Pinard pointed out several arguments
 against this ‘AM_MAINTAINER_MODE’ macro.  Most of them relate to
 insecurity.  By removing dependencies you get non-dependable builds:
-changes to sources files can have no effect on generated files and this
+changes to source files can have no effect on generated files and this
 can be very confusing when unnoticed.  He adds that security shouldn’t
 be reserved to maintainers (what ‘--enable-maintainer-mode’ suggests),
 on the contrary.  If one user has to modify a ‘Makefile.am’, then either
@@ -3113,8 +3128,8 @@ what Automake uses ‘missing’ for) but the last thing you want is that
 nothing happens and the user doesn’t notice it (this is what happens
 when rebuild rules are disabled by ‘AM_MAINTAINER_MODE’).
 
-   Jim Meyering, the inventor of the ‘AM_MAINTAINER_MODE’ macro was
-swayed by François’s arguments, and got rid of ‘AM_MAINTAINER_MODE’ in
+   Jim Meyering, the inventor of the ‘AM_MAINTAINER_MODE’ macro, was
+swayed by François’ arguments, and got rid of ‘AM_MAINTAINER_MODE’ in
 all of his packages.
 
    Still many people continue to use ‘AM_MAINTAINER_MODE’, because it
@@ -3272,8 +3287,8 @@ error.
    • distributed files that are erroneously rebuilt.
 
    The former left-over files are not distributed, so the fix is to mark
-them for cleaning (*note Clean::), this is obvious and doesn’t deserve
-more explanations.
+them for cleaning (*note Clean::); this is obvious and doesn’t deserve
+more explanation.
 
    The latter bug is not always easy to understand and fix, so let’s
 proceed with an example.  Suppose our package contains a program for
@@ -3312,10 +3327,10 @@ rebuilt by users, or there is no point in distributing ‘foo.1’.
 depend on non-distributed built files.  If you distribute something
 generated, distribute its sources.
 
-   One way to fix the above example, while still distributing ‘foo.1’ is
-to not depend on ‘foo$(EXEEXT)’.  For instance, assuming ‘foo --version’
-and ‘foo --help’ do not change unless ‘foo.c’ or ‘configure.ac’ change,
-we could write the following ‘Makefile.am’:
+   One way to fix the above example, while still distributing ‘foo.1’,
+is to not depend on ‘foo$(EXEEXT)’.  For instance, assuming ‘foo
+--version’ and ‘foo --help’ do not change unless ‘foo.c’ or
+‘configure.ac’ change, we could write the following ‘Makefile.am’:
 
      bin_PROGRAMS = foo
      foo_SOURCES = foo.c
@@ -3333,8 +3348,8 @@ binaries are built before man pages.
 
    We could also decide not to distribute ‘foo.1’.  In this case it’s
 fine to have ‘foo.1’ dependent upon ‘foo$(EXEEXT)’, since both will have
-to be rebuilt.  However it would be impossible to build the package in a
-cross-compilation, because building ‘foo.1’ involves an _execution_ of
+to be rebuilt.  However, it would be impossible to build the package in
+a cross-compilation, because building ‘foo.1’ involves an _execution_ of
 ‘foo$(EXEEXT)’.
 
    Another context where such errors are common is when distributed
@@ -3527,7 +3542,7 @@ this naming scheme.  The slight difference is that ‘MAKEFLAGS’ is passed
 to sub-‘make’s implicitly by ‘make’ itself.
 
    ‘ARFLAGS’ (*note A Library::) is usually defined by Automake and has
-neither ‘AM_’ nor per-target cousin.
+neither an ‘AM_’ nor a per-target cousin.
 
    Finally you should not think that the existence of a per-target
 variable implies the existence of an ‘AM_’ variable or of a user
@@ -3582,7 +3597,7 @@ File: automake.info,  Node: Per-Object Flags,  Next: Multiple Outputs,  Prev: Re
 ===============================
 
      One of my source files needs to be compiled with different flags.  How
-     do I do?
+     do I do that?
 
    Automake supports per-program and per-library compilation flags (see
 *note Program and Library Variables:: and *note Flag Variables
@@ -3596,14 +3611,14 @@ all files compiled for a target.  For instance, in
 ‘foo-foo.o’, ‘foo-bar.o’, and ‘foo-main.o’ will all be compiled with
 ‘-some -flags’.  (If you wonder about the names of these object files,
 see *note Renamed Objects::.)  Note that ‘foo_CFLAGS’ gives the flags to
-use when compiling all the C sources of the _program_ ‘foo’, it has
+use when compiling all the C sources of the _program_ ‘foo’; it has
 nothing to do with ‘foo.c’ or ‘foo-foo.o’ specifically.
 
    What if ‘foo.c’ needs to be compiled into ‘foo.o’ using some specific
 flags, that none of the other files requires?  Obviously per-program
 flags are not directly applicable here.  Something like per-object flags
 are expected, i.e., flags that would be used only when creating
-‘foo-foo.o’.  Automake does not support that, however this is easy to
+‘foo-foo.o’.  Automake does not support that; however this is easy to
 simulate using a library that contains only that object, and compiling
 this library with per-library flags.
 
@@ -3936,10 +3951,10 @@ File: automake.info,  Node: Hard-Coded Install Paths,  Next: Debugging Make Rule
      My package needs to populate the installation directory of another
      package at install-time.  I can easily compute that installation
      directory in ‘configure’, but if I install files therein,
-     ‘make distcheck’ fails.  How else should I do?
+     ‘make distcheck’ fails.  How else should I do it?
 
    These two setups share their symptoms: ‘make distcheck’ fails because
-they are installing files to hard-coded paths.  In the later case the
+they are installing files to hard-coded paths.  In the latter case the
 path is not really hard-coded in the package, but we can consider it to
 be hard-coded in the system (or in whichever tool that supplies the
 path).  As long as the path does not use any of the standard directory
@@ -3963,7 +3978,7 @@ would be better replaced by
 
      sysconf_DATA = afile
 
-by default ‘sysconfdir’ will be ‘$(prefix)/etc’, because this is what
+By default ‘sysconfdir’ will be ‘$(prefix)/etc’, because this is what
 the GNU Standards require.  When such a package is installed on an FHS
 compliant system, the installer will have to set ‘--sysconfdir=/etc’.
 As the maintainer of the package you should not be concerned by such
@@ -3981,7 +3996,7 @@ where to install the library, it will answer something like this:
      /usr/lib/python2.5/site-packages
 
    If you indeed use this absolute path to install your shared library,
-non-root users will not be able to install the package, hence distcheck
+non-root users will not be able to install the package; hence distcheck
 fails.
 
    Let’s do better.  The ‘sysconfig.get_python_lib()’ function actually
@@ -3995,20 +4010,21 @@ accepts a third argument that will replace Python’s installation prefix.
    • root users can install your package with the same ‘--prefix’ as
      Python (you get the behavior of the previous attempt)
 
-   • non-root users can install your package too, they will have the
+   • non-root users can install your package too; they will have the
      extension module in a place that is not searched by Python but they
      can work around this using environment variables (and if you
      installed scripts that use this shared library, it’s easy to tell
-     Python were to look in the beginning of your script, so the script
+     Python where to look in the beginning of your script, so the script
      works in both cases).
 
    The ‘AM_PATH_PYTHON’ macro uses similar commands to define
 ‘$(pythondir)’ and ‘$(pyexecdir)’ (*note Python::).
 
    Of course not all tools are as advanced as Python regarding that
-substitution of PREFIX.  So another strategy is to figure the part of
-the installation directory that must be preserved.  For instance, here
-is how ‘AM_PATH_LISPDIR’ (*note Emacs Lisp::) computes ‘$(lispdir)’:
+substitution of PREFIX.  So another strategy is to figure out the part
+of the installation directory that must be preserved.  For instance,
+here is how ‘AM_PATH_LISPDIR’ (*note Emacs Lisp::) computes
+‘$(lispdir)’:
 
      $EMACS -batch -Q -eval '(while load-path
        (princ (concat (car load-path) "\n"))
@@ -4029,7 +4045,7 @@ path of emacs, and then substitutes ‘${libdir}’ or ‘${datadir}’
 appropriately.
 
    The emacs case looks complicated because it processes a list and
-expects two possible layouts, otherwise it’s easy, and the benefits for
+expects two possible layouts; otherwise it’s easy, and the benefits for
 non-root users are really worth the extra ‘sed’ invocation.
 
 
@@ -4066,8 +4082,8 @@ debugging makefiles generated by ‘automake’ effectively:
      file with that name exists.
    • <http://bashdb.sourceforge.net/remake/> provides a modified GNU
      ‘make’ command called ‘remake’ that copes with complex GNU
-     ‘make’-specific Makefiles and allows to trace execution, examine
-     variables, and call rules interactively, much like a debugger.
+     ‘make’-specific Makefiles and allows tracing execution, examining
+     variables, and calling rules interactively, much like a debugger.
 
    ---------- Footnotes ----------
 
@@ -4104,7 +4120,7 @@ this, please familiarize yourself with How to Report Bugs Effectively
 (http://www.chiark.greenend.org.uk/~sgtatham/bugs.html) and How to Ask
 Questions the Smart Way
 (http://catb.org/~esr/faqs/smart-questions.html).  This helps you and
-developers to save time which can then be spent on fixing more bugs and
+developers to save time, which can then be spent on fixing more bugs and
 implementing more features.
 
    For a bug report, a feature request or other suggestions, please send
@@ -4133,8 +4149,8 @@ A.1 GNU Free Documentation License
 
                      Version 1.3, 3 November 2008
 
-     Copyright © 2000-2018 Free Software Foundation, Inc.
-     <http://fsf.org/>
+     Copyright © 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <https://fsf.org/>
 
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -4277,7 +4293,7 @@ A.1 GNU Free Documentation License
      have printed covers) of the Document, numbering more than 100, and
      the Document’s license notice requires Cover Texts, you must
      enclose the copies in covers that carry, clearly and legibly, all
-     of these Cover Texts: Front-Cover Texts on the front cover, and
+     these Cover Texts: Front-Cover Texts on the front cover, and
      Back-Cover Texts on the back cover.  Both covers must also clearly
      and legibly identify you as the publisher of these copies.  The
      front cover must present the full title with all words of the title
@@ -4531,7 +4547,7 @@ A.1 GNU Free Documentation License
      the GNU Free Documentation License from time to time.  Such new
      versions will be similar in spirit to the present version, but may
      differ in detail to address new problems or concerns.  See
-     <http://www.gnu.org/copyleft/>.
+     <https://www.gnu.org/copyleft/>.
 
      Each version of the License is given a distinguishing version
      number.  If the Document specifies that a particular numbered
@@ -4655,7 +4671,7 @@ B.1 Macro Index
 * AC_PROG_CXX:                           Optional.            (line  85)
 * AC_PROG_F77:                           Optional.            (line  97)
 * AC_PROG_FC:                            Optional.            (line 112)
-* AC_PROG_LEX:                           Public Macros.       (line  95)
+* AC_PROG_LEX:                           Public Macros.       (line  94)
 * AC_PROG_LEX <1>:                       Optional.            (line 127)
 * AC_PROG_LIBTOOL:                       Optional.            (line 117)
 * AC_PROG_OBJC:                          Optional.            (line  89)
@@ -4680,27 +4696,27 @@ B.1 Macro Index
 * AM_INIT_AUTOMAKE:                      Requirements.        (line   6)
 * AM_INIT_AUTOMAKE <1>:                  Public Macros.       (line   7)
 * AM_MAINTAINER_MODE:                    Rebuilding.          (line   9)
-* AM_MAINTAINER_MODE <1>:                maintainer-mode.     (line  37)
+* AM_MAINTAINER_MODE <1>:                maintainer-mode.     (line  38)
 * AM_MAINTAINER_MODE([DEFAULT-MODE]):    Optional.            (line 172)
 * AM_MAKE_INCLUDE:                       Private Macros.      (line  20)
-* AM_MISSING_PROG:                       Public Macros.       (line 111)
+* AM_MISSING_PROG:                       Public Macros.       (line 110)
 * AM_OUTPUT_DEPENDENCY_COMMANDS:         Private Macros.      (line  15)
-* AM_PATH_LISPDIR:                       Public Macros.       (line  61)
+* AM_PATH_LISPDIR:                       Public Macros.       (line  60)
 * AM_PATH_PYTHON:                        Python.              (line  28)
-* AM_PROG_AR:                            Public Macros.       (line  76)
-* AM_PROG_AS:                            Public Macros.       (line  83)
-* AM_PROG_CC_C_O:                        Public Macros.       (line  88)
-* AM_PROG_GCJ:                           Public Macros.       (line 100)
+* AM_PROG_AR:                            Public Macros.       (line  75)
+* AM_PROG_AS:                            Public Macros.       (line  82)
+* AM_PROG_CC_C_O:                        Public Macros.       (line  87)
+* AM_PROG_GCJ:                           Public Macros.       (line  99)
 * AM_PROG_INSTALL_STRIP:                 Private Macros.      (line  25)
-* AM_PROG_LEX:                           Public Macros.       (line  95)
+* AM_PROG_LEX:                           Public Macros.       (line  94)
 * AM_PROG_MKDIR_P:                       Obsolete Macros.     (line  14)
-* AM_PROG_UPC:                           Public Macros.       (line 105)
+* AM_PROG_UPC:                           Public Macros.       (line 104)
 * AM_PROG_VALAC:                         Vala Support.        (line  20)
 * AM_SANITY_CHECK:                       Private Macros.      (line  30)
 * AM_SET_DEPDIR:                         Private Macros.      (line  13)
-* AM_SILENT_RULES:                       Public Macros.       (line 119)
+* AM_SILENT_RULES:                       Public Macros.       (line 118)
 * AM_SUBST_NOTMAKE(VAR):                 Optional.            (line 180)
-* AM_WITH_DMALLOC:                       Public Macros.       (line 123)
+* AM_WITH_DMALLOC:                       Public Macros.       (line 122)
 * m4_include:                            Basics of Distribution.
                                                               (line  17)
 * m4_include <1>:                        Optional.            (line 190)
@@ -4766,7 +4782,7 @@ B.2 Variable Index
 * AM_GCJFLAGS:                           Java Support with gcj.
                                                               (line  26)
 * AM_INSTALLCHECK_STD_OPTIONS_EXEMPT:    List of Automake options.
-                                                              (line 135)
+                                                              (line 138)
 * AM_JAVACFLAGS:                         Java.                (line  44)
 * AM_LDFLAGS:                            Linking.             (line  10)
 * AM_LDFLAGS <1>:                        Program Variables.   (line  59)
@@ -4799,7 +4815,7 @@ B.2 Variable Index
 * AM_V_GEN:                              Automake Silent Rules.
                                                               (line 120)
 * AM_YFLAGS:                             Yacc and Lex.        (line  37)
-* AR:                                    Public Macros.       (line  76)
+* AR:                                    Public Macros.       (line  75)
 * AUTOCONF:                              automake Invocation. (line  28)
 * AUTOM4TE:                              aclocal Invocation.  (line  44)
 * AUTOMAKE_JOBS:                         automake Invocation. (line 178)
@@ -4815,9 +4831,9 @@ B.2 Variable Index
 * BZIP2:                                 The Types of Distributions.
                                                               (line  13)
 * CC:                                    Program Variables.   (line  12)
-* CCAS:                                  Public Macros.       (line  83)
+* CCAS:                                  Public Macros.       (line  82)
 * CCAS <1>:                              Assembly Support.    (line  10)
-* CCASFLAGS:                             Public Macros.       (line  83)
+* CCASFLAGS:                             Public Macros.       (line  82)
 * CCASFLAGS <1>:                         Assembly Support.    (line  10)
 * CFLAGS:                                Program Variables.   (line  12)
 * check_:                                Uniform.             (line  95)
@@ -4872,7 +4888,7 @@ B.2 Variable Index
 * DIST_SUBDIRS <1>:                      Basics of Distribution.
                                                               (line  47)
 * DVIPS:                                 Texinfo.             (line 141)
-* EMACS:                                 Public Macros.       (line  61)
+* EMACS:                                 Public Macros.       (line  60)
 * ETAGSFLAGS:                            Tags.                (line  25)
 * ETAGS_ARGS:                            Tags.                (line  25)
 * EXPECT:                                DejaGnu Tests.       (line  19)
@@ -4909,8 +4925,8 @@ B.2 Variable Index
 * FLIBS:                                 Mixing Fortran 77 With C and C++.
                                                               (line  21)
 * FLINK:                                 Fortran 77 Support.  (line  35)
-* GCJ:                                   Public Macros.       (line 100)
-* GCJFLAGS:                              Public Macros.       (line 100)
+* GCJ:                                   Public Macros.       (line  99)
+* GCJFLAGS:                              Public Macros.       (line  99)
 * GCJFLAGS <1>:                          Java Support with gcj.
                                                               (line  16)
 * GCJLINK:                               How the Linker is Chosen.
@@ -4944,7 +4960,7 @@ B.2 Variable Index
 * LINK <1>:                              How the Linker is Chosen.
                                                               (line  17)
 * LISP:                                  Uniform.             (line 101)
-* lispdir:                               Public Macros.       (line  61)
+* lispdir:                               Public Macros.       (line  60)
 * lisp_LISP:                             Emacs Lisp.          (line   6)
 * localstate_DATA:                       Data.                (line   9)
 * LOG_COMPILE:                           Parallel Test Harness.
@@ -5016,7 +5032,7 @@ B.2 Variable Index
                                                               (line 180)
 * maude_YFLAGS:                          Program and Library Variables.
                                                               (line 181)
-* MISSING:                               Public Macros.       (line 111)
+* MISSING:                               Public Macros.       (line 110)
 * MKDIR_P:                               Obsolete Macros.     (line  14)
 * mkdir_p:                               Obsolete Macros.     (line  14)
 * MOSTLYCLEANFILES:                      Clean.               (line  13)
@@ -5116,7 +5132,7 @@ B.2 Variable Index
 * top_distdir:                           The dist Hook.       (line  33)
 * top_distdir <1>:                       Third-Party Makefiles.
                                                               (line  25)
-* UPC:                                   Public Macros.       (line 105)
+* UPC:                                   Public Macros.       (line 104)
 * UPC <1>:                               Unified Parallel C Support.
                                                               (line  15)
 * UPCCOMPILE:                            Unified Parallel C Support.
@@ -5137,13 +5153,17 @@ B.2 Variable Index
                                                               (line   6)
 * WARNINGS:                              automake Invocation. (line 171)
 * WARNINGS <1>:                          aclocal Options.     (line  95)
-* WITH_DMALLOC:                          Public Macros.       (line 123)
+* WITH_DMALLOC:                          Public Macros.       (line 122)
 * XFAIL_TESTS:                           Scripts-based Testsuites.
                                                               (line  32)
 * XZ_OPT:                                The Types of Distributions.
                                                               (line  24)
 * YACC:                                  Optional.            (line 122)
 * YFLAGS:                                Yacc and Lex.        (line  37)
+* ZSTD_CLEVEL:                           The Types of Distributions.
+                                                              (line  47)
+* ZSTD_OPT:                              The Types of Distributions.
+                                                              (line  47)
 
 
 File: automake.info,  Node: General Index,  Prev: Variable Index,  Up: Indices
@@ -5185,7 +5205,7 @@ B.3 General Index
 * --help:                                automake Invocation. (line  98)
 * --help <1>:                            aclocal Options.     (line  31)
 * --help check:                          List of Automake options.
-                                                              (line 129)
+                                                              (line 132)
 * --help=recursive:                      Nested Packages.     (line  30)
 * --host=HOST:                           Cross-Compilation.   (line  16)
 * --include-deps:                        automake Invocation. (line 106)
@@ -5208,10 +5228,10 @@ B.3 General Index
 * --version:                             automake Invocation. (line 129)
 * --version <1>:                         aclocal Options.     (line  76)
 * --version check:                       List of Automake options.
-                                                              (line 129)
+                                                              (line 132)
 * --warnings:                            automake Invocation. (line 133)
 * --warnings <1>:                        aclocal Options.     (line  80)
-* --with-dmalloc:                        Public Macros.       (line 123)
+* --with-dmalloc:                        Public Macros.       (line 122)
 * -a:                                    automake Invocation. (line  41)
 * -c:                                    automake Invocation. (line  74)
 * -f:                                    automake Invocation. (line  79)
@@ -5311,7 +5331,7 @@ B.3 General Index
                                                               (line  20)
 * AM_LIBTOOLFLAGS and LIBTOOLFLAGS:      Flag Variables Ordering.
                                                               (line  20)
-* AM_MAINTAINER_MODE, purpose:           maintainer-mode.     (line  37)
+* AM_MAINTAINER_MODE, purpose:           maintainer-mode.     (line  38)
 * AM_OBJCFLAGS and OBJCFLAGS:            Flag Variables Ordering.
                                                               (line  20)
 * AM_OBJCXXFLAGS and OBJXXCFLAGS:        Flag Variables Ordering.
@@ -5416,13 +5436,13 @@ B.3 General Index
                                                               (line  20)
 * cross-compilation:                     Cross-Compilation.   (line   6)
 * cross-compilation example:             Cross-Compilation.   (line  25)
-* CVS and generated files:               CVS.                 (line  49)
-* CVS and third-party files:             CVS.                 (line 167)
-* CVS and timestamps:                    CVS.                 (line  28)
+* CVS and generated files:               CVS.                 (line  50)
+* CVS and third-party files:             CVS.                 (line 168)
+* CVS and timestamps:                    CVS.                 (line  29)
 * CXXFLAGS and AM_CXXFLAGS:              Flag Variables Ordering.
                                                               (line  20)
 * DATA primary, defined:                 Data.                (line   6)
-* debug build, example:                  VPATH Builds.        (line  46)
+* debug build, example:                  VPATH Builds.        (line  48)
 * debugging rules:                       Debugging Make Rules.
                                                               (line   6)
 * default source, Libtool modules example: Default _SOURCES.  (line  38)
@@ -5467,15 +5487,15 @@ B.3 General Index
 * dist-shar:                             The Types of Distributions.
                                                               (line  45)
 * dist-shar <1>:                         List of Automake options.
-                                                              (line  36)
+                                                              (line  39)
 * dist-shar <2>:                         List of Automake options.
-                                                              (line  34)
+                                                              (line  37)
 * dist-tarZ:                             The Types of Distributions.
                                                               (line  39)
 * dist-tarZ <1>:                         List of Automake options.
-                                                              (line  41)
+                                                              (line  44)
 * dist-tarZ <2>:                         List of Automake options.
-                                                              (line  39)
+                                                              (line  42)
 * dist-xz:                               The Types of Distributions.
                                                               (line  30)
 * dist-xz <1>:                           List of Automake options.
@@ -5488,6 +5508,12 @@ B.3 General Index
                                                               (line  31)
 * dist-zip <2>:                          List of Automake options.
                                                               (line  31)
+* dist-zstd:                             The Types of Distributions.
+                                                              (line  55)
+* dist-zstd <1>:                         List of Automake options.
+                                                              (line  34)
+* dist-zstd <2>:                         List of Automake options.
+                                                              (line  34)
 * distcheck:                             Creating amhello.    (line 100)
 * distcheck <1>:                         Checking the Distribution.
                                                               (line   6)
@@ -5518,7 +5544,7 @@ B.3 General Index
 * dist_ and notrans_:                    Man Pages.           (line  63)
 * DIST_SUBDIRS, explained:               SUBDIRS vs DIST_SUBDIRS.
                                                               (line   6)
-* dmalloc, support for:                  Public Macros.       (line 123)
+* dmalloc, support for:                  Public Macros.       (line 122)
 * dvi:                                   Texinfo.             (line  25)
 * dvi <1>:                               Extending.           (line  41)
 * DVI output using Texinfo:              Texinfo.             (line   6)
@@ -5572,7 +5598,7 @@ B.3 General Index
 * file names, limitations on:            Limitations on File Names.
                                                               (line   6)
 * filename-length-max=99:                List of Automake options.
-                                                              (line  44)
+                                                              (line  47)
 * Files distributed with Automake:       automake Invocation. (line  39)
 * First line of Makefile.am:             General Operation.   (line  74)
 * Flag variables, ordering:              Flag Variables Ordering.
@@ -5594,7 +5620,7 @@ B.3 General Index
 * Fortran 9x support:                    Fortran 9x Support.  (line   6)
 * GCJFLAGS and AM_GCJFLAGS:              Flag Variables Ordering.
                                                               (line  20)
-* generated files and CVS:               CVS.                 (line  49)
+* generated files and CVS:               CVS.                 (line  50)
 * generated files, distributed:          CVS.                 (line   9)
 * Gettext support:                       gettext.             (line   6)
 * git-dist:                              General Operation.   (line  12)
@@ -5622,7 +5648,7 @@ B.3 General Index
 * HEADERS, installation directories:     Headers.             (line   6)
 * Hello World example:                   Hello World.         (line   6)
 * hook targets:                          Extending.           (line  66)
-* HP-UX 10, lex problems:                Public Macros.       (line  95)
+* HP-UX 10, lex problems:                Public Macros.       (line  94)
 * html:                                  Texinfo.             (line  25)
 * html <1>:                              Extending.           (line  41)
 * HTML output using Texinfo:             Texinfo.             (line   6)
@@ -5638,10 +5664,10 @@ B.3 General Index
 * Including Makefile fragment:           Include.             (line   6)
 * indentation in Makefile.am:            General Operation.   (line  33)
 * info:                                  List of Automake options.
-                                                              (line  93)
+                                                              (line  96)
 * info <1>:                              Extending.           (line  41)
 * info-in-builddir:                      List of Automake options.
-                                                              (line  53)
+                                                              (line  56)
 * info-local:                            Extending.           (line  41)
 * install:                               Standard Targets.    (line  18)
 * install <1>:                           The Two Parts of Install.
@@ -5675,13 +5701,13 @@ B.3 General Index
 * install-html-local:                    Extending.           (line  41)
 * install-info:                          Texinfo.             (line  85)
 * install-info <1>:                      List of Automake options.
-                                                              (line  93)
+                                                              (line  96)
 * install-info <2>:                      Extending.           (line  41)
 * install-info target:                   Texinfo.             (line  85)
 * install-info-local:                    Extending.           (line  41)
 * install-man:                           Man Pages.           (line  32)
 * install-man <1>:                       List of Automake options.
-                                                              (line  99)
+                                                              (line 102)
 * install-man target:                    Man Pages.           (line  32)
 * install-pdf:                           Texinfo.             (line  25)
 * install-pdf <1>:                       Extending.           (line  41)
@@ -5723,7 +5749,7 @@ B.3 General Index
 * LDADD and -l:                          Linking.             (line  70)
 * LDFLAGS and AM_LDFLAGS:                Flag Variables Ordering.
                                                               (line  20)
-* lex problems with HP-UX 10:            Public Macros.       (line  95)
+* lex problems with HP-UX 10:            Public Macros.       (line  94)
 * lex, multiple lexers:                  Yacc and Lex.        (line  68)
 * LFLAGS and AM_LFLAGS:                  Flag Variables Ordering.
                                                               (line  20)
@@ -5777,7 +5803,7 @@ B.3 General Index
                                                               (line 106)
 * make install support:                  Install.             (line   6)
 * make installcheck, testing --help and --version: List of Automake options.
-                                                              (line 129)
+                                                              (line 132)
 * Make rules, overriding:                General Operation.   (line  46)
 * Make targets, overriding:              General Operation.   (line  46)
 * Makefile fragment, including:          Include.             (line   6)
@@ -5801,37 +5827,37 @@ B.3 General Index
 * mostlyclean:                           Extending.           (line  41)
 * mostlyclean-local:                     Clean.               (line  15)
 * mostlyclean-local <1>:                 Extending.           (line  41)
-* multiple configurations, example:      VPATH Builds.        (line  46)
+* multiple configurations, example:      VPATH Builds.        (line  48)
 * Multiple configure.ac files:           automake Invocation. (line   6)
 * Multiple lex lexers:                   Yacc and Lex.        (line  68)
 * multiple outputs, rules with:          Multiple Outputs.    (line   6)
 * Multiple yacc parsers:                 Yacc and Lex.        (line  68)
 * Nested packages:                       Nested Packages.     (line   6)
 * Nesting packages:                      Subpackages.         (line   6)
-* no-define:                             Public Macros.       (line  55)
+* no-define:                             Public Macros.       (line  54)
 * no-define <1>:                         List of Automake options.
-                                                              (line  58)
+                                                              (line  61)
 * no-dependencies:                       Dependencies.        (line  34)
 * no-dependencies <1>:                   List of Automake options.
-                                                              (line  66)
+                                                              (line  69)
 * no-dist:                               List of Automake options.
-                                                              (line  73)
+                                                              (line  76)
 * no-dist-gzip:                          List of Automake options.
-                                                              (line  77)
-* no-dist-gzip <1>:                      List of Automake options.
-                                                              (line  77)
-* no-exeext:                             List of Automake options.
                                                               (line  80)
+* no-dist-gzip <1>:                      List of Automake options.
+                                                              (line  80)
+* no-exeext:                             List of Automake options.
+                                                              (line  83)
 * no-installinfo:                        Texinfo.             (line  85)
 * no-installinfo <1>:                    List of Automake options.
-                                                              (line  90)
+                                                              (line  93)
 * no-installinfo option:                 Texinfo.             (line  85)
 * no-installman:                         Man Pages.           (line  32)
 * no-installman <1>:                     List of Automake options.
-                                                              (line  96)
+                                                              (line  99)
 * no-installman option:                  Man Pages.           (line  32)
 * no-texinfo.tex:                        List of Automake options.
-                                                              (line 106)
+                                                              (line 109)
 * nobase_ and dist_ or nodist_:          Alternative.         (line  29)
 * nobase_ prefix:                        Alternative.         (line  23)
 * nodist_ and nobase_:                   Alternative.         (line  29)
@@ -5840,7 +5866,7 @@ B.3 General Index
 * Non-GNU packages:                      Strictness.          (line   6)
 * Non-standard targets:                  General Operation.   (line  12)
 * nostdinc:                              List of Automake options.
-                                                              (line 102)
+                                                              (line 105)
 * notrans_ and dist_ or nodist_:         Man Pages.           (line  63)
 * notrans_ prefix:                       Man Pages.           (line  54)
 * OBJCFLAGS and AM_OBJCFLAGS:            Flag Variables Ordering.
@@ -5853,11 +5879,11 @@ B.3 General Index
 * Objects in subdirectory:               Program and Library Variables.
                                                               (line  51)
 * obsolete macros:                       Obsolete Macros.     (line   6)
-* optimized build, example:              VPATH Builds.        (line  46)
+* optimized build, example:              VPATH Builds.        (line  48)
 * Option, --warnings=CATEGORY:           List of Automake options.
-                                                              (line 213)
+                                                              (line 216)
 * Option, -WCATEGORY:                    List of Automake options.
-                                                              (line 213)
+                                                              (line 216)
 * Option, check-news:                    List of Automake options.
                                                               (line  14)
 * Option, dejagnu:                       List of Automake options.
@@ -5867,15 +5893,17 @@ B.3 General Index
 * Option, dist-lzip:                     List of Automake options.
                                                               (line  25)
 * Option, dist-shar:                     List of Automake options.
-                                                              (line  34)
+                                                              (line  37)
 * Option, dist-tarZ:                     List of Automake options.
-                                                              (line  39)
+                                                              (line  42)
 * Option, dist-xz:                       List of Automake options.
                                                               (line  28)
 * Option, dist-zip:                      List of Automake options.
                                                               (line  31)
+* Option, dist-zstd:                     List of Automake options.
+                                                              (line  34)
 * Option, filename-length-max=99:        List of Automake options.
-                                                              (line  44)
+                                                              (line  47)
 * Option, foreign:                       List of Automake options.
                                                               (line   9)
 * Option, gnits:                         List of Automake options.
@@ -5883,49 +5911,49 @@ B.3 General Index
 * Option, gnu:                           List of Automake options.
                                                               (line   9)
 * Option, info-in-builddir:              List of Automake options.
-                                                              (line  53)
+                                                              (line  56)
 * Option, no-define:                     List of Automake options.
-                                                              (line  58)
+                                                              (line  61)
 * Option, no-dependencies:               List of Automake options.
-                                                              (line  66)
+                                                              (line  69)
 * Option, no-dist:                       List of Automake options.
-                                                              (line  73)
+                                                              (line  76)
 * Option, no-dist-gzip:                  List of Automake options.
-                                                              (line  77)
-* Option, no-exeext:                     List of Automake options.
                                                               (line  80)
+* Option, no-exeext:                     List of Automake options.
+                                                              (line  83)
 * Option, no-installinfo:                Texinfo.             (line  85)
 * Option, no-installinfo <1>:            List of Automake options.
-                                                              (line  90)
+                                                              (line  93)
 * Option, no-installman:                 Man Pages.           (line  32)
 * Option, no-installman <1>:             List of Automake options.
-                                                              (line  96)
+                                                              (line  99)
 * Option, no-texinfo.tex:                List of Automake options.
-                                                              (line 106)
+                                                              (line 109)
 * Option, nostdinc:                      List of Automake options.
-                                                              (line 102)
+                                                              (line 105)
 * Option, parallel-tests:                List of Automake options.
-                                                              (line 114)
+                                                              (line 117)
 * Option, readme-alpha:                  List of Automake options.
-                                                              (line 120)
+                                                              (line 123)
 * Option, serial-tests:                  List of Automake options.
-                                                              (line 110)
+                                                              (line 113)
 * Option, tar-pax:                       List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * Option, tar-ustar:                     List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * Option, tar-v7:                        List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * Option, VERSION:                       List of Automake options.
-                                                              (line 208)
+                                                              (line 211)
 * Option, warnings:                      List of Automake options.
-                                                              (line 213)
+                                                              (line 216)
 * Options, aclocal:                      aclocal Options.     (line   6)
 * Options, automake:                     automake Invocation. (line  37)
 * Options, std-options:                  List of Automake options.
-                                                              (line 129)
+                                                              (line 132)
 * Options, subdir-objects:               List of Automake options.
-                                                              (line 150)
+                                                              (line 153)
 * Ordering flag variables:               Flag Variables Ordering.
                                                               (line   6)
 * Overriding make rules:                 General Operation.   (line  46)
@@ -5934,16 +5962,16 @@ B.3 General Index
 * overriding rules:                      Extending.           (line  26)
 * overriding semantics:                  Extending.           (line  26)
 * PACKAGE, directory:                    Uniform.             (line  19)
-* PACKAGE, prevent definition:           Public Macros.       (line  55)
+* PACKAGE, prevent definition:           Public Macros.       (line  54)
 * Packages, nested:                      Nested Packages.     (line   6)
 * Packages, preparation:                 Preparing Distributions.
                                                               (line   6)
 * Parallel build trees:                  VPATH Builds.        (line   6)
 * parallel-tests:                        List of Automake options.
-                                                              (line 114)
+                                                              (line 117)
 * Path stripping, avoiding:              Alternative.         (line  23)
 * pax format:                            List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * pdf:                                   Texinfo.             (line  25)
 * pdf <1>:                               Extending.           (line  41)
 * PDF output using Texinfo:              Texinfo.             (line   6)
@@ -5988,9 +6016,9 @@ B.3 General Index
 * PYTHON primary, defined:               Python.              (line   6)
 * Ratfor programs:                       Preprocessing Fortran 77.
                                                               (line   6)
-* read-only source tree:                 VPATH Builds.        (line  89)
+* read-only source tree:                 VPATH Builds.        (line  91)
 * readme-alpha:                          List of Automake options.
-                                                              (line 120)
+                                                              (line 123)
 * README-alpha:                          Gnits.               (line  42)
 * rebuild rules:                         Rebuilding.          (line   6)
 * rebuild rules <1>:                     CVS.                 (line   9)
@@ -6032,7 +6060,7 @@ B.3 General Index
 * serial number and --install:           aclocal Options.     (line  42)
 * serial numbers in macros:              Serials.             (line   6)
 * serial-tests:                          List of Automake options.
-                                                              (line 110)
+                                                              (line 113)
 * serial-tests, Using:                   Serial Test Harness. (line   6)
 * Shared libraries, support for:         A Shared Library.    (line   6)
 * Silencing make:                        Silencing Make.      (line   6)
@@ -6043,12 +6071,12 @@ B.3 General Index
                                                               (line  59)
 * site.exp:                              DejaGnu Tests.       (line  26)
 * source tree and build tree:            VPATH Builds.        (line   6)
-* source tree, read-only:                VPATH Builds.        (line  89)
+* source tree, read-only:                VPATH Builds.        (line  91)
 * SOURCES primary, defined:              Program Sources.     (line  32)
 * Special Automake comment:              General Operation.   (line  68)
 * Staged installation:                   DESTDIR.             (line  14)
 * std-options:                           List of Automake options.
-                                                              (line 129)
+                                                              (line 132)
 * Strictness, command line:              automake Invocation. (line  37)
 * Strictness, defined:                   Strictness.          (line  10)
 * Strictness, foreign:                   Strictness.          (line  10)
@@ -6056,7 +6084,7 @@ B.3 General Index
 * Strictness, gnu:                       Strictness.          (line  10)
 * su, before make install:               Basic Installation.  (line  49)
 * subdir-objects:                        List of Automake options.
-                                                              (line 150)
+                                                              (line 153)
 * Subdirectories, building conditionally: Conditional Subdirectories.
                                                               (line   6)
 * Subdirectories, configured conditionally: Unconfigured Subdirectories.
@@ -6092,13 +6120,13 @@ B.3 General Index
 * tags:                                  Tags.                (line   9)
 * TAGS support:                          Tags.                (line   6)
 * tar formats:                           List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * tar-pax:                               List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * tar-ustar:                             List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * tar-v7:                                List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * Target, install-info:                  Texinfo.             (line  85)
 * Target, install-man:                   Man Pages.           (line  32)
 * test case:                             Generalities about Testing.
@@ -6130,10 +6158,10 @@ B.3 General Index
 * Texinfo flag, VERSION:                 Texinfo.             (line  35)
 * texinfo.tex:                           Texinfo.             (line  70)
 * TEXINFOS primary, defined:             Texinfo.             (line   6)
-* third-party files and CVS:             CVS.                 (line 167)
+* third-party files and CVS:             CVS.                 (line 168)
 * Third-party packages, interfacing with: Third-Party Makefiles.
                                                               (line   6)
-* timestamps and CVS:                    CVS.                 (line  28)
+* timestamps and CVS:                    CVS.                 (line  29)
 * Transforming program names:            Renaming.            (line   6)
 * trees, source vs. build:               VPATH Builds.        (line   6)
 * true Example:                          true.                (line   6)
@@ -6162,15 +6190,15 @@ B.3 General Index
 * user variables:                        User Variables.      (line   6)
 * Using aclocal:                         configure.           (line   6)
 * ustar format:                          List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * v7 tar format:                         List of Automake options.
-                                                              (line 159)
+                                                              (line 162)
 * Vala Support:                          Vala Support.        (line   6)
 * variables, conflicting:                Extending.           (line  14)
 * Variables, overriding:                 General Operation.   (line  51)
 * variables, reserved for the user:      User Variables.      (line   6)
 * VERSION Texinfo flag:                  Texinfo.             (line  35)
-* VERSION, prevent definition:           Public Macros.       (line  55)
+* VERSION, prevent definition:           Public Macros.       (line  54)
 * version.m4, example:                   Rebuilding.          (line  12)
 * version.sh, example:                   Rebuilding.          (line  12)
 * versioned binaries, installing:        Extending.           (line  86)

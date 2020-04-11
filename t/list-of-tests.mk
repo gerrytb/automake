@@ -2,7 +2,7 @@
 ## testsuite.  This fragment is meant to be included by the Makefile.am,
 ## but also to be executed directly by make when bootstrapping automake.
 
-## Copyright (C) 2011-2018 Free Software Foundation, Inc.
+## Copyright (C) 2011-2020 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -1188,6 +1188,7 @@ t/tap-summary-color.sh \
 t/tags.sh \
 t/tags2.sh \
 t/tagsub.sh \
+t/tags-lisp-space.sh \
 t/tags-pr12372.sh \
 t/tar-ustar.sh \
 t/tar-pax.sh \
@@ -1214,6 +1215,7 @@ t/txinfo-no-clutter.sh \
 t/txinfo-no-extra-dist.sh \
 t/txinfo-no-installinfo.sh \
 t/txinfo-no-repeated-targets.sh \
+t/txinfo-no-setfilename.sh \
 t/txinfo-other-suffixes.sh \
 t/txinfo-override-infodeps.sh \
 t/txinfo-override-texinfo-tex.sh \

@@ -1,3 +1,366 @@
+2020-03-16  Jim Meyering  <meyering@fb.com>
+
+	version 1.16.2
+
+	* configure.ac (AC_INIT): Bump version number to 1.16.2.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+	* NEWS: Record release version.
+
+2020-03-16  Karl Berry  <karl@freefriends.org>
+
+	maint: sync fdl.texi.
+
+	* doc/fdl.texi: sync with gnulib/doc/fdl.texi, for https://fsf.org
+	and some Texinfo fixes.
+
+2020-03-12  Karl Berry  <karl@freefriends.org>
+
+	maint: do not descend into unreadable test directories.
+
+	* maintainer/syntax-checks.mk (sc_tests_makefile_variable_order):
+	find t ! -perm o+r -prune, since some test directories
+	are intentionally unreadable.
+
+2020-03-11  Jim Meyering  <meyering@fb.com>
+
+	doc: gender tweak
+
+	* HACKING: s/his/their/
+
+2020-03-11  Jim Meyering  <meyering@fb.com>
+
+	maint: run "make fetch" to update files from elsewhere
+
+	* lib/config.guess: Auto-update.
+	* lib/config.sub: Auto-update.
+	* lib/gendocs.sh: Auto-update.
+	* lib/gendocs_template: Auto-update.
+	* lib/gitlog-to-changelog: Auto-update.
+	* lib/gnupload: Auto-update.
+	* lib/texinfo.tex: Auto-update.
+	* lib/update-copyright: Auto-update.
+
+2020-03-11  Karl Berry  <karl@freefriends.org>
+
+	maint: typo in comment.
+
+	* t/CheckListOfTests.am (maintainer-check-list-of-tests): an -> and.
+
+2020-02-25  Karl Berry  <karl@freefriends.org>
+
+	python: support both Python 2 and 3 in py-compile
+
+	* lib/py-compile: check python major version and use imp
+	or importlib accordingly, plus related changes. Original
+	patch for Python 3 only from Gabriel Ganne at:
+	https://lists.gnu.org/archive/html/automake-patches/2019-07/msg00002.html
+
+2020-02-15  Paul Osmialowski  <pawel.osmialowski@arm.com>
+
+	configure: add flang compilers to _AM_COMPILER_CAN_FAIL
+
+	* configure.ac (_AM_COMPILER_CAN_FAIL): add armflang and flang
+	(in two places). Original patch at:
+	https://lists.gnu.org/archive/html/automake-patches/2019-02/msg00001.html
+
+2020-02-14  Libor Bukata  <libor.bukata@oracle.com>
+
+	cosmetics: improve error message when dependency tracking fails
+
+	This change fixes https://bugs.gnu.org/35848.
+
+	* m4/depout.m4: Add suggestion to try GNU make to the error message.
+	Original patch at
+	https://lists.gnu.org/archive/html/automake-patches/2019-05/msg00000.html
+
+2020-02-13  Vincent Lefevre  <vincent@vinc17.net>
+
+	maint: update lib/COPYING from canonical source.
+
+	* lib/COPYING: update from https://www.gnu.org/licenses/gpl-3.0.txt
+	(only change is to use https urls).
+
+2020-02-10  Mathieu Lirzin  <mthl@gnu.org>
+
+	build: fix 'installcheck' target
+
+	* t/local.mk (installcheck-testsuite): Do not use 'pre-inst-env' script.
+	(AM_TESTS_ENVIRONMENT): Ensure that installed perl modules are found.
+
+2020-01-29  Lukas Fleischer  <lfleischer@lfos.de>
+
+	python: properly uninstall __pycache__ in subdirectories
+
+	This change finishes fixing automake bug#32088:
+	https://debbugs.gnu.org/32088
+
+	* lib/am/python.am (uninstall-%DIR%PYTHON): Uninstall
+	byte-compiled files in a '__pycache__' subdirectory
+	from sub/__pycache__/, not __pycache__/sub/.
+	(am__pep3147_tweak): prefix __pycache__ here, for both .pyc and .pyo.
+	https://lists.gnu.org/archive/html/automake-patches/2018-05/msg00000.html
+	* t/instmany-python.sh (limit): increase to 4500, following
+	Andreas Huettel, https://debbugs.gnu.org/32088#11.
+
+2020-01-29  Lukas Fleischer  <lfleischer@lfos.de>
+
+	tests: in python tests, do not require .pyo files (for python3)
+
+	This change partially fixes automake bug#32088:
+	https://debbugs.gnu.org/32088
+
+	* t/py-compile-basedir.sh: Remove all .pyo checks.
+	Also, in this test only, allow for either 4 or 6 files resulting
+	from compilation, as new-enough Python3 results in 6
+	(per Andreas Huettel, https://debbugs.gnu.org/cgi/bugreport.cgi?bug=32088#17)
+	* t/py-compile-basic.sh: Remove all .pyo checks.
+	* t/py-compile-destdir.sh: Likewise.
+	* t/py-compile-option-terminate.sh: Likewise.
+	* t/python-virtualenv.sh: Likewise.
+	* t/python10.sh: Likewise.
+	* t/python12.sh: Likewise.
+	* t/python3.sh: Likewise.
+
+2020-01-26  Karl Berry  <karl@freefriends.org>
+
+	doc: clarify build tree location
+
+	* doc/automake.texi (VPATH Builds): more words about the build
+	tree location. Suggestion from Jefferson Carpenter, 31 May 2018:
+	<https://lists.gnu.org/archive/html/automake-patches/2018-05/msg00003.html>
+
+2020-01-19  Karl Berry  <karl@freefriends.org>
+
+	lint: make syntax-check same as maintainer-check.
+
+	* maintainer/syntax-checks.mk (syntax-check): new target,
+	same as maintainer-check. For consistency with many other
+	GNU packages.
+	(.PHONY): add here too.
+
+2020-01-19  Karl Berry  <karl@freefriends.org>
+
+	tests: use find+rm, not perl, to remove temporary directories.
+
+	This change fixes automake bug#39078:
+	https://debbugs.gnu.org/39078
+
+	* t/ax/test-lib.sh (rm_rf_): run chmod -R u+rwx and rm -rf,
+	instead of calling our t/ax/deltree.pl script.  This reverses the
+	change of 2013-05-16.  It made sense to write and use deltree
+	at that point, but unfortunately as of perl-5.28.0
+	(File::Path.pm version 2.15), rmtree no longer removes a tree with
+	unreadable subdirectories, such as we (intentionally) have.  So we
+	might as well go back to rm -rf.  The unconditional recursive chmod
+	instead of the previously-used more complex find command will
+	hopefully prove portable.  See the bug report for more details.
+
+	Our deltree.pl is not used for anything else, but nevertheless
+	leaving it in our source tree for now, for ease of reversion
+	and comparison.
+
+2020-01-08  Karl Berry  <karl@freefriends.org>
+
+	tests: use skip_ consistently.
+
+	* t/lisp-loadpath.sh: use skip_ instead of exit 77;
+	also, notice and reset if the EMACS envvar is simply "t".
+	* t/uninstall-fail.sh: use skip_ instead of the undefined skip.
+
+2020-01-05  Karl Berry  <karl@freefriends.org>
+
+	tests: Correctly simulate no emacs in t/nobase-nodist.sh
+
+	* t/nobase-nodist.sh: export EMACS, not EMCAS, as "no".
+
+2020-01-04  Karl Berry  <karl@freefriends.org>
+
+	automake: Support byte compilation in older Emacsen
+
+	* lib/am/lisp.am (am__emacs_byte_compile_setup) [FIRST]: define
+	new make variable, to use byte-compile-dest-file-function if
+	available, else byte-compile-dest-file.
+	(.el.elc): use it.
+	* t/lisp-loadpath.sh: skip test if emacs version is <= 23,
+	since their -L ordering is backwards.
+	* NEWS: update.
+
+2020-01-01  Jim Meyering  <meyering@fb.com>
+
+	maint: make update-copyright
+
+2019-12-23  Jim Meyering  <meyering@fb.com>
+
+	maint: make maintainer-check tests pass
+
+	* maintainer/syntax-checks.mk (sc_sanity_gnu_grep): Remove
+	NUL byte from grep output, to avoid shell diagnostic about
+	"NUL byte suppressed from expansion."
+	(automake_diff_no, aclocal_diff_no): Adjust number of expected
+	diff lines.
+
+2019-12-21  Karl Berry  <karl@freefriends.org>
+
+	tests: Ensure UTC for Texinfo @UPDATED@ test
+
+	* t/txinfo-vtexi4.sh: TZ=UTC0; export TZ (same as mdate-sh).
+	* NEWS: update.
+
+2019-12-17  Karl Berry  <karl@freefriends.org>
+
+	automake: Ensure space after $(LISP) in tags dependencies.
+
+	This change fixes automake bug#38139.
+
+	* bin/automake.in (handle_tags): Concatenate with space in " @config".
+	* t/tags-lisp-space.sh: New test.
+	* t/list-of-tests.mk (handwritten_TESTS): Add it.
+
+2019-11-17  Giuseppe Scrivano  <gscrivan@redhat.com>
+
+	dist: add dist-zstd option
+
+	Add support for using the zstd compression algorithm.
+	Use a default compression setting of -19, and ".zst" as the suffix.
+
+	* bin/automake.in (handle_dist): Add zstd to the list of known dist-
+	suffixes.
+	(preprocess_file): Map ZSTD to dist-zstd.
+	* doc/automake.texi: Document the new option.
+	* lib/Automake/Options.pm (_is_valid_easy_option): Add dist-zstd.
+	* lib/am/distdir.am (dist-zstd): New rule.
+	(?ZSTD?DIST_TARGETS): Add definition.
+	(distcheck): Add a case for *.tar.zst*.
+	* t/dist-formats.tap: Add tests.
+	* NEWS: Mention the change.
+
+2019-11-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	config: add msys support
+
+	Requested by Arnold Robbins in:
+	https://lists.gnu.org/r/bug-gnulib/2019-11/msg00008.html
+	* lib/ar-lib, lib/compile (func_file_conv):
+	Treat msys like cygwin.
+
+2019-10-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: make update-copyright
+
+2019-10-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: make fetch
+
+2019-09-02  Gavin Smith  <gavinsmith0123@gmail.com>
+
+	automake: do not require @setfilename in Texinfo files
+
+	Texinfo no longer requires a @setfilename directive in each
+	.texi file, so automake now also relaxes its restriction.
+	* bin/automake.in (scan_texinfo_file): Derive name of info file from
+	name of input file if no @setfilename line occurs in the file.
+	* t/txinfo-no-setfilename.sh: New test.
+	* t/list-of-tests.mk: Add it.
+	* NEWS: Mention it.
+
+	Fixes automake bugs #36921 and #34201.
+
+2019-08-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	install-sh: support -s with read-only source
+
+	Problem reported by Karl Berry in:
+	https://lists.gnu.org/r/bug-gnulib/2019-08/msg00067.html
+	* lib/install-sh: If -s is given, create the temporary file
+	with $cp_umask so that ‘strip’ can write to it.
+
+2019-07-03  Bruno Haible  <bruno@clisp.org>
+
+	ar-lib: Fix for MSVC 14.
+
+	* lib/ar-lib (extract): Convert CRLFs in 'lib -NOLOGO -LIST' output to LFs.
+
+2018-10-23  Paul Hardy  <unifoundry@gmail.com>
+
+	doc: Fix various typos and phrasing
+
+	This change fixes automake bug#32150.
+
+	* doc/automake.texi: Various typos and phrasing changes.
+
+2018-07-08  Mathieu Lirzin  <mthl@gnu.org>
+
+	python: Don't use '\n' in sed substitution
+
+	This change fixes automake bug#31222.
+
+	On macOS, 'sed' interprets '\n' in the substitution text as the letter 'n'
+	instead of as a newline.
+
+	* lib/am/python.am [?FIRST?] (am__pep3147_tweak): Use a space instead of '\n'.
+	* NEWS: Update.
+
+2018-03-24  Mathieu Lirzin  <mthl@gnu.org>
+
+	test-driver.scm: Add "--coverage" option
+
+	* contrib/test-driver.scm: When 'coverage' option is enabled, run tests
+	in the debug vm and trace coverage data.
+	(%options): Add 'coverage'.
+	(show-help): Display option.
+
+2018-03-24  Mathieu Lirzin  <mthl@gnu.org>
+
+	test-driver.scm: Don't guess script name from "--test-name"
+
+	'primitive-load' is used instead of 'load-from-path' since the script is
+	given as a relative file name.  For unknown reason, using 'load' fails
+	with GNU Mcron test suite when running 'make distcheck'.
+
+	* contrib/test-driver.scm: Get the actual script name directly from the
+	command line.  Handle the case where that argument is missing.
+
+2018-03-24  Mathieu Lirzin  <mthl@gnu.org>
+
+	test-driver.scm: Inline 'main' procedure
+
+	Having a main procedure involves passing the '-e main' command-line
+	argument to 'guile' which makes the test driver a bit less easy to use.
+
+	* contrib/test-driver.scm (main): Delete.  Move body to the top-level.
+
+2018-03-11  Mathieu Lirzin  <mthl@gnu.org>
+
+	maint: Use 'before-save-hook' in "contrib/test-driver.scm"
+
+	This a follow-up to commit 6bab5b26a1241b0e0edd058d2a921989f9a1747c.
+
+	Use 'before-save-hook' instead of 'write-file-functions' to match what
+	is done in other scripts.
+
+	* contrib/test-driver.scm: Update hook usage and use 'UTC0' timezone
+	instead of 'UTC'.
+
+2018-03-11  Mathieu Lirzin  <mthl@gnu.org>
+
+	bin: Rely only on the shebang line
+
+	Previously ‘automake’ and ‘aclocal’ were handling the case of being
+	interpreted as a Shell script by using a hack leveraging the fact that
+	Shell and Perl has a compatible syntax intersection allowing those
+	scripts to launch ‘perl’ from the shell.
+
+	* bin/aclocal.in: Remove cryptic launching hack.
+	* bin/automake.in: Likewise.
+
+2018-03-11  Mathieu Lirzin  <mthl@gnu.org>
+
+	maint: Post-release administrivia
+
+	* NEWS: Add header line for next release.
+	* configure.ac (AC_INIT): Bump version number to 1.16a.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
 2018-03-11  Mathieu Lirzin  <mthl@gnu.org>
 
 	version 1.16.1
@@ -75,7 +438,7 @@
 	'python3.8', and 'python3.9'.
 	* NEWS: Update.
 
-2018-03-07  Paul Eggert  <eggert@cs.ucla.edu>
+2018-03-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	maint: write-file-hooks -> before-save-hook
 
@@ -176,7 +539,7 @@
 	* t/maken3.sh (check_targets): "--force" is not a documented option, so
 	don't use it.
 
-2018-02-04  Mathieu Lirzin  <mthl@gnu.org>
+2018-02-03  Mathieu Lirzin  <mthl@gnu.org>
 
 	python: Generate python interpreter list
 
@@ -197,7 +560,7 @@
 	* t/txinfo-many-output-formats.sh: Explain why AM_MAKEINFOFLAGS is set
 	with an invalid option.
 
-2018-01-19  Mathieu Lirzin  <mthl@gnu.org>
+2018-01-18  Mathieu Lirzin  <mthl@gnu.org>
 
 	tests: Distribute DEJATOOL files manually
 
@@ -207,14 +570,14 @@
 
 	* t/check12.sh (Makefile.am): Distribute files from DEJATOOL.
 
-2018-01-19  Mathieu Lirzin  <mthl@gnu.org>
+2018-01-18  Mathieu Lirzin  <mthl@gnu.org>
 
 	tests: Let 'ltorder.sh' run successfully with Guix dynamic loader
 
 	* t/ltorder.sh: Set GUIX_LD_WRAPPER_ALLOW_IMPURITIES environment variable to
 	unlock the dynamic loader provided by GNU Guix.
 
-2018-01-19  Mathieu Lirzin  <mthl@gnu.org>
+2018-01-18  Mathieu Lirzin  <mthl@gnu.org>
 
 	tests: Fix various 'flex' compilation issues
 
@@ -233,7 +596,7 @@
 	* t/aclocal.sh: Check that 'aclocal' support the --version and --help
 	command-line options.
 
-2018-01-18  Mathieu Lirzin  <mthl@gnu.org>
+2018-01-17  Mathieu Lirzin  <mthl@gnu.org>
 
 	contrib: Add Guile custom test driver using SRFI-64 test harness
 
@@ -242,13 +605,13 @@
 	* contrib/test-driver.scm: New test driver script.
 	* NEWS: Update.
 
-2018-01-18  Mathieu Lirzin  <mthl@gnu.org>
+2018-01-17  Mathieu Lirzin  <mthl@gnu.org>
 
 	maint: Document how to use Guix for Automake development
 
 	* HACKING <Setting the development environment>: New part.
 
-2018-01-05  Khem Raj  <raj.khem@gmail.com>  (tiny change)
+2018-01-04  Khem Raj  <raj.khem@gmail.com>  (tiny change)
 
 	automake: Add default libtool_tag to cppasm
 
@@ -281,7 +644,7 @@
 
 	* maintainer/maint.mk (files_without_copyright): Add ".dir-locals.el".
 
-2017-12-17  Jim Meyering  <meyering@fb.com>
+2017-12-16  Jim Meyering  <meyering@fb.com>
 
 	port elisp-compilation support to emacs-23.1 and newer
 
@@ -300,7 +663,7 @@
 	* t/list-of-tests.mk (handwritten_TESTS): Add it.
 	* NEWS (Bugs fixed): Mention this problem.
 
-2017-11-29  Jim Meyering  <meyering@fb.com>
+2017-11-28  Jim Meyering  <meyering@fb.com>
 
 	"make dist" did not depend on $(BUILT_SOURCES)
 
@@ -370,11 +733,11 @@
 
 	* HACKING: Fix instructions merge instructions.
 
-2017-09-22  Paul Eggert  <eggert@cs.ucla.edu>
+2017-09-21  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/mdate.sh (TZ): Use portable setting.
 
-2017-09-20  Mathieu Lirzin  <mthl@gnu.org>
+2017-09-19  Mathieu Lirzin  <mthl@gnu.org>
 
 	Merge branch 'minor'
 
@@ -423,11 +786,11 @@
 	help. The GNU project regularly serves up code to users, so we should
 	take some care here.
 
-2017-09-17  Paul Eggert  <eggert@cs.ucla.edu>
+2017-09-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	make fetch
 
-2017-09-17  Paul Eggert  <eggert@cs.ucla.edu>
+2017-09-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix a couple more http: URLs
 
@@ -554,7 +917,7 @@
 	* maintainer/syntax-checks.mk (sc_perl_protos): New target.
 	(syntax_check_rules): Add it.
 
-2017-08-31  Mathieu Lirzin  <mthl@gnu.org>
+2017-08-30  Mathieu Lirzin  <mthl@gnu.org>
 
 	build: Generate versioned scripts at make time
 
@@ -566,7 +929,7 @@
 	(%D%/aclocal-$(APIVERSION)): New targets.
 	(CLEANFILES): Add them.
 
-2017-08-31  Mathieu Lirzin  <mthl@gnu.org>
+2017-08-30  Mathieu Lirzin  <mthl@gnu.org>
 
 	aclocal: Support ACLOCAL_AUTOMAKE_DIR environment variable
 
@@ -651,7 +1014,7 @@
 	* bin/automake.in (handle_LIBOBJS_or_ALLOCA): Remove complex regexp
 	substitution when handling LTLIBOBJS.
 
-2017-08-22  Michael Haubenwallner  <michael.haubenwallner@ssi-schaefer.com>
+2017-08-21  Michael Haubenwallner  <michael.haubenwallner@ssi-schaefer.com>
 
 	automake: Ensure that LIBOBJ_DIR builddir is created
 
@@ -668,7 +1031,7 @@
 	* doc/help2man: Sync with version 1.47.3 to support reproducible
 	builds by using $SOURCE_DATE_EPOCH.
 
-2017-07-16  Mathieu Lirzin  <mthl@gnu.org>
+2017-07-15  Mathieu Lirzin  <mthl@gnu.org>
 
 	doc: Fix typo "nothing" => "noting"
 
@@ -677,7 +1040,7 @@
 	* doc/automake.texi (Checking the Distribution): Fix typo.
 	* THANKS: Update.
 
-2017-07-16  Mathieu Lirzin  <mthl@gnu.org>
+2017-07-15  Mathieu Lirzin  <mthl@gnu.org>
 
 	doc: Fix typos
 
@@ -687,7 +1050,7 @@
 	(Parallel Test Harness): Fix typos.
 	* THANKS: Update.
 
-2017-07-16  Mathieu Lirzin  <mthl@gnu.org>
+2017-07-15  Mathieu Lirzin  <mthl@gnu.org>
 
 	check: Make 'check-TESTS' target depend on test dependencies
 
@@ -783,7 +1146,7 @@
 	* maintainer/maint.mk (git-tag-release): Use a Git tag message similar
 	to what the 'do-release-commit-and-tag' script from Gnulib do.
 
-2017-06-18  Mathieu Lirzin  <mthl@gnu.org>
+2017-06-17  Mathieu Lirzin  <mthl@gnu.org>
 
 	maint: Update files from upstream with 'make fetch'
 
@@ -791,7 +1154,7 @@
 	* lib/config.sub: Likewise.
 	* lib/texinfo.tex: Likewise.
 
-2017-06-18  Mathieu Lirzin  <mthl@gnu.org>
+2017-06-17  Mathieu Lirzin  <mthl@gnu.org>
 
 	maint: Update NEWS
 
@@ -912,7 +1275,7 @@
 	  UPDATE_COPYRIGHT_MAX_LINE_LENGTH=79 \
 	   update-copyright $(git ls-files)
 
-2016-09-09  Jim Meyering  <meyering@fb.com>
+2016-09-08  Jim Meyering  <meyering@fb.com>
 
 	automake: do not emit rule with two dependents
 
@@ -929,7 +1292,7 @@
 	it is deduped.
 	See: http://bugs/gnu/org/22702
 
-2016-06-02  Jim Meyering  <meyering@fb.com>
+2016-06-01  Jim Meyering  <meyering@fb.com>
 
 	compile: remove .Tpo file upon failure
 
@@ -949,21 +1312,21 @@
 	* t/list-of-tests.mk (handwritten_TESTS): Add it.
 	This addresses bug#23661.
 
-2016-04-21  Paul Eggert  <eggert@cs.ucla.edu>
+2016-04-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	python: add python3.5, python3.4
 
 	* m4/python.m4 (AM_PATH_PYTHON): Add python3.5, python3.4.
 
-2016-04-01  Paul Eggert  <eggert@cs.ucla.edu>
+2016-03-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Merge branch 'minor'
 
-2016-04-01  Paul Eggert  <eggert@cs.ucla.edu>
+2016-03-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Merge branch 'micro' into minor
 
-2016-04-01  Paul Eggert  <eggert@cs.ucla.edu>
+2016-03-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	automake: port to Perl 5.22 and later
 
@@ -973,7 +1336,7 @@
 	http://search.cpan.org/dist/perl-5.22.0/pod/perldelta.pod#A_literal_%22{%22_should_now_be_escaped_in_a_pattern
 	* bin/automake.in (substitute_ac_subst_variables): Escape left brace.
 
-2016-03-29  Paul Eggert  <eggert at>
+2016-03-28  Paul Eggert  <eggert at>
 
 	automake: port better to future gzip
 
@@ -1293,14 +1656,14 @@
 	  install-sh: assume 'dirname' is available and working correctly
 	  post-release: micro version bump (1.14a)
 
-2014-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2014-12-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	release: stable minor release 1.15
 
 	* configure.ac (AC_INIT): Bump version number to 1.15.
 	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
 
-2014-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2014-12-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	NEWS: minor improvements and fixed some typos and grammaros
 
@@ -1799,7 +2162,7 @@
 
 	They were swapped.  Reported in http://debbugs.gnu.org/19108.
 
-2014-12-18  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2014-12-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: improve description of ${PACKAGE}, ${VERSION}, and similar variables
 
@@ -1980,7 +2343,7 @@
 	use curly quotes, which is easier to read though it does assume
 	UTF-8 support.
 
-2013-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-12-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	NEWS: a typofix, and better word wrapping
 
@@ -2057,7 +2420,7 @@
 
 	See also automake bugs #9088, #8662 and #8540.
 
-2013-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-12-25  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'install-sh-improvements' into minor
 
@@ -2065,7 +2428,7 @@
 	  install-sh: a slightly better diagnostic, and tests enhancements
 	  install-sh: be stricter in catching invalid usages
 
-2013-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-12-25  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	install-sh: a slightly better diagnostic, and tests enhancements
 
@@ -2076,7 +2439,7 @@
 	* t/install-sh-unittests.sh: Enhance to also check diagnostic printed
 	in cases of expected failure.
 
-2013-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-12-25  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	install-sh: be stricter in catching invalid usages
 
@@ -2318,7 +2681,7 @@
 	  distcheck: don't allow overriding of --prefix and --srcdir by the user
 	  tests: expose bug#14991 (relates to 'distcheck')
 
-2013-11-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-11-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'modernize-install-sh' into minor
 
@@ -2328,7 +2691,7 @@
 	  install-sh: assume ${var:-value} works as expected
 	  install-sh: assume 'dirname' is available and working correctly
 
-2013-11-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-11-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'micro' into minor
 
@@ -2339,7 +2702,7 @@
 	  distcheck: don't allow overriding of --prefix and --srcdir by the user
 	  tests: expose bug#14991 (relates to 'distcheck')
 
-2013-11-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-11-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	cosmetics: fix typo in a user-facing message in tests
 
@@ -2357,7 +2720,7 @@
 	  automake: account for perl hash order randomization
 	  tests: avoid use of intervals to capitalize letters
 
-2013-10-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	automake: account for perl hash order randomization
 
@@ -2378,7 +2741,7 @@
 	sorts its output.
 	* t/preproc-errmsg.sh: Adjust.
 
-2013-10-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: avoid use of intervals to capitalize letters
 
@@ -2387,13 +2750,13 @@
 
 	* t/test-extensions.sh: Adjust.
 
-2013-10-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	cosmetics: untabify the install-sh script
 
 	* lib/install-sh: Here, plus a couple of related formatting tweaks.
 
-2013-10-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	install-sh: assume that "set -f" and "set +f" work...
 
@@ -2452,7 +2815,7 @@
 	* t/distcheck-no-prefix-or-srcdir-override.sh: New, expose the bug.
 	* t/list-of-tests.mk (handwritten_TESTS, XFAIL_TESTS): Add it.
 
-2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'minor'
 
@@ -2471,7 +2834,7 @@
 	  tests: avoid a spurious failure on MacOS X 10.6.8
 	  tests: don't risk hanging on the 'cl' requirement
 
-2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'micro' into minor
 
@@ -2490,7 +2853,7 @@
 	  tests: avoid a spurious failure on MacOS X 10.6.8
 	  tests: don't risk hanging on the 'cl' requirement
 
-2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: fix spurious failure when zip is present but unzip is not
 
@@ -2502,7 +2865,7 @@
 	at it, reorganize the existing code a bit.
 	* THANKS, NEWS: Update.
 
-2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: fix spurious failure due to localization issues
 
@@ -2512,11 +2875,11 @@
 	we can expect error messages in English when grepping its output.
 	* THANKS, NEWS: Update.
 
-2013-10-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-10-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	NEWS: update with the changes since v1.14
 
-2013-10-29  Peter Breitenlohner  <peb@mppmu.mpg.de>  (tiny change)
+2013-10-28  Peter Breitenlohner  <peb@mppmu.mpg.de>  (tiny change)
 
 	docs: correct typos in the fix-timestamp.sh script
 
@@ -3038,7 +3401,7 @@
 	updated (apparently, it was mistakenly not updated in the previous
 	real change to the script).
 
-2013-06-13  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-06-12  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint'
 
@@ -4207,7 +4570,7 @@
 	* t/tap-more.sh: Likewise.
 	* t/parallel-tests-concurrency.sh: Likewise.
 
-2013-05-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: new convenience target 'check-parallel'
 
@@ -4374,7 +4737,7 @@
 	* t/make-keepgoing.tap: Here.
 	* t/parallel-tests-exit-statuses.sh: And here.
 
-2013-05-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint'
 
@@ -4385,7 +4748,7 @@
 	  test-lib: minor style changes
 	  test-lib: fix botched function name in an error message
 
-2013-05-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'micro' into maint
 
@@ -4396,7 +4759,7 @@
 	  test-lib: minor style changes
 	  test-lib: fix botched function name in an error message
 
-2013-05-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: run_make: options to do command redirection
 
@@ -4453,7 +4816,7 @@
 	* t/uninstall-fail.sh: Likewise.
 	* t/yacc-dist-nobuild.sh: Likewise.
 
-2013-05-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: only activate 'unset' alias if required
 
@@ -4466,7 +4829,7 @@
 	alias if "unset VAR" returns a non-zero exit status when VAR is already
 	unset.
 
-2013-05-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: better idiom to override make macro defs on the cmdline
 
@@ -4611,7 +4974,7 @@
 
 	* t/parallel-tests-recheck-pr11791.sh: Here.
 
-2013-05-19  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-18  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: fix a spurious failure with FreeBSD make
 
@@ -4620,7 +4983,7 @@
 
 	* t/ltlibsrc.sh: Adjust.
 
-2013-05-19  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-18  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: fix a spurious failure with FreeBSD make
 
@@ -4750,7 +5113,7 @@
 	* t/yflags.sh: Likewise.
 	* t/yflags2.sh: Likewise.
 
-2013-05-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: fix some botched/outdated comments
 
@@ -4884,7 +5247,7 @@
 	* t/README: Likewise, and updated the surrounding text to get rid of
 	obsolete statements and advices.
 
-2013-05-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-15  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	PLANS: subdir-objects: various updates
 
@@ -5272,7 +5635,7 @@
 	commit 'v1.13.1d-129-gf7ef16f', but we noticed that too late.
 	Oh well.
 
-2013-05-11  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-10  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	options: consistently use return statuses to report errors (more)
 
@@ -5283,7 +5646,7 @@
 	* lib/Automake/Options.pm (_process_option_list): Adjust, where dealing
 	with the removed options 'dist-shar' and 'dist-tarZ'.
 
-2013-05-11  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-10  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint'
 
@@ -5299,7 +5662,7 @@
 	  THANKS: update Eric Blake's e-mail address
 	  NEWS: typofix
 
-2013-05-11  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-10  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	options: try to report as much errors as possible
 
@@ -5309,7 +5672,7 @@
 	* lib/Automake/Options.pm (_process_option_list): Do so by avoiding
 	early returns in here.
 
-2013-05-11  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-10  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'branch-1.13.2' into maint
 
@@ -5687,13 +6050,13 @@
 
 	* doc/automake.texi: Adjust.
 
-2013-05-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	fixlet: remove leftover comment fragment
 
 	* configure.ac: Here.
 
-2013-05-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	master branch: we are going to become Automake 2.0
 
@@ -5701,7 +6064,7 @@
 	1.13a to 1.99a.
 	* m4/amversion.m4: Regenerate.
 
-2013-05-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint'
 
@@ -5713,7 +6076,7 @@
 	  tests: typofixes in comments in t/preproc-c-compile.sh
 	  tests: remove bashism from a test
 
-2013-05-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	maint branch: we are going to become Automake 1.14
 
@@ -5721,7 +6084,7 @@
 	1.13.2a to 1.13a.
 	* m4/amversion.m4: Regenerate.
 
-2013-05-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'branch-1.13.2' into maint
 
@@ -5730,7 +6093,7 @@
 	  release: beta release 1.13.1d (will become 1.13.2)
 	  NEWS: document more robust handling/recognition of make options
 
-2013-05-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	maint: version bump after beta release 1.13.1d
 
@@ -5957,7 +6320,7 @@
 	* t/header-vars.am (am__make_running_with_option): Adjust to cater
 	to the new GNU make behaviour.
 
-2013-05-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: expose weaknesses in make flags analysis
 
@@ -5967,7 +6330,7 @@
 	* t/make-dryrun.tap: Enhance and extend.
 	* t/make-keepgoing.tap: Likewise.
 
-2013-05-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-05-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: improve debugging output in checks on make flags analysis
 
@@ -6882,7 +7245,7 @@
 	* lib/Automake/Options.pm: Likewise.
 	* m4/internal/ac-config-macro-dirs.m4: Likewise.
 
-2013-02-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2013-02-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	cosmetics: fix some "docstring-like" comments in automake
 
@@ -8226,7 +8589,7 @@
 	Conflicts:
 		Makefile.am
 
-2013-01-04  Karl Berry  <karl@gnu.org>
+2013-01-03  Karl Berry  <karl@gnu.org>
 
 	docs: mention dist-hook help for EXTRA_DIST
 
@@ -8668,7 +9031,7 @@
 	* configure.ac (AC_INIT): Bump version number to 1.13.1.
 	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
 
-2013-01-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint'
 
@@ -8679,7 +9042,7 @@
 	  coverage: test CONFIGURE_DEPENDENCIES
 	  coverage: test CONFIG_STATUS_DEPENDENCIES
 
-2013-01-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: don't always look for a C++ compiler named 'RCC'
 
@@ -8699,7 +9062,7 @@
 
 	* configure.ac: Adjust.
 
-2013-01-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: fix bug in pkg-config-macros.sh, could cause spurious SKIPs
 
@@ -8712,7 +9075,7 @@
 	not to be found even when the program was present.
 	* THANKS: Update.
 
-2013-01-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: autom4te cache can break CONFIGURE_DEPENDENCIES
 
@@ -8723,7 +9086,7 @@
 
 	* doc/automake.texi (Rebuilding): ... here.
 
-2013-01-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	coverage: test CONFIGURE_DEPENDENCIES
 
@@ -8731,7 +9094,7 @@
 	* t/list-of-tests.mk: Add it.
 	* doc/automake.texi: Reference it in comments.
 
-2013-01-01  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	coverage: test CONFIG_STATUS_DEPENDENCIES
 
@@ -9095,11 +9458,11 @@
 	(edit_configure_in): ... this function ...
 	(edit_configure_ac): ... like this.
 
-2012-12-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	NEWS: better distinction between obsolete and obsolescent features
 
-2012-12-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	cleanup: get rid of 'Automake::Configure_ac' module
 
@@ -9118,7 +9481,7 @@
 	'require_configure_ac' function.
 	* aclocal.in: Likewise.
 
-2012-12-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	maint: remove last vestiges of 'configure.in' support from the testsuite
 
@@ -9127,13 +9490,13 @@
 	* t/autodist-configure-no-subdir.sh: Remove last references to
 	'configure.in'.
 
-2012-12-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: remove a botched comment from a test case
 
 	* t/backcompat6.sh: Here.
 
-2012-12-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-12-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	maint: reflect removal of 'configure.in' support in comments and messages
 
@@ -10577,7 +10940,7 @@
 	* t/aclocal-underquoted-defun.sh: ... like this.
 	* t/list-of-tests.mk: Update.
 
-2012-11-18  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-11-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: improve coverage on Texinfo + silent rules
 
@@ -10873,7 +11236,7 @@
 
 	* NEWS (Bugs fixed in 1.12.5): Here.
 
-2012-11-11  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>  (tiny change)
+2012-11-10  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>  (tiny change)
 
 	python: improve support for modern python (CPython 3.2 and PyPy)
 
@@ -12408,7 +12771,7 @@
 
 	* automake.in (preprocess_file): Here.
 
-2012-08-11  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-08-10  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	cleanup: remove stale references to 'lzma' option
 
@@ -13212,7 +13575,7 @@
 	* runtest.in: Here.  This required code refactoring not
 	completely trivial.
 
-2012-07-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-07-25  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	cosmetics: remove leftover comment fragment from runtest.in
 
@@ -14755,7 +15118,7 @@
 	not 'configure', as the witness file, because the latter does not exist
 	in the current directory during a VPATH build.
 
-2012-06-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-06-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: prefer "test ! -e FILE" to check that a file doesn't exist
 
@@ -15245,14 +15608,14 @@
 	the existing code heavily, in particular introducing
 	(give_advice): ... this new function in the process.
 
-2012-06-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-06-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'missing-not-touch-just-warn'
 
 	* missing-not-touch-just-warn:
 	  missing: do not touch timestamps; only warn for out-of-date files
 
-2012-06-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-06-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint'
 
@@ -15268,7 +15631,7 @@
 	  cosmetics: fix description of an expected error message in a test
 	  tests: assume automake quotes 'like this', not `like this'
 
-2012-06-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-06-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: avoid one last `...` command substitution in 'test-init.sh'
 
@@ -15276,7 +15639,7 @@
 	also shave off a couple of forks, and the need for a sanity check
 	only required in fringe situations.
 
-2012-06-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-06-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	maintcheck: guard against `...` for command substitution in test cases
 
@@ -16306,7 +16669,7 @@
 	* lib/am/tags.am: Use it in several recipes and dependencies list to
 	reduce code duplication.
 
-2012-06-08  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-06-07  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tags (cscope): also process $(TAGS_FILES)
 
@@ -16314,7 +16677,7 @@
 	the '$(TAGS_FILES) variable, for consistency by what is done by the
 	'ID', 'TAGS' and 'CTAGS' rules.
 
-2012-06-08  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-06-07  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tags (ID, cscope): also process config header (if any)
 
@@ -17197,7 +17560,7 @@
 	had erroneously been applied to 'master' only rather than to
 	'maint'.
 
-2012-05-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-05-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	maintcheck: reduce code duplication, increase coverage
 
@@ -18288,7 +18651,7 @@
 	* t/self-check-is_newest.tap: Apparently, on some systems (or file
 	systems), "touch -r" can truncate timestamps :-(  Work around that.
 
-2012-04-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-04-25  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	build: require autoconf 2.69
 
@@ -18608,7 +18971,7 @@
 	* t/vala-headers.sh, t/vala-vpath.sh: Enhance.
 	* NEWS: Update.
 
-2012-04-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-04-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	vala tests: check headers generation
 
@@ -18616,7 +18979,7 @@
 	header generation (e.g., '-H', '--vapi', ...) in '$(..._VALAFLAGS)'.
 	* t/list-of-tests.mk: Add it.
 
-2012-04-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-04-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	vala tests: remove redundant libtool requirements and usages
 
@@ -18643,7 +19006,7 @@
 	reasons).
 	Ensure the stamp file is created in the source directory.
 
-2012-04-16  Jim Meyering  <meyering@redhat.com>
+2012-04-15  Jim Meyering  <meyering@redhat.com>
 
 	build: use latest help2man, but without locale support
 
@@ -18843,7 +19206,7 @@
 	* NEWS (Changes to Automake-generated testsuite harnesses): It's
 	'perl', not 'per'.  Reported by Akim Demaille in a private mail.
 
-2012-04-12  Marc-Antoine Perennou  <Marc-Antoine@Perennou.com>  (tiny change)
+2012-04-11  Marc-Antoine Perennou  <Marc-Antoine@Perennou.com>  (tiny change)
 
 	vala: fix vapi files handling
 
@@ -18857,7 +19220,7 @@
 	as an extension for vala input files.
 	* tests/list-of-tests.mk (XFAIL_TESTS): Remove 'vala-vapi.test'.
 
-2012-04-12  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+2012-04-11  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
 	    Marc-Antoine Perennou  <Marc-Antoine@Perennou.com>
 
 	vala: test vapi files handling (still failing)
@@ -19028,7 +19391,7 @@
 	  tests: remove recipes that run tests with 'prove'
 	  tests: move most helper scripts and files into the 'ax' subdirectory
 
-2012-04-09  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-04-08  Stefano Lattarini  <stefano.lattarini@gmail.com>
 	    Peter Rosin  <peda@lysator.liu.se>
 
 	tests: avoid spurious failures with non-flex 'lex' programs and C++
@@ -19393,7 +19756,7 @@
 
 	From a suggestion by Joseph S. Myers in automake bug#11034.
 
-2012-03-29  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-03-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	perl refactor: use modern semantics of 'open'
 
@@ -20164,7 +20527,7 @@
 	commit), even though this change has nothing to do with the changes
 	on the msvc branch.
 
-2012-03-07  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-03-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: remove useless sleep from tests on remake rules
 
@@ -20181,11 +20544,11 @@
 	* tests/remake10b.test: Likewise.
 	* tests/remake10c.test: Likewise.
 
-2012-03-07  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-03-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'msvc' into master (dummy merge)
 
-2012-03-07  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-03-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint' into msvc
 
@@ -20784,7 +21147,7 @@
 	compilers determined at configure time (i.e., $GNU_CC for the GNU
 	C compiler, and so on).
 
-2012-02-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-02-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs, news: document planned removal of obsolete macros and features
 
@@ -20794,7 +21157,7 @@
 	two- or three-arguments invocation forms of AM_INIT_AUTOMAKE.
 	* doc/automake.texi: Likewise.
 
-2012-02-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-02-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: remove reference to lzma support, it has been removed
 
@@ -20806,14 +21169,14 @@
 	* doc/automake.texi: Remove references to the 'dist-lzma' option
 	and to the lzma compression support.
 
-2012-02-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-02-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	cosmetics: fixlet in comment in automake
 
 	* automake.in ($configure_dist_common): In the associated comment,
 	refer to scanning of 'configure.ac', not 'configure.in'.
 
-2012-02-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-02-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	maint: assume 'test -x' is portable
 
@@ -20823,7 +21186,7 @@
 	should today be portable to any non-museum system.  Since we are at
 	it, improve diagnostic in case of failure.
 
-2012-02-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-02-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	deptrack: avoid few forks in configure (minor optimization)
 
@@ -21270,7 +21633,7 @@
 
 	cosmetics: remove extra trailing whitespace in configure.ac
 
-2012-02-18  Peter Rosin  <peda@lysator.liu.se>
+2012-02-17  Peter Rosin  <peda@lysator.liu.se>
 
 	Merge branch 'yacc-quote-fix'
 
@@ -21881,7 +22244,7 @@
 	* configure.ac (AM_SUBST_NOTMAKE): Don't call anymore on 'YACC' nor
 	on 'LEX'.
 
-2012-02-14  Peter Rosin  <peda@lysator.liu.se>
+2012-02-13  Peter Rosin  <peda@lysator.liu.se>
 
 	depcomp tests: do not specify LDFLAGS for static libraries
 
@@ -21892,7 +22255,7 @@
 	* tests/depcomp.sh (src/Makefile.am): Don't add any LDFLAGS
 	when libbaz is built as a static library.
 
-2012-02-14  Peter Rosin  <peda@lysator.liu.se>
+2012-02-13  Peter Rosin  <peda@lysator.liu.se>
 
 	depcomp tests: avoid redundant runs for non-libtool test
 
@@ -21903,7 +22266,7 @@
 	* tests/depcomp.sh: Only run the tests three-fold when
 	libtool is in use.
 
-2012-02-14  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-02-13  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: avoid yet other spurious failures on NetBSD
 
@@ -22748,7 +23111,7 @@
 	Or maybe this situation is  the consequence of a minor blunder in
 	the conversion from CVS to Git; either way, this is not a big deal.
 
-2012-01-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-01-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'maint'
 
@@ -22922,7 +23285,7 @@
 	* tests/transform2.test: Skip the affected part of the test
 	if the described Cygwin behaviour is detected.
 
-2012-01-28  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2012-01-27  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: avoid spurious failure of deleted-am.test with FreeBSD make
 
@@ -24767,7 +25130,7 @@
 	avoid spuriously triggering a match from the syntax check
 	`sc_tests_overriding_macros_on_cmdline'.
 
-2011-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+2011-12-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Merge branch 'dist-lzip' into maint
 
