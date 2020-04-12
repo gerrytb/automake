@@ -1,3 +1,14 @@
+automake-1.16 (1:1.16.2-1) unstable; urgency=medium
+
+  * New upstream release (Closes: 889647, 918582)
+  * Update upstream signing key
+  * Switch to debhelper-compat 12
+  * Standards-Version to 4.5.0.1
+  * Switch python dependencies to Python 3 (Closes: 942928)
+  * Remove long obsolete Conflicts
+
+ -- Eric Dorland <eric@debian.org>  Sun, 12 Apr 2020 14:14:58 -0400
+
 automake-1.16 (1:1.16.1-4) unstable; urgency=medium
 
   * Touch automake.texi with SOURCE_DATE_EPOCH
