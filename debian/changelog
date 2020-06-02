@@ -1,6 +1,7 @@
 automake-1.16 (1:1.16.2-2) UNRELEASED; urgency=low
 
   * Trim trailing whitespace.
+  * Set upstream metadata fields: Bug-Submit (from ./configure).
 
  -- Debian Janitor <janitor@jelmer.uk>  Tue, 02 Jun 2020 17:59:02 -0000
 
