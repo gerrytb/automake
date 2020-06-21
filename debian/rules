@@ -40,7 +40,7 @@ override_dh_auto_install:
 	rm -f \
 		$(CURDIR)/debian/tmp/usr/share/automake-$(version)/config.guess
 ifneq ($(DEB_BUILD_PROFILE),stage1)
-# Rebuild the info files                                                       
+# Rebuild the info files
 	cd $(infodir) && makeinfo automake.texi
 endif
 
