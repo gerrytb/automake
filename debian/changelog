@@ -1,9 +1,14 @@
-automake-1.16 (1:1.16.2-2) UNRELEASED; urgency=low
+automake-1.16 (1:1.16.2-2) unstable; urgency=medium
 
+  [ Debian Janitor ]
   * Trim trailing whitespace.
   * Set upstream metadata fields: Bug-Submit (from ./configure).
 
- -- Debian Janitor <janitor@jelmer.uk>  Tue, 02 Jun 2020 17:59:02 -0000
+  [ Eric Dorland ]
+  * Add dch section to gbp.conf
+  * Use https for watch file URL
+
+ -- Eric Dorland <eric@debian.org>  Sat, 04 Jul 2020 18:23:19 -0400
 
 automake-1.16 (1:1.16.2-1) unstable; urgency=medium
 
