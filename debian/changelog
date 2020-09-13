@@ -1,3 +1,12 @@
+automake-1.16 (1:1.16.2-4) unstable; urgency=medium
+
+  * Add patch for 'support -fno-common in vala-mix2 test' (Closes: 970142)
+  * Fix ordering of patches
+  * Add upstream Repository and Repository-Browse
+  * Add lintian override for tex file outside of /usr/share/doc
+
+ -- Eric Dorland <eric@debian.org>  Sun, 13 Sep 2020 01:12:34 -0400
+
 automake-1.16 (1:1.16.2-3) unstable; urgency=medium
 
   * Add debian/not-installed
