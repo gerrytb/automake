@@ -7,7 +7,7 @@ Subject: texi file rename for multiple automake versions
  1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/doc/automake.texi b/doc/automake.texi
-index da0aa29..b6457aa 100644
+index 9f4acf6..c4d08e9 100644
 --- a/doc/automake.texi
 +++ b/doc/automake.texi
 @@ -1,7 +1,7 @@
