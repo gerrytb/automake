@@ -1,3 +1,11 @@
+automake-1.16 (1:1.16.3-1) unstable; urgency=medium
+
+  * New upstream release
+  * Refresh and drop upstreamed patch
+  * Standards-Version to 4.5.1.0
+
+ -- Eric Dorland <eric@debian.org>  Tue, 01 Dec 2020 01:35:51 -0500
+
 automake-1.16 (1:1.16.2-4) unstable; urgency=medium
 
   * Add patch for 'support -fno-common in vala-mix2 test' (Closes: 970142)
