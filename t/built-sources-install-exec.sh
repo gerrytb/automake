@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2009-2020 Free Software Foundation, Inc.
+# Copyright (C) 2002-2020 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,28 +14,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Make sure the documentation targets work as required with BSD make,
-# even in the presence of subdirs (requires presence of default *-am rules).
+# Test that 'install-exec:' honors $(BUILT_SOURCES);
+# https://bugs.gnu.org/43683.
 
-required='makeinfo tex texi2dvi dvips'
 . test-init.sh
 
-mkdir sub
-cat >>configure.ac <<'END'
-AC_CONFIG_FILES([sub/Makefile])
+cat >> configure.ac << 'END'
 AC_OUTPUT
 END
-cat >Makefile.am <<'END'
-SUBDIRS = sub
+
+cat > Makefile.am << 'END'
+BUILT_SOURCES = built1
+built1:
+	echo ok > $@
 END
-: >sub/Makefile.am
 
 $ACLOCAL
 $AUTOCONF
 $AUTOMAKE
-./configure --prefix="$(pwd)/inst"
-$MAKE html dvi ps pdf info \
-      install-html install-dvi install-ps install-pdf install-info \
-      install-man install-data install-exec install uninstall
+./configure --prefix "$(pwd)/inst"
+
+# Make sure this file is rebuilt by make install-exec.
+$MAKE install-exec
+test -f built1
 
 :

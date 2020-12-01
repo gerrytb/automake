@@ -30,7 +30,6 @@ t/pm/Version3.pl
 
 XFAIL_TESTS = \
 t/all.sh \
-t/auxdir-pr19311.sh \
 t/cond17.sh \
 t/gcj6.sh \
 t/override-conditional-2.sh \
@@ -203,6 +202,7 @@ t/built-sources-check.sh \
 t/built-sources-cond.sh \
 t/built-sources-fork-bomb.sh \
 t/built-sources-install.sh \
+t/built-sources-install-exec.sh \
 t/built-sources-subdir.sh \
 t/built-sources.sh \
 t/candist.sh \
@@ -431,6 +431,7 @@ t/distcheck-writable-srcdir.sh \
 t/distcheck-missing-m4.sh \
 t/distcheck-outdated-m4.sh \
 t/distcheck-no-prefix-or-srcdir-override.sh \
+t/distcheck-override-dvi.sh \
 t/distcheck-override-infodir.sh \
 t/distcheck-pr9579.sh \
 t/distcheck-pr10470.sh \
@@ -529,6 +530,7 @@ t/installdir.sh \
 t/add-missing-install-sh.sh \
 t/install-sh-unittests.sh \
 t/install-sh-option-C.sh \
+t/install-sh-option-S.sh \
 t/instdat.sh \
 t/instdat2.sh \
 t/instdir.sh \
@@ -816,6 +818,7 @@ t/tests-environment-backcompat.sh \
 t/testsuite-summary-color.sh \
 t/testsuite-summary-count.sh \
 t/testsuite-summary-count-many.sh \
+t/testsuite-summary-header.sh \
 t/testsuite-summary-reference-log.sh \
 t/test-driver-acsubst.sh \
 t/test-driver-cond.sh \
@@ -830,6 +833,7 @@ t/test-driver-strip-vpath.sh \
 t/test-driver-trs-suffix-registered.sh \
 t/test-driver-fail.sh \
 t/test-driver-is-distributed.sh \
+t/test-extensions-empty.sh \
 t/test-harness-vpath-rewrite.sh \
 t/test-log.sh \
 t/test-logs-repeated.sh \
@@ -1248,6 +1252,8 @@ t/vala-configure.sh \
 t/vala-grepping.sh \
 t/vala-headers.sh \
 t/vala-libs.sh \
+t/vala-libs-distcheck.sh \
+t/vala-libs-vpath.sh \
 t/vala-mix.sh \
 t/vala-mix2.sh \
 t/vala-non-recursive-setup.sh \

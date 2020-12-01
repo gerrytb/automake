@@ -1,7 +1,7 @@
-This is automake.info, produced by makeinfo version 6.5 from
+This is automake.info, produced by makeinfo version 6.7 from
 automake.texi.
 
-This manual is for GNU Automake (version 1.16.2, 1 February 2020), a
+This manual is for GNU Automake (version 1.16.3, 19 November 2020), a
 program that creates GNU standards-compliant Makefiles from template
 files.
 
@@ -31,7 +31,7 @@ File: automake.info,  Node: Top,  Next: Introduction,  Up: (dir)
 GNU Automake
 ************
 
-This manual is for GNU Automake (version 1.16.2, 1 February 2020), a
+This manual is for GNU Automake (version 1.16.3, 19 November 2020), a
 program that creates GNU standards-compliant Makefiles from template
 files.
 
@@ -67,7 +67,6 @@ files.
 * Include::                     Including extra files in an Automake template
 * Conditionals::                Conditionals
 * Silencing Make::              Obtain less verbose output from ‘make’
-* Gnits::                       The effect of ‘--gnu’ and ‘--gnits’
 * Not Enough::                  When Automake is not Enough
 * Distributing::                Distributing the Makefile.in
 * API Versioning::              About compatibility between Automake versions
@@ -402,7 +401,7 @@ not worry: this chapter will walk you through it.
    If you need some teaching material, more illustrations, or a less
 ‘automake’-centered continuation, some slides for this introduction are
 available in Alexandre Duret-Lutz’s Autotools Tutorial
-(http://www.lrde.epita.fr/~adl/autotools.html).  This chapter is the
+(https://www.lrde.epita.fr/~adl/autotools.html).  This chapter is the
 written version of the first part of his tutorial.
 
 * Menu:
@@ -1056,8 +1055,8 @@ target constructs ‘PACKAGE-VERSION.tar.gz’ just as well as ‘dist’, but
 it additionally ensures most of the use cases presented so far work:
 
    • It attempts a full compilation of the package (*note Basic
-     Installation::), unpacking the newly constructed tarball, running
-     ‘make’, ‘make check’, ‘make install’, as well as ‘make
+     Installation::): unpacking the newly constructed tarball, running
+     ‘make’, ‘make dvi’, ‘make check’, ‘make install’, as well as ‘make
      installcheck’, and even ‘make dist’,
    • it tests VPATH builds with read-only source tree (*note VPATH
      Builds::),
@@ -1066,12 +1065,11 @@ it additionally ensures most of the use cases presented so far work:
    • and it checks that ‘DESTDIR’ installations work (*note DESTDIR::).
 
    All of these actions are performed in a temporary directory, so that
-no root privileges are required.  Please note that the exact location
-and the exact structure of such a subdirectory (where the extracted
-sources are placed, how the temporary build and install directories are
-named and how deeply they are nested, etc.)  is to be considered an
-implementation detail, which can change at any time; so do not rely on
-it.
+no root privileges are required.  The exact location and the exact
+structure of such a subdirectory (where the extracted sources are
+placed, how the temporary build and install directories are named and
+how deeply they are nested, etc.)  is to be considered an implementation
+detail, which can change at any time; so do not rely on it.
 
    Releasing a package that fails ‘make distcheck’ means that one of the
 scenarios we presented will not work and some users will be
@@ -1628,24 +1626,52 @@ While Automake is intended to be used by maintainers of GNU packages, it
 does make some effort to accommodate those who wish to use it, but do
 not want to use all the GNU conventions.
 
-   To this end, Automake supports three levels of “strictness”—the
-strictness indicating how stringently Automake should check standards
-conformance.
+   To this end, Automake supports three levels of “strictness”—how
+stringently Automake should enforce conformance with GNU conventions.
+Each strictness level can be selected using an option of the same name;
+see *note Options::.
 
-   The valid strictness levels are:
+   The strictness levels are:
+
+‘gnu’
+     This is the default level of strictness.  Automake will check for
+     basic compliance with the GNU standards for software packaging.
+     *Note (standards)Top:: for full details of these standards.
+     Currently the following checks are made:
+
+        • The files ‘INSTALL’, ‘NEWS’, ‘README’, ‘AUTHORS’, and
+          ‘ChangeLog’, plus one of ‘COPYING.LIB’, ‘COPYING.LESSER’ or
+          ‘COPYING’, are required at the topmost directory of the
+          package.
+
+          If the ‘--add-missing’ option is given, ‘automake’ will add a
+          generic version of the ‘INSTALL’ file as well as the ‘COPYING’
+          file containing the text of the current version of the GNU
+          General Public License existing at the time of this Automake
+          release (version 3 as this is written,
+          <https://www.gnu.org/copyleft/gpl.html>).  However, an
+          existing ‘COPYING’ file will never be overwritten by
+          ‘automake’.
+
+        • The options ‘no-installman’ and ‘no-installinfo’ are
+          prohibited.
+
+     Future versions of Automake will add more checks at this level of
+     strictness; it is advisable to be familiar with the precise
+     requirements of the GNU standards.
+
+     Future versions of Automake may, at this level of strictness,
+     require certain non-standard GNU tools to be available to
+     maintainer-only Makefile rules.  For instance, in the future
+     ‘pathchk’ (*note (coreutils)pathchk invocation::) may be required
+     to run ‘make dist’.
 
 ‘foreign’
      Automake will check for only those things that are absolutely
      required for proper operation.  For instance, whereas GNU standards
      dictate the existence of a ‘NEWS’ file, it will not be required in
      this mode.  This strictness will also turn off some warnings by
-     default (among them, portability warnings).  The name comes from
-     the fact that Automake is intended to be used for GNU programs;
-     these relaxed rules are not the standard mode of operation.
-
-‘gnu’
-     Automake will check—as much as possible—for compliance to the GNU
-     standards for packages.  This is the default.
+     default (among them, portability warnings).
 
 ‘gnits’
      Automake will check for compliance to the as-yet-unwritten “Gnits
@@ -1654,8 +1680,29 @@ conformance.
      recommended that you avoid this option until such time as the Gnits
      standard is actually published (which may never happen).
 
-   *Note Gnits::, for more information on the precise implications of
-the strictness level.
+     Currently, ‘--gnits’ does all the checks that ‘--gnu’ does, and
+     checks the following as well:
+
+        • ‘make installcheck’ will check to make sure that the ‘--help’
+          and ‘--version’ really print a usage message and a version
+          string, respectively.  This is the ‘std-options’ option (*note
+          Options::).
+
+        • ‘make dist’ will check to make sure the ‘NEWS’ file has been
+          updated to the current version.
+
+        • ‘VERSION’ is checked to make sure its format complies with
+          Gnits standards.
+
+        • If ‘VERSION’ indicates that this is an alpha release, and the
+          file ‘README-alpha’ appears in the topmost directory of a
+          package, then it is included in the distribution.  This is
+          done in ‘--gnits’ mode, and no other, because this mode is the
+          only one where version number formats are constrained, and
+          hence the only mode where Automake can automatically determine
+          whether ‘README-alpha’ should be included.
+
+        • The file ‘THANKS’ is required.
 
 
 File: automake.info,  Node: Uniform,  Next: Length Limitations,  Prev: Strictness,  Up: Generalities
@@ -1775,8 +1822,8 @@ File: automake.info,  Node: Length Limitations,  Next: Canonicalization,  Prev: 
 Traditionally, most unix-like systems have a length limitation for the
 command line arguments and environment contents when creating new
 processes (see for example
-<http://www.in-ulm.de/~mascheck/various/argmax/> for an overview on this
-issue), which of course also applies to commands spawned by ‘make’.
+<https://www.in-ulm.de/~mascheck/various/argmax/> for an overview on
+this issue), which of course also applies to commands spawned by ‘make’.
 POSIX requires this limit to be at least 4096 bytes, and most modern
 systems have quite high limits (or are unlimited).
 
@@ -1947,10 +1994,12 @@ source in case you need more recent versions.
      testsuite harness.
 
 ‘texinfo.tex’
-     Not a program, this file is required for ‘make dvi’, ‘make ps’ and
-     ‘make pdf’ to work when Texinfo sources are in the package.  The
-     latest version can be downloaded from
-     <https://www.gnu.org/software/texinfo/>.
+     When Texinfo sources are in the package, this file is required for
+     ‘make dvi’, ‘make ps’ and ‘make pdf’.  The latest version can be
+     downloaded from <https://www.gnu.org/software/texinfo/>.  A working
+     TeX distribution, or at least a ‘tex’ program, is also required.
+     Furthermore, ‘make dist’ invokes ‘make dvi’, so these become
+     requirements for making a distribution with Texinfo sources.
 
 ‘ylwrap’
      This program wraps ‘lex’ and ‘yacc’ to rename their output files.
@@ -2185,11 +2234,11 @@ misunderstand this paragraph: ‘automake’ runs ‘autoconf’ to *scan* your
 
 ‘--gnits’
      Set the global strictness to ‘gnits’.  For more information, see
-     *note Gnits::.
+     *note Strictness::.
 
 ‘--gnu’
      Set the global strictness to ‘gnu’.  For more information, see
-     *note Gnits::.  This is the default strictness.
+     *note Strictness::.  This is the default strictness.
 
 ‘--help’
      Print a summary of the command line options and exit.
@@ -2225,52 +2274,69 @@ misunderstand this paragraph: ‘automake’ runs ‘autoconf’ to *scan* your
 ‘--version’
      Print the version number of Automake and exit.
 
-‘-W CATEGORY’
-‘--warnings=CATEGORY’
-     Output warnings falling in CATEGORY.  CATEGORY can be one of:
+‘-W CATEGORY[,CATEGORY...]’
+‘--warnings=CATEGORY[,CATEGORY...]’
+     Output warnings about a CATEGORY of potential problems with the
+     package.  CATEGORY can be any of:
+
+     ‘cross’
+          Constructs compromising the ability to cross-compile the
+          package.
      ‘gnu’
-          warnings related to the GNU Coding Standards (*note
+          Minor deviations from the GNU Coding Standards (*note
           (standards)Top::).
      ‘obsolete’
-          obsolete features or constructions
+          Obsolete features or constructions.
      ‘override’
-          user redefinitions of Automake rules or variables
+          Redefinitions of Automake rules or variables.
      ‘portability’
-          portability issues (e.g., use of ‘make’ features that are
-          known to be not portable)
+          Portability issues (e.g., use of ‘make’ features that are
+          known to be not portable).
+     ‘portability-recursive’
+          Recursive, or nested, Make variable expansions (‘$(foo$(x))’).
+          These are not universally supported, but are more portable
+          than the other non-portable constructs diagnosed by
+          ‘-Wportability’.  These warnings are turned on by
+          ‘-Wportability’ but can then be turned off specifically by
+          ‘-Wno-portability-recursive’.
      ‘extra-portability’
-          extra portability issues related to obscure tools.  One
-          example of such a tool is the Microsoft ‘lib’ archiver.
+          Extra portability issues, related to rarely-used tools such as
+          the Microsoft ‘lib’ archiver.
      ‘syntax’
-          weird syntax, unused variables, typos
+          Questionable syntax, unused variables, typos, etc.
      ‘unsupported’
-          unsupported or incomplete features
+          Unsupported or incomplete features.
      ‘all’
-          all the warnings
+          Turn on all the above categories of warnings.
      ‘none’
-          turn off all the warnings
+          Turn off all the above categories of warnings.
      ‘error’
-          treat warnings as errors
+          Treat warnings as errors.
 
      A category can be turned off by prefixing its name with ‘no-’.  For
      instance, ‘-Wno-syntax’ will hide the warnings about unused
      variables.
 
-     The categories output by default are ‘obsolete’, ‘syntax’ and
-     ‘unsupported’.  Additionally, ‘gnu’ and ‘portability’ are enabled
-     in ‘--gnu’ and ‘--gnits’ strictness.
+     Warnings in the ‘gnu’, ‘obsolete’, ‘portability’, ‘syntax’, and
+     ‘unsupported’ categories are turned on by default.  The ‘gnu’ and
+     ‘portability’ categories are turned off in ‘--foreign’ strictness.
 
      Turning off ‘portability’ will also turn off ‘extra-portability’,
      and similarly turning on ‘extra-portability’ will also turn on
      ‘portability’.  However, turning on ‘portability’ or turning off
      ‘extra-portability’ will not affect the other category.
 
+     Unknown warning categories supplied as an argument to ‘-W’ will
+     themselves produce a warning, in the ‘unsupported’ category.  This
+     warning is never treated as an error.
+
      The environment variable ‘WARNINGS’ can contain a comma separated
-     list of categories to enable.  It will be taken into account before
-     the command-line switches, this way ‘-Wnone’ will also ignore any
-     warning category enabled by ‘WARNINGS’.  This variable is also used
-     by other tools like ‘autoconf’; unknown categories are ignored for
-     this reason.
+     list of categories to enable.  ‘-W’ settings on the command line
+     take precedence; for instance, ‘-Wnone’ also turns off any warning
+     categories enabled by ‘WARNINGS’.
+
+     Unknown warning categories named in ‘WARNINGS’ are silently
+     ignored.
 
    If the environment variable ‘AUTOMAKE_JOBS’ contains a positive
 number, it is taken as the maximum number of Perl threads to use in
@@ -3379,7 +3445,7 @@ File: automake.info,  Node: Public Macros,  Next: Obsolete Macros,  Up: Macros
      Silent Rules::).
 
 ‘AM_WITH_DMALLOC’
-     Add support for the Dmalloc package (http://dmalloc.com/).  If the
+     Add support for the Dmalloc package (https://dmalloc.com/).  If the
      user runs ‘configure’ with ‘--with-dmalloc’, then define
      ‘WITH_DMALLOC’ and add ‘-ldmalloc’ to ‘LIBS’.
 
@@ -3765,12 +3831,11 @@ File: automake.info,  Node: Alternative,  Next: Subpackages,  Prev: Conditional 
 7.3 An Alternative Approach to Subdirectories
 =============================================
 
-If you’ve ever read Peter Miller’s excellent paper, Recursive Make
-Considered Harmful (http://miller.emu.id.au/pmiller/books/rmch/), the
-preceding sections on the use of make recursion will probably come as
-unwelcome advice.  For those who haven’t read the paper, Miller’s main
-thesis is that recursive ‘make’ invocations are both slow and
-error-prone.
+If you’ve ever read Peter Miller’s excellent paper, ‘Recursive Make
+Considered Harmful’, the preceding sections on the use of make recursion
+will probably come as unwelcome advice.  For those who haven’t read the
+paper, Miller’s main thesis is that recursive ‘make’ invocations are
+both slow and error-prone.
 
    Automake provides sufficient cross-directory support (1) to enable
 you to write a single ‘Makefile.am’ for a complex multi-directory
@@ -4303,7 +4368,7 @@ library, or maybe both.  Their exact nature cannot be determined until
 ‘./configure’ is run: not all platforms support all kinds of libraries,
 and users can explicitly select which libraries should be built.
 (However the package’s maintainers can tune the default; *note The
-‘AC_PROG_LIBTOOL’ macro: (libtool)AC_PROG_LIBTOOL.)
+‘LT_INIT’ macro: (libtool)LT_INIT.)
 
    Because object files for shared and static libraries must be compiled
 differently, libtool is also used during compilation.  Object files
@@ -5629,7 +5694,7 @@ warning.
    ---------- Footnotes ----------
 
    (1) For example, the cfortran package
-(http://www-zeus.desy.de/~burow/cfortran/) addresses all of these
+(https://www-zeus.desy.de/~burow/cfortran/) addresses all of these
 inter-language issues, and runs under nearly all Fortran 77, C and C++
 compilers on nearly all platforms.  However, ‘cfortran’ is not yet Free
 Software, but it will be in the next major release.
@@ -5769,7 +5834,7 @@ File: automake.info,  Node: Vala Support,  Next: Support for Other Languages,  P
 =================
 
 Automake provides initial support for Vala
-(<http://www.vala-project.org/>).  This requires valac version 0.7.0 or
+(<https://www.vala-project.org/>).  This requires valac version 0.7.0 or
 later, and currently requires the user to use GNU ‘make’.
 
      foo_SOURCES = foo.vala bar.vala zardoc.c
@@ -5786,13 +5851,16 @@ will locate the Vala compiler and optionally check its version number.
      [ACTION-IF-NOT-FOUND]) Search for a Vala compiler in ‘PATH’.  If it
      is found, the variable ‘VALAC’ is set to point to it (see below for
      more details).  This macro takes three optional arguments.  The
-     first argument, if present, is the minimum version of the Vala
-     compiler required to compile this package.  If a compiler is found
-     and satisfies MINIMUM-VERSION, then ACTION-IF-FOUND is run (this
-     defaults to do nothing).  Otherwise, ACTION-IF-NOT-FOUND is run.
-     If ACTION-IF-NOT-FOUND is not specified, the default value is to
-     print a warning in case no compiler is found, or if a too-old
-     version of the compiler is found.
+     first argument, if present, is the minimum version of the Vala API
+     required to compile this package.  For Vala releases, this is the
+     same as the major and minor release number; e.g., when ‘valac
+     --version’ reports ‘0.48.7’, ‘valac --api-version’ reports ‘0.48’.
+     If a compiler is found and satisfies MINIMUM-VERSION, then
+     ACTION-IF-FOUND is run (this defaults to do nothing).  Otherwise,
+     ACTION-IF-NOT-FOUND is run.  If ACTION-IF-NOT-FOUND is not
+     specified, the default value is to print a warning in case no
+     compiler is found, or if a too-old version of the compiler is
+     found.
 
    There are a few variables that are used when compiling Vala sources:
 
@@ -6101,10 +6169,11 @@ run.  For instance, there might be a rule to build ‘foo.h’.  This time
 dependency information.
 
    The ‘BUILT_SOURCES’ variable is a workaround for this problem.  A
-source file listed in ‘BUILT_SOURCES’ is made on ‘make all’ or ‘make
-check’ (or even ‘make install’) before other targets are processed.
-However, such a source file is not _compiled_ unless explicitly
-requested by mentioning it in some other ‘_SOURCES’ variable.
+source file listed in ‘BUILT_SOURCES’ is made when ‘make all’, ‘make
+check’, ‘make install’, ‘make install-exec’ (or ‘make dist’) is run,
+before other targets are processed.  However, such a source file is not
+_compiled_ unless explicitly requested by mentioning it in some other
+‘_SOURCES’ variable.
 
    So, to conclude our introductory example, we could use ‘BUILT_SOURCES
 = foo.h’ to ensure ‘foo.h’ gets built before any other target (including
@@ -6117,11 +6186,12 @@ listed in ‘BUILT_SOURCES’.  For instance, a generated ‘.c’ file doesn’
 need to appear in ‘BUILT_SOURCES’ (unless it is included by another
 source), because it’s a known dependency of the associated object.
 
-   It might be important to emphasize that ‘BUILT_SOURCES’ is honored
-only by ‘make all’, ‘make check’ and ‘make install’.  This means you
-cannot build a specific target (e.g., ‘make foo’) in a clean tree if it
-depends on a built source.  However it will succeed if you have run
-‘make all’ earlier, because accurate dependencies are already available.
+   To emphasize, ‘BUILT_SOURCES’ is honored only by ‘make all’, ‘make
+check’, ‘make install’, and ‘make install-exec’ (and ‘make dist’).  This
+means you cannot build an arbitrary target (e.g., ‘make foo’) in a clean
+tree if it depends on a built source.  However it will succeed if you
+have run ‘make all’ earlier, because accurate dependencies are already
+available.
 
    The next section illustrates and discusses the handling of built
 sources on a toy example.
@@ -6534,7 +6604,7 @@ below).
 
 ‘PYTHON_VERSION’
      The Python version number, in the form MAJOR.MINOR (e.g., ‘2.5’).
-     This is currently the value of ‘sys.version[:3]’.
+     This is currently the value of ‘'%u.%u' % sys.version_info[:2]’.
 
 ‘PYTHON_PREFIX’
      The string ‘${prefix}’.  This term may be used in future work that
@@ -6741,7 +6811,6 @@ be prevented by exporting the ‘AM_UPDATE_INFO_DIR’ variable to "‘no’".
      file.  This defaults to ‘dvips’.
 
 ‘TEXINFO_TEX’
-
      If your package has Texinfo files in many directories, you can use
      the variable ‘TEXINFO_TEX’ to tell Automake where to find the
      canonical ‘texinfo.tex’ for your package.  The value of this
@@ -6837,89 +6906,4 @@ user runs ‘make install’.
 * Extending Installation::      Adding your own rules for installation
 * Staged Installs::             Installation in a temporary location
 * Install Rules for the User::  Useful additional rules
-
-
-File: automake.info,  Node: Basics of Installation,  Next: The Two Parts of Install,  Up: Install
-
-12.1 Basics of Installation
-===========================
-
-A file named in a primary is installed by copying the built file into
-the appropriate directory.  The base name of the file is used when
-installing.
-
-     bin_PROGRAMS = hello subdir/goodbye
-
-   In this example, both ‘hello’ and ‘goodbye’ will be installed in
-‘$(bindir)’.
-
-   Sometimes it is useful to avoid the basename step at install time.
-For instance, you might have a number of header files in subdirectories
-of the source tree that are laid out precisely how you want to install
-them.  In this situation you can use the ‘nobase_’ prefix to suppress
-the base name step.  For example:
-
-     nobase_include_HEADERS = stdio.h sys/types.h
-
-will install ‘stdio.h’ in ‘$(includedir)’ and ‘types.h’ in
-‘$(includedir)/sys’.
-
-   For most file types, Automake will install multiple files at once,
-while avoiding command line length issues (*note Length Limitations::).
-Since some ‘install’ programs will not install the same file twice in
-one invocation, you may need to ensure that file lists are unique within
-one variable such as ‘nobase_include_HEADERS’ above.
-
-   You should not rely on the order in which files listed in one
-variable are installed.  Likewise, to cater for parallel make, you
-should not rely on any particular file installation order even among
-different file types (library dependencies are an exception here).
-
-
-File: automake.info,  Node: The Two Parts of Install,  Next: Extending Installation,  Prev: Basics of Installation,  Up: Install
-
-12.2 The Two Parts of Install
-=============================
-
-Automake generates separate ‘install-data’ and ‘install-exec’ rules, in
-case the installer is installing on multiple machines that share
-directory structure—these targets allow the machine-independent parts to
-be installed only once.  ‘install-exec’ installs platform-dependent
-files, and ‘install-data’ installs platform-independent files.  The
-‘install’ target depends on both of these targets.  While Automake tries
-to automatically segregate objects into the correct category, the
-‘Makefile.am’ author is, in the end, responsible for making sure this is
-done correctly.
-
-   Variables using the standard directory prefixes ‘data’, ‘info’,
-‘man’, ‘include’, ‘oldinclude’, ‘pkgdata’, or ‘pkginclude’ are installed
-by ‘install-data’.
-
-   Variables using the standard directory prefixes ‘bin’, ‘sbin’,
-‘libexec’, ‘sysconf’, ‘localstate’, ‘lib’, or ‘pkglib’ are installed by
-‘install-exec’.
-
-   For instance, ‘data_DATA’ files are installed by ‘install-data’,
-while ‘bin_PROGRAMS’ files are installed by ‘install-exec’.
-
-   Any variable using a user-defined directory prefix with ‘exec’ in the
-name (e.g., ‘myexecbin_PROGRAMS’) is installed by ‘install-exec’.  All
-other user-defined prefixes are installed by ‘install-data’.
-
-
-File: automake.info,  Node: Extending Installation,  Next: Staged Installs,  Prev: The Two Parts of Install,  Up: Install
-
-12.3 Extending Installation
-===========================
-
-It is possible to extend this mechanism by defining an
-‘install-exec-local’ or ‘install-data-local’ rule.  If these rules
-exist, they will be run at ‘make install’ time.  These rules can do
-almost anything; care is required.
-
-   Automake also supports two install hooks, ‘install-exec-hook’ and
-‘install-data-hook’.  These hooks are run after all other install rules
-of the appropriate type, exec or data, have completed.  So, for
-instance, it is possible to perform post-installation modifications
-using an install hook.  *Note Extending::, for some examples.
 

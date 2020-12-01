@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2009-2020 Free Software Foundation, Inc.
+# Copyright (C) 2006-2020 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,28 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Make sure the documentation targets work as required with BSD make,
-# even in the presence of subdirs (requires presence of default *-am rules).
+# More install-sh checks: option -S SUFFIX should create backups.
 
-required='makeinfo tex texi2dvi dvips'
+required=non-root
 . test-init.sh
 
-mkdir sub
-cat >>configure.ac <<'END'
-AC_CONFIG_FILES([sub/Makefile])
-AC_OUTPUT
-END
-cat >Makefile.am <<'END'
-SUBDIRS = sub
-END
-: >sub/Makefile.am
+get_shell_script install-sh
 
-$ACLOCAL
-$AUTOCONF
-$AUTOMAKE
-./configure --prefix="$(pwd)/inst"
-$MAKE html dvi ps pdf info \
-      install-html install-dvi install-ps install-pdf install-info \
-      install-man install-data install-exec install uninstall
+# File gets backed up if -S is specified.
+echo foo >file
+echo bar >newfile
+./install-sh -S .BAK newfile file
+test -r file.BAK
 
 :

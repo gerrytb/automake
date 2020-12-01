@@ -14,25 +14,43 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Test if configure bails out if $AR does not work and AM_PROG_AR is used.
+# Check that we can override the 'dvi' target run as part of distcheck,
+# specifically to be 'html', so that TeX is not required.
+# Related to automake bug#8289.
 
+# TeX and texi2dvi should not be needed or invoked.
+TEX=false TEXI2DVI=false
+export TEX TEXI2DVI
+
+required='makeinfo'
 . test-init.sh
 
-: > ar-lib
 cat >> configure.ac << 'END'
-AM_PROG_AR
+AC_OUTPUT
+END
+
+cat > Makefile.am << 'END'
+AM_DISTCHECK_DVI_TARGET = html
+info_TEXINFOS = main.texi
+END
+
+# Protect with leading " # " to avoid spurious maintainer-check failures.
+sed 's/^ *# *//' > main.texi << 'END'
+ # \input texinfo
+ # @setfilename main.info
+ # @settitle main
+ #
+ # @node Top
+ # Hello.
+ # @bye
 END
 
 $ACLOCAL
+$AUTOMAKE -a
 $AUTOCONF
 
-st=0; ./configure AR=/bin/false >stdout 2>stderr || st=$?
-cat stdout
-cat stderr >&2
-test $st -eq 1
-
-grep '^checking.* archiver .*interface.*\.\.\. unknown' stdout
-grep '^configure: error: could not determine /bin/false interface' stderr
-ls *conftest* && exit 1
+./configure
+$MAKE
+$MAKE distcheck
 
 :

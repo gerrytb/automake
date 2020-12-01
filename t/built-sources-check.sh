@@ -44,7 +44,7 @@ BUILT_SOURCES = command2.inc
 check_SCRIPTS = echo.sh
 echo.sh:
 ## The next line ensures that command1.inc has been built before
-## recurring into the subdir.
+## recursing into the subdir.
 	test -f ../command1.inc
 	(echo '#! /bin/sh'; cat command2.inc) > $@
 	chmod +x $@

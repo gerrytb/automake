@@ -1,3 +1,774 @@
+2020-11-18  Jim Meyering  <meyering@fb.com>
+
+	version 1.16.3
+
+	* configure.ac (AC_INIT): Bump version number to 1.16.3.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+	* NEWS: Record release version.
+
+2020-11-16  Jim Meyering  <meyering@fb.com>
+
+	tests: correct preceding change.
+
+	* t/auxdir-pr19311.sh: Fix error in case stmt and match more
+	upcoming versions.
+
+2020-11-16  Jim Meyering  <meyering@fb.com>
+
+	tests: auxdir-pr19311.sh no longer fails with latest autoconf
+
+	* t/list-of-tests.mk (XFAIL_TESTS): Remove from this list.
+	* t/auxdir-pr19311.sh: Instead, run this test only when autoconf
+	is 2.69d or newer.  Otherwise, skip it.
+
+2020-11-16  Jim Meyering  <meyering@fb.com>
+
+	maint: placate maintainer-check's rm -f check
+
+	* t/vala-recursive-setup.sh: Add an unnecessary -f option
+	to an rm invocation to avoid "make maintainer-check" failure.
+
+2020-11-15  Jim Meyering  <meyering@fb.com>
+
+	maint: Update files from upstream with 'make fetch'
+
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/texinfo.tex: Likewise.
+
+2020-11-15  Jim Meyering  <meyering@fb.com>
+
+	tests: avoid missing .dvi failure with parallel tests
+
+	* t/txinfo-no-clutter.sh: Tests of texinfo-related rules
+	had overlap that made them fail often when some rules were
+	run in parallel, so inhibit parallelism in that one directory.
+	See discussion starting at
+	https://lists.gnu.org/r/automake-patches/2020-11/msg00011.html
+
+2020-11-15  Jim Meyering  <meyering@fb.com>
+
+	tests: protect against parallel false failure
+
+	* t/parallel-tests-console-output.sh: Do not depend on the order
+	of items in test summary. With a parallel test run, they may
+	appear in a different order, e.g., when running tests like this:
+	  make check AM_TESTSUITE_MAKE='make -j14'
+	Sort the expected output and the actual output before comparing.
+
+2020-11-15  Jim Meyering  <meyering@fb.com>
+
+	doc: fix quoting in suggested parallel test invocation
+
+	* t/README: Fix reversed single/double quotes.
+
+2020-11-14  Jim Meyering  <meyering@fb.com>
+
+	tests: accommodate an $ac_aux_dir of "." or "./"
+
+	* t/auxdir-pr15981.sh: This test would fail when run with
+	autoconf-2.69d because $ac_aux_dir would be "./" rather than
+	the expected ".".  Accept both.
+
+2020-11-14  Jim Meyering  <meyering@fb.com>
+
+	tests: avoid failures due to missing ar-lib
+
+	* t/ar4.sh: Create dummy ar-lib, as done in other tests,
+	to avoid failure like this:
+	configure: error: cannot find required auxiliary files: ar-lib
+	* t/ar5.sh: Likewise.
+
+2020-11-13  Karl Berry  <karl@freefriends.org>
+
+	install-sh: trailing whitespace.
+
+	* lib/install-sh: remove trailing whitespace. Sigh.
+	(scriptversion): 2020-11-14.01
+
+2020-11-13  Robert Menteer  <reetnem@mac.com>
+
+	dejagnu: quote `pwd` when writing "set objdir" line to site.exp.
+
+	This change fixes https://bugs.gnu.org/44600.
+
+	* lib/am/dejagnu.am (site.exp): quote set objdir line.
+	* NEWS: mention this.
+
+2020-11-12  Karl Berry  <karl@freefriends.org>
+
+	install-sh: new option -S SUFFIX for simple file backups.
+
+	* lib/install-sh: implement and document -S.
+	Patch sent by Julien Elie:
+	        https://lists.gnu.org/archive/html/automake-patches/2018-03/msg00004.html
+	(scriptversion): 2020-11-13.01
+	* t/install-sh-option-S.sh: new test.
+	* t/list-of-tests.mk (handwritten_tests): add it.
+	* NEWS: mention it.
+
+2020-11-10  Karl Berry  <karl@freefriends.org>
+
+	install-sh: --help tweaks.
+
+	* lib/install-sh (usage): avoid too-long line, mention
+	bug reporting address (bug-automake) and automake home page.
+
+2020-11-10  Karl Berry  <karl@freefriends.org>
+
+	install-sh: new option -p to preserve mtime.
+
+	* lib/install-sh: new option -p to call cp -p.
+	Idea from patch sent by Julien Elie:
+	https://lists.gnu.org/archive/html/automake-patches/2018-03/msg00002.html
+	(scriptversion): 2020-11-11.02
+	* NEWS: mention this.
+
+	2020-11-10  Karl Berry  <karl@freefriends.org>
+
+2020-11-10  Karl Berry  <karl@freefriends.org>
+
+	vala: forgot to update lists-of-tests.mk.
+
+	* t/list-of-tests.mk (handwritten_tests): include
+	t/vala-libs-distcheck.sh and t/vala-libs-vpath.sh.
+	Should have been committed with 2020-10-29 vala change,
+	but somehow missed.
+
+	2020-11-10  Karl Berry  <karl@freefriends.org>
+
+2020-11-10  Karl Berry  <karl@freefriends.org>
+
+	install-sh: do not chown existing directories.
+
+	* lib/install-sh: do not chown existing directories.
+	Original patch sent by Julien Elie:
+	https://lists.gnu.org/archive/html/automake-patches/2018-03/msg00003.html
+	(scriptversion): 2020-11-11.01
+	* NEWS: mention this.
+
+2020-11-10  Karl Berry  <karl@freefriends.org>
+
+	install-sh: do not redundantly specify -f to rm.
+
+	* lib/install-sh: do not redundantly specify -f to rm.
+	Mention implication for RMPROG in the --help message.
+	Original patch sent by Julien Elie:
+	https://lists.gnu.org/archive/html/automake-patches/2018-03/msg00005.html
+	* NEWS: mention this.
+
+2020-11-07  Reuben Thomas  <rrt@sc3d.org>
+
+	vala: improve support, especially builddir vs. srcdir.
+
+	This change fixes https://bugs.gnu.org/13002.
+
+	* NEWS: mention these changes.
+	* bin/automake.in: generated C files go in builddir, not srcdir.
+	Distribute the header files generated from VAPI files.
+	* t/vala-libs-distcheck.sh: new test for `make distcheck' of a
+	Vala library.
+	* t/vala-libs-vpath.sh: new test for a VPATH build of a Vala library.
+	* t/vala-libs.sh: add local VAPIs used as external --package to test.
+
+	* t/vala-recursive-setup.sh: we need to make
+	maintainer-clean at one point to remove stamp files to avoid
+	confusing a VPATH build performed after a non-VPATH build.
+	* t/vala-non-recursive-setup.sh: likewise.
+
+	* t/vala-parallel.sh: some test paths need changing to take into
+	account that generated C files now go in builddir.
+	* t/vala-per-target-flags.sh: likewise.
+	* t/vala-recursive-setup.sh: likewise.
+	* t/vala-vpath.sh: likewise.
+
+2020-11-07  Karl Berry  <karl@freefriends.org>
+
+	tests: recompute dependencies when lists-of-tests.mk changes.
+
+	This change fixes https://bugs.gnu.org/44458
+	and updates https://bugs.gnu.org/11347.
+
+	* t/local.mk ($(srcdir)/%D/testsuite-part.am): restore
+	dependency on '%D/list-of-tests.mk' (i.e., t/list-of-tests.mk),
+	partially reverting the change of 26 Apr 2012 for bug#11347.
+	Otherwise, new tests that have dependencies will not cause an
+	update of testsuite-part.am, leading to strange failures
+	(bug#44458). The original problem being fixed in #11347 was
+	unnecessary rebuilding when modifying tests; that should not be
+	affected here, but when new tests are added, it seems reasonable,
+	as well as necessary, to ensure dependencies are updated.
+
+2020-10-27  Miro Hron\v{c}ok  <miro@hroncok.cz>
+
+	python: determine Python (3.10) version number correctly.
+
+	This change fixes https://bugs.gnu.org/44239
+	(and https://bugzilla.redhat.com/show_bug.cgi?id=1889732).
+
+	* m4/python.m4: use print('%u.%u' % sys.version_info[:2]) for
+	the version number instead of merely sys.version[:3], so the
+	numbers are treated as numbers.
+	* t/python-vars.sh (PYTHON_VERSION): Likewise.
+	* doc/automake.texi: Document it.
+	* NEWS: mention it. (Minor tweaks from Karl Berry.)
+
+2020-10-23  Jim Meyering  <meyering@fb.com>
+
+	doc: correct "moved in", to "moved to"
+
+	* NEWS: Correct wording.
+	* contrib/README: Likewise.
+	* doc/automake.texi: Likewise.
+
+2020-10-23  Reuben Thomas  <rrt@sc3d.org>
+
+	contrib/README: fix and clarify the English
+
+2020-10-23  Reuben Thomas  <rrt@sc3d.org>
+
+	Improve Vala compiler detection: use API version, not compiler version
+
+	* m4/vala.m4: check `valac --api-version', not `valac --version'.
+	* doc/automake.texi: update documentation.
+
+2020-10-07  Zack Weinberg  <zackw@panix.com>
+
+	Use complete configure.ac’s in testsuite.
+
+	Autoconf 2.70 will issue warnings if it encounters a configure.ac that doesn’t
+	call both AC_INIT and AC_OUTPUT.
+
+	Automake already issues warnings if it encounters a configure.ac that uses an
+	AM_ macro but doesn’t call AM_INIT_AUTOMAKE or AC_CONFIG_FILES([Makefile]).
+
+	In two places, the testsuite was tripping these warnings, leading to spurious
+	failures with Autoconf 2.70 betas.
+
+	* t/aminit-moreargs-deprecation.sh: Add AC_OUTPUT to test configure.ac.
+	* t/mkdirp-deprecation.sh: Use a complete test configure.ac, not a stub
+	  containing only a use of AM_PROG_MKDIR_P.
+
+2020-10-06  Karl Berry  <karl@freefriends.org>
+
+	automake: install-exec did not depend on $(BUILT_SOURCES).
+
+	This change fixes https://bugs.gnu.org/43683.
+
+	* lib/am/install.am (install-exec): %maybe_BUILT_SOURCES% dependency,
+	twice.  Basic patch from madmurphy (tiny change), message#8.
+	(.MAKE) [maybe_BUILT_SOURCES]: depend on install-exec.
+	* NEWS: mention it.
+	* doc/automake.texi (Sources): mention this (also that make dist
+	depends on $(BUILT_SOURCES)).
+	* t/built-sources-install-exec.sh: new test.
+	* t/list-of-tests.mk (handwritten_TESTS): add it.
+	* t/built-sources-install.sh: typo.
+	* t/built-sources-check.sh: typo.
+
+2020-09-21  Zack Weinberg  <zackw@panix.com>
+
+	Update documentation of warnings options and strictness levels.
+
+	The warning categories ‘cross’ and ‘portability-recursive’ were not mentioned
+	in the manual.
+
+	Also clarify the relationship between warnings categories and strictness
+	levels, and streamline the description of strictness levels by merging the
+	“Gnits” section into the “Strictness” section.
+
+	* doc/automake.texi (Gnits, Strictness): Combine these sections.
+	  Minor revisions to explanation of strictness levels.
+	  (automake Invocation): Add documentation of all the warnings
+	  categories that have been added since the last time this section
+	  was updated.  Minor clarifications.
+
+2020-09-21  Zack Weinberg  <zackw@panix.com>
+
+	Use WARNINGS=none to suppress warnings from autom4te runs.
+
+	aclocal uses autom4te in trace mode to scan configure.ac for macros whose
+	definition is not yet available.  It has a kludge to prevent this from
+	producing spurious warnings, but a cleaner, fully backward compatible, way to
+	get the same effect is to set WARNINGS=none in the environment and not pass
+	down any -W options.  (This is better than passing -Wnone on the command line
+	because it automatically inherits to any subprocesses started by autom4te.)
+
+	Perl’s ‘local’ feature can be used to make the enviironment variable setting
+	temporary, reverting to the previous value when we exit the function.
+
+	automake also runs autom4te (technically autoconf) in trace mode; warnings
+	from this invocation will not be *spurious*, but in the common case where
+	the person running automake is going to run autoconf next, they will be
+	duplicated.  Therefore, make the same change to automake.
+
+	* bin/aclocal.in (trace_used_macros)
+	* bin/automake.in (scan_autoconf_traces):
+	  Use “local $ENV{WARNINGS}='none'” to suppress warnings from autom4te.
+
+2020-09-18  Zack Weinberg  <zackw@panix.com>
+
+	New utility function Automake::ChannelDefs::merge_WARNINGS.
+
+	This function merges a list of warnings categories into the environment
+	variable WARNINGS, returning a new value to set it to.  The intended use
+	is in code of the form
+
+	{
+	  local $ENV{WARNINGS} = merge_WARNINGS ("this", "that");
+
+	  # run a command here with WARNINGS=this,that,etc
+	}
+
+	This is not actually used in automake, but will be in autoconf.
+
+	* lib/Automake/ChannelDefs.pm (merge_WARNINGS): New function.
+
+2020-09-12  Zack Weinberg  <zackw@panix.com>
+
+	t/python-virtualenv.sh: Skip when versions don’t match
+
+	On some operating systems ‘python’ is Python 2.x but ‘virtualenv -ppython’
+	will create a virtualenv that uses Python 3.x.  This is a bug, but it’s
+	not *automake’s* bug, and should not cause t/python-virtualenv.sh to fail.
+	Skip the test, instead of failing it, when the inner=outer version check
+	fails.
+
+	(This also has nothing to do with the main goal of this patchset, it just
+	annoyed me while I was testing.)
+
+	* t/python-virtualenv.sh: Skip test, rather than failing it, when
+	  $py_version_pre != $py_version_post.
+
+2020-09-12  Zack Weinberg  <zackw@panix.com>
+
+	Consistently use ‘our’ instead of ‘use vars’.
+
+	At file scope of a file containing at most one ‘package’ declaration,
+	‘use vars’ is exactly equivalent to ‘our’, and the latter is preferred
+	starting with Perl 5.6.0, which happens to be the oldest version we
+	support.
+
+	(This change has nothing to do with the previous two, but I want to make the
+	same change in Autoconf and that means doing it here for all the files synced
+	from Automake.)
+
+	(I don’t know why, but this change exposed a latent bug in FileUtils.pm where
+	the last pod block in the file didn’t have a ‘=cut’ delimiter, so the code
+	after it was considered documentation, causing ‘require FileUtils’ to fail.)
+
+	* lib/Automake/ChannelDefs.pm
+	* lib/Automake/Channels.pm
+	* lib/Automake/Condition.pm
+	* lib/Automake/Configure_ac.pm
+	* lib/Automake/DisjConditions.pm
+	* lib/Automake/FileUtils.pm
+	* lib/Automake/General.pm
+	* lib/Automake/Getopt.pm
+	* lib/Automake/Options.pm
+	* lib/Automake/Rule.pm
+	* lib/Automake/RuleDef.pm
+	* lib/Automake/VarDef.pm
+	* lib/Automake/Variable.pm
+	* lib/Automake/Wrap.pm
+	* lib/Automake/XFile.pm:
+	  Replace all uses of ‘use vars’ with ‘our’.
+
+	* lib/Automake/FileUtils.pm:
+	  Add missing ‘=cut’ to a pod block near the end of the file.
+
+2020-09-12  Zack Weinberg  <zackw@panix.com>
+
+	Consistently process -W(no-)error after all other warning options.
+
+	automake and aclocal were processing ‘-W(no-)error’ whenever it
+	appeared on the command line, which means that
+	‘-Werror,something-strange’ would issue a hard error, but
+	‘-Wsomething-strange,error’ would only issue a warning.
+
+	It is not desirable for warnings about unknown warning categories ever to be
+	treated as a hard error; that leads to problems for driver scripts like
+	autoreconf, which would like to pass whatever -W options it got on its own
+	command line down to all the tools and not worry about which tools understand
+	which warning categories.  Also, this sort of order dependence is confusing
+	for humans.
+
+	Change parse_warnings to take just one option, the _complete_ list of warning
+	categories seen on the command line, and to process -Werror / -Wno-error after
+	processing all other warnings options.  Thus, unknown warnings categories will
+	always just be a plain warning.  This does mean aclocal has to stop using
+	parse_warnings as a Getopt::Long callback, but that’s not a big deal.
+
+	Similarly, change parse_WARNINGS to record whether ‘error’ appeared in the
+	environment variable, but not activate warnings-are-errors mode itself.
+	parse_warnings picks up the record and honors it, unless it’s overridden by
+	the command line.
+
+	* lib/Automake/ChannelDefs.pm ($werror): New package global (not exported).
+	  (parse_WARNINGS): Do not call switch_warning for ‘error’ / ‘no-error’;
+	  just toggle the value of $werror.
+	  (parse_warnings): Do not call switch_warning immediately for
+	  ‘error’ / ‘no-error’; toggle $werror instead.  Call switch_warning ‘error’
+	  at the very end if $werror is true.  Remove unused $OPTION argument.
+	* bin/automake.in: parse_warnings now takes only one argument.
+	* bin/aclocal.in: Call parse_warnings after parse_options instead of
+	  using it as a parse_options callback.
+
+2020-09-11  Zack Weinberg  <zackw@panix.com>
+
+	Sync ChannelDefs.pm from autoconf.
+
+	ChannelDefs.pm *ought* to be kept in sync between automake and autoconf,
+	because it defines the set of valid -W options, and autoreconf assumes
+	that it can pass arbitrary -W options to all of the tools it invokes.
+	However, it isn’t covered by either project’s ‘make fetch’ and it hasn’t
+	actually *been* in sync for more than 17 years.
+
+	This patch manually brings over all of the changes made on the autoconf side.
+	Most importantly, there is a new warnings channel ‘cross’, for warnings
+	related to cross-compilation.  Also, the ‘usage’ function now *returns*
+	the text to be put into a usage message, instead of printing it itself.
+	(This is necessary on autoconf’s side.)
+
+	* lib/Automake/ChannelDefs.pm: Sync from autoconf.
+	  (cross): New warnings channel.
+	  (portability-recursive): Document.
+	  (usage): Now returns the text to be printed, instead of printing it.
+	  (parse_warnings): Second argument may now be a list.
+
+2020-09-05  Zack Weinberg  <zackw@panix.com>
+
+	automake: be robust against directories containing ().
+
+	This change fixes https://bugs.gnu.org/14196.
+
+	* m4/missing.m4 (AM_MISSING_HAS_RUN): always quote the
+	invocation (not just if $am_aux_dir contains space or tab), in
+	case $am_aux_dir contains () or other metachars not rejected by
+	AM_SANITY_CHECK; quoting with '...' suggested by Jim Meyering.
+	* t/man6.sh (HELP2MAN): adjust grep since missing value
+	is quoted now.
+	* t/am-missing-prog.sh: likewise.
+
+2020-09-04  Issam E. Maghni  <issam.e.maghni@mailbox.org>
+
+	maint: Update files from upstream with 'make fetch'
+
+	* lib/config.guess: Update.
+	* lib/config.sub: Likewise.
+	* lib/gendocs_template: Likewise.
+	* lib/gitlog-to-changelog: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* lib/update-copyright: Likewise.
+
+2020-08-31  Zack Weinberg  <zackw@panix.com>
+
+	perl: use warnings instead of -w; consistent ordering of use, etc.
+
+	Per thread at:
+	https://lists.gnu.org/archive/html/automake-patches/2020-08/msg00009.html
+
+	* bin/aclocal.in: use warnings instead of #!...-w;
+	consistent ordering of basic "use" directives,
+	then BEGIN block,
+	then standard modules in ASCII order,
+	then Automake:: modules (not sort),
+	finally use vars.
+	Also sort @ISA lists and use qw(...) in ASCII order.
+	* bin/automake.in: likewise.
+	* lib/Automake/ChannelDefs.pm: likewise.
+	* lib/Automake/Channels.pm: likewise.
+	* lib/Automake/Condition.pm: likewise.
+	* lib/Automake/Config.in: likewise.
+	* lib/Automake/Configure_ac.pm: likewise.
+	* lib/Automake/DisjConditions.pm: likewise.
+	* lib/Automake/FileUtils.pm: likewise.
+	* lib/Automake/General.pm: likewise.
+	* lib/Automake/Getopt.pm: likewise.
+	* lib/Automake/Item.pm: likewise.
+	* lib/Automake/ItemDef.pm: likewise.
+	* lib/Automake/Language.pm: likewise.
+	* lib/Automake/Location.pm: likewise.
+	* lib/Automake/Options.pm: likewise.
+	* lib/Automake/Rule.pm: likewise.
+	* lib/Automake/RuleDef.pm: likewise.
+	* lib/Automake/VarDef.pm: likewise.
+	* lib/Automake/Variable.pm: likewise.
+	* lib/Automake/Version.pm: likewise.
+	* lib/Automake/Wrap.pm: likewise.
+	* lib/Automake/XFile.pm: remove unnecessary imports of
+	Carp, DynaLoader, and File::Basename.
+
+2020-08-28  Robert Wanamaker  <rlw@nycap.rr.com>
+
+	docs: automake-history.texi @dircategory Software development.
+
+	Per thread at:
+	https://lists.gnu.org/archive/html/automake-patches/2020-08/msg00006.html
+
+	* doc/automake-history.texi (@dircategory): Define.
+
+2020-08-28  Karl Berry  <karl@freefriends.org>
+
+	automake: if TEST_EXTENSIONS is set to empty, don't look inside it.
+
+	This change fixes https://bugs.gnu.org/42635.
+
+	* bin/automake.in (handle_tests): do not use $test_suffixes[0]
+	if it does not exist.
+	* t/test-extensions-empty.sh: new test.
+	* t/list-of-tests.mk (handwritten_TESTS): add it.
+
+2020-08-13  Felix Yan  <felixonmars@archlinux.org>
+
+	docs: typo in tap-driver.sh.
+
+	Per thread at:
+	https://lists.gnu.org/archive/html/automake-patches/2020-08/msg00000.html
+
+	* lib/tap-driver.sh (setup_result_obj): "assing" typo, etc.
+
+2020-08-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	port XFile locking to OpenIndiana
+
+	I observed this problem on an NFS filesystem on an OpenIndiana
+	host (5.11 illumos-dde7ba523f i386).  fcntl (fd, F_SETLK, ...)
+	failed with errno == EINVAL, which POSIX allows for files that
+	do not support locking.
+	* lib/Automake/XFile.pm (lock): Treat EINVAL like ENOLCK.
+
+2020-07-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* Update scriptversions for install-sh, mkinstalldirs.
+
+2020-07-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Install directories mode 755 instead of using umask
+
+	Problem reported by Antoine Amarilli in:
+	https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
+	and followed up by Akim Demaille in:
+	https://lists.gnu.org/archive/html/bug-bison/2020-07/msg00040.html
+	* bin/automake.in: Add a comment about this.
+	* lib/install-sh: Ignore umask; just create directories mode 755
+	unless overridden via -m (for non-intermediate directories only).
+	Also, fix 'umask=$mkdir_umask' typo.
+	* lib/mkinstalldirs: Likewise.
+
+2020-06-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	automake: remove stray up_to_date_p
+
+	* lib/Automake/FileUtils.pm (up_to_date_p):
+	Don’t export up_to_date_p, which was removed in
+	2020-05-11T00:40:14Z!karl@freefriends.org.
+
+2020-06-06  Karl Berry  <karl@freefriends.org>
+
+	tests: support -fno-common in vala-mix2 test.
+
+	This change fixes https://bugs.gnu.org/41726.
+
+	* t/vala-mix2.sh: extern in .h, initialization in .c.
+	GCC 10 defaults to -fno-common.
+
+2020-06-06  Karl Berry  <karl@freefriends.org>
+
+	automake: support AM_TESTSUITE_SUMMARY_HEADER override.
+
+	This change handles https://bugs.gnu.org/11745.
+
+	* lib/am/check.am (AM_TESTSUITE_SUMMARY_HEADER): new variable.
+	Default value is " for $(PACKAGE_STRING)", including quotes,
+	to keep the default output the same.
+	($(TEST_SUITE_LOG)): use it, unquoted.
+	* doc/automake.texi (Scripts-based Testsuites): document it.
+	* NEWS: mention it.
+	* t/testsuite-summary-header.sh: new test.
+	* t/list-of-tests.mk (handwritten_tests): add it.
+	* t/ax/testsuite-summary-checks.sh: fix typo.
+
+2020-05-28  Akim Demaille  <akim@gnu.org>
+
+	docs: promote Makefile snippets that work properly with make -n.
+
+	This change handles https://bugs.gnu.org/10852.
+
+	* doc/automake.texi (Multiple Outputs): Split commands than
+	reinvoke $(MAKE) to avoid file removals during dry runs.
+
+2020-05-25  Karl Berry  <karl@freefriends.org>
+
+	docs: forgot TAR in NEWS; fix " -- " in manual.
+
+	* NEWS: it seems the TAR envvar was never mentioned in NEWS;
+	add it, back for 1.11.3 when it was apparently implemented.
+	* doc/automake.texi: consistently use "---" instead of " --".
+
+2020-05-25  Karl Berry  <karl@freefriends.org>
+
+	docs: TAR envvar overrides "tar" for make dist.
+
+	This change finishes https://bugs.gnu.org/9822.
+
+	* doc/automake.texi (Basics of Distribution): mention that
+	environment variable TAR overrides "tar".
+
+2020-05-17  Karl Berry  <karl@freefriends.org>
+
+	automake: new variable AM_DISTCHECK_DVI_TARGET to override "dvi".
+
+	This change fixes https://bugs.gnu.org/8289.
+
+	* lib/am/distdir.am (AM_DISTCHECK_DVI_TARGET): define as dvi.
+	(distcheck): use it, isntead of hardcoding dvi.
+	* lib/Automake/Variable.pm (%_silent_variable_override): add
+	AM_DISTCHECK_DVI_TARGET.
+	* t/distcheck-override-dvi.sh: new test.
+	* t/list-of-tests.mk (handwritten_TESTS): add it.
+	* doc/automake.texi (Checking the Distribution): document this.
+	(Third-Party Makefiles): explicitly mention that
+	EMPTY_AUTOMAKE_TARGETS is not a built-in or special name.
+	Various other index entries and wording tweaks.
+	* NEWS (Distribution): mention this.
+
+2020-05-10  Karl Berry  <karl@freefriends.org>
+
+	automake: remove unused Automake::FileUtils::up_to_date_p function.
+
+	Per thread at:
+	https://lists.gnu.org/archive/html/automake-patches/2020-04/msg00000.html>
+	especially:
+	https://lists.gnu.org/archive/html/automake-patches/2020-05/msg00003.html
+
+	* lib/Automake/FileUtils.pm (up_to_date_p): remove.
+	Nothing in Automake itself uses this.  It is used in Autoconf's
+	autom4te utility, but Autoconf has its own copy, and the duplication
+	was impeding auto4mte development, as discussed in the thread above.
+	(While here, insert missing =over/=back to placate pod2text.)
+	* NEWS (Miscellanous changes): note this.
+
+2020-05-07  Karl Berry  <karl@freefriends.org>
+
+	docs: make dist implies make dvi.
+
+	This change handles https://bugs.gnu.org/7994.
+
+	* doc/automake.texi (Preparing Distributions): make distcheck
+	runs make dvi.
+	(Auxiliary Programs) <texinfo.tex>: mention
+	that make dist runs make dvi, and therefore a TeX system is
+	required when Texinfo sources are present. Add @cmindex entries
+	for all auxiliary programs while we're here.
+
+2020-05-07  Karl Berry  <karl@freefriends.org>
+
+	tests: TeX system required for two more tests.
+
+	* t/instdir-no-empty.sh (required): makeinfo tex texi2dvi dvips.
+	* t/txinfo-bsd-make-recurs.sh (required): likewise.
+
+2020-04-23  Vincent Lefevre  <vincent@vinc17.net>
+
+	bug#40699: "dist Hook" documentation in manual is incorrect or unclear about write permissions
+
+	On 2020-04-20 14:59:00 -0600, Karl Berry wrote:
+	>     i.e. it does not change the permissions in order to make the removal
+	>     work recursively
+	>
+	> Right, I see it now. Had been testing the wrong thing.
+	>
+	> So, can you propose a specific change for the manual? -k
+
+	I think that it is sufficient to fix the example (the explanation
+	is just below). BTW, the second example is also incorrect.
+
+	commit a639e5b51cadbaff88ca4059b4db4571c811070c
+	Author: Vincent Lefevre <vincent@vinc17.net>
+	Date:   2020-04-23 17:33:54 +0200
+
+	    doc: fix dist-hook examples
+
+2020-04-18  Karl Berry  <karl@freefriends.org>
+
+	cosmetics: spurious word in README, copyright year.
+
+	* README: delete spurious "that"; update copyright year end to 2020.
+	Original suggestion from Vincent Lefevre,
+	https://lists.gnu.org/archive/html/automake-patches/2020-04/msg00007.html
+
+2020-04-08  Samuel Tardieu  <sam@rfc1149.net>
+
+	docs: test-driver options do not accept =, update --help.
+
+	This change fixes https://bugs.gnu.org/22445.
+
+	* lib/test-driver (print_usage): space after --test-name,
+	--log-file, --trs-file, not =. Also mention Automake as source.
+
+2020-04-06  Samy Mahmoudi  <samy.mahmoudi@gmail.com>
+
+	cosmetics: typo in comment.
+
+	This change fixes https://bugs.gnu.org/32100.
+
+	* bin/aclocal.in (install_file): remove duplicate "the" in
+	"Using the real the destination file ...".
+
+2020-04-05  Colomban Wendling  <lists.ban@herbesfolles.org>
+
+	vala: more precise argument matching.
+
+	This change fixes https://bugs.gnu.org/18734.
+
+	* bin/automake.in (lang_vala_finish_target): anchor option regexp
+	so that, e.g., an argument "vapi" does not match the option --vapi.
+	* NEWS: mention this (and preceding checklinkx change, sorry).
+
+2020-04-03  Karl Berry  <karl@freefriends.org>
+
+	doc: update urls in manual and include checklinkx script.
+
+	* doc/automake.texi: update many urls; http -> https,
+	search.cpan.org -> metacpan.org/pod/distribution, node names, etc.
+	Remove sourceware.org/cgi-bin/gnatsweb.pl and
+	miller.emu.id.au/pmiller/books/rmch/ as these are 404
+	and no good replacement is evident.
+	s/perl/Perl/ a couple times in text for good measure.
+	* contrib/checklinkx: new script, a small modification of
+	W3C checklink <https://validator.w3.org/checklink/docs/checklink.html>
+	(W3C license, which is free software), starting from version 4.81
+	installed from CPAN:
+	https://metacpan.org/pod/distribution/W3C-LinkChecker/bin/checklink.pod
+	* doc/local.mk (checklinkx): new target to invoke it, with variables.
+	* Makefile.am (EXTRA_DIST): distribute it.
+	* NEWS: mention all this.
+
+2020-03-24  Karl Berry  <karl@freefriends.org>
+
+	tests: require etags for tags-lisp-space test.
+
+	* t/tags-lisp-space.sh (required): set to etags.
+
+2020-03-24  Karl Berry  <karl@freefriends.org>
+
+	Merge branch 'master' of git.savannah.gnu.org:/srv/git/automake
+
+2020-03-24  Karl Berry  <karl@freefriends.org>
+
+	doc: forgot Python 3 NEWS entries.
+
+	* NEWS: item for Python 3 support in 1.16.2.
+
+2020-03-23  Jim Meyering  <meyering@fb.com>
+
+	maint: Post-release administrivia
+
+	* NEWS: Add header line for next release.
+	* configure.ac (AC_INIT): Bump version number to 1.16b.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
 2020-03-16  Jim Meyering  <meyering@fb.com>
 
 	version 1.16.2
