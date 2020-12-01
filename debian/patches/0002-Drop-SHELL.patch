@@ -8,11 +8,11 @@ Debian systems.
  bin/automake.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/bin/automake.in b/bin/automake.in
-index 212cb38..7923528 100644
---- a/bin/automake.in
-+++ b/bin/automake.in
-@@ -36,7 +36,7 @@ BEGIN
+Index: automake-1.16/bin/automake.in
+===================================================================
+--- automake-1.16.orig/bin/automake.in	2020-12-01 01:24:01.564403114 -0500
++++ automake-1.16/bin/automake.in	2020-12-01 01:24:01.560403159 -0500
+@@ -38,7 +38,7 @@
    # it turns up other systems need the same thing.  After all,
    # if SHELL is used, ./configure's SHELL is always better than
    # the user's SHELL (which may be something like tcsh).
@@ -20,4 +20,4 @@ index 212cb38..7923528 100644
 +  $ENV{'SHELL'} = '/bin/sh' if exists $ENV{'DJDIR'};
  }
  
- use Automake::Config;
+ use Carp;
