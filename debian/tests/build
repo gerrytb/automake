@@ -2,4 +2,4 @@
 
 trap "cp ./test-suite.log $AUTOPKGTEST_ARTIFACTS" EXIT
 
-make check
+PYTHON=python3 make check
