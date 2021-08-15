@@ -1,3 +1,467 @@
+2021-07-25  Jim Meyering  <meyering@fb.com>
+
+	version 1.16.4
+
+	* configure.ac (AC_INIT): Bump version number to 1.16.4.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+	* NEWS: Record release version.
+
+2021-07-22  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch'.
+
+	* lib/gendocs.sh: Update.
+
+2021-07-18  Jim Meyering  <meyering@fb.com>
+
+	maint: adjust version, post-snapshot
+
+	* configure.ac (AC_INIT): Bump version number to 1.16e for snapshot.
+	* m4/amversion.m4: Regenerate.
+
+2021-07-18  Jim Meyering  <meyering@fb.com>
+
+	maint: adjust version for snapshot
+
+	* configure.ac (AC_INIT): Bump version number to 1.16d for snapshot.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
+2021-07-18  Jim Meyering  <meyering@fb.com>
+
+	doc: NEWS tweak
+
+	* NEWS: Indent consistently.
+
+2021-07-17  Karl Berry  <karl@freefriends.org>
+
+	doc: update HACKING.
+
+	* HACKING: update for some current realities.
+
+2021-07-15  Jacob Bachmeyer  <jcb@gnu.org>
+
+	tests: use testsuite/ directory in DejaGnu tests
+
+	Patch posted:
+	https://lists.gnu.org/archive/html/automake-patches/2021-07/msg00009.html
+
+	* t/check12.sh: Consistently use the directory name, testsuite/,
+	for all DejaGnu tests, and always use recursive make to run
+	DejaGnu, for backward and forward compatibility.
+	* t/dejagnu3.sh: Likewise.
+	* t/dejagnu4.sh: Likewise.
+	* t/dejagnu5.sh: Likewise.
+	* t/dejagnu6.sh: Likewise.
+	* t/dejagnu7.sh: Likewise.
+	* t/dejagnu-absolute-builddir.sh: Likewise.
+	* t/dejagnu-relative-srcdir.sh: Likewise.
+	* t/dejagnu-siteexp-extend.sh: Likewise.
+	* t/dejagnu-siteexp-useredit.sh: Likewise.
+	* NEWS: mention this.
+	* THANKS: new contributor.
+
+2021-07-15  Nick Gasson  <nick@nickg.me.uk>
+
+	automake: silent make output for custom link commands.
+
+	Patch posted:
+	https://lists.gnu.org/archive/html/automake-patches/2021-07/msg00010.html
+
+	* bin/automake.in (define_per_target_linker_variable): Use
+	AM_V_${target}_LINK if defined as the verbose variable name for
+	custom link commands.
+	* doc/automake.texi (Program and Library Variables): Document the new
+	variable.
+	* t/link_override.sh: Add extra checks for silent make rules.
+	* NEWS: Mention this.
+	* THANKS: new contributor.
+
+2021-07-11  meyering  <meyering@hx.meyering.net.(none)>
+
+	maint: avoid syntax-check failures
+
+	* maintainer/syntax-checks.mk (toupper): Tighten the regexp
+	to avoid a new false-match in t/python-prefix.sh.
+	* t/instmany-python.sh: Use run_make in place of some $MAKE uses.
+	* t/python-prefix.sh: Likewise.
+	* t/python-vars.sh: Likewise.
+
+2021-07-11  Jim Meyering  <meyering@fb.com>
+
+	maint: make update-copyright
+
+2021-07-11  Allison Karlitskaya  <allison.karlitskaya@redhat.com>
+
+	maint: tweak comment wording
+
+	* doc/automake.texi (List of Automake options): Nit.
+	* t/dist-no-built-sources.sh: Likewise.
+
+2021-07-11  Jim Meyering  <meyering@fb.com>
+
+	no-dist-built-sources: fix-up
+
+	* bin/automake.in (preprocess_file): Process new option here,
+	(handle_dist): ... not here.
+	* lib/Automake/Options.pm (_is_valid_easy_option):
+	Remove pure-dist.
+	* lib/am/distdir.am: Don't factor out the duplicate-looking
+	$(MAKE)... command.  Otherwise, many dist-using tests would fail
+	for me, e.g., t/aclocal-amflags.sh.
+
+2021-07-11  Jim Meyering  <meyering@fb.com>
+
+	test: disable use of ksh in a test that would otherwise hang
+
+	* t/tests-environment-fd-redirect.sh: This test would hang when
+	using ksh93 from Fedora 34 and CentOS 8.  Comments demonstrate
+	the issue reported as https://github.com/ksh93/ksh/issues/316
+
+2021-07-11  Karl Berry  <karl@freefriends.org>
+
+	doc: update THANKS.
+
+	* THANKS: mention contributors over the past couple years.
+
+2021-07-09  Allison Karlitskaya  <allison.karlitskaya@redhat.com>
+
+	dist: add new "dist-no-built-sources" automake option.
+
+	Fixes automake bug https://debbugs.gnu.org/49317.
+
+	* bin/automake.in: implement new option "no-dist-built-sources" to
+	omit the dependency of distdir on $(BUILT_SOURCES).  (Allison's
+	original patch used the option name dist-pure; trivially renamed.)
+	* lib/am/distdir.am (distdir) [DIST_BUILT_SOURCES]: conditionalize
+	the dependency.
+	* lib/Automake/Options.pm (_is_valid_easy_option): list it.
+	* doc/automake.texi (List of Automake options): document it.
+	* NEWS: mention it.
+	* t/dist-no-built-sources.sh: test it.
+	* t/list-of-tests.mk (handwritten_TESTS): add it.
+
+2021-07-07  Karl Berry  <karl@freefriends.org>
+
+	maint: missed commits.
+
+	* INSTALL: Update from gnulib via make fetch.
+	* NEWS: mention config.{guess,sub} restoration of `...`.
+
+2021-07-05  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch'
+
+	* lib/INSTALL: Update.
+	* lib/config.guess: Likewise.
+	* lib/config.sub: Likewise.
+	* lib/gendocs.sh: Likewise.
+	* lib/gendocs_template: Likewise.
+	* lib/gitlog-to-changelog: Likewise.
+	* lib/gnupload: Likewise.
+	* lib/texinfo.tex: Likewise.
+	* lib/update-copyright: Likewise.
+
+2021-07-05  Karl Berry  <karl@freefriends.org>
+
+	tests: forgot to remove dev exit 33 from new test.
+
+	* t/toplevelmd.sh: normal ending.
+
+2021-07-01  Karl Berry  <karl@freefriends.org>
+
+	dist: accept .md versions for README et al.
+
+	This change was suggested by madmurphy; some ideas were taken
+	from the patch he provided.
+	https://lists.gnu.org/archive/html/automake-patches/2021-06/msg00005.html
+
+	* bin/automake.in (@toplevelmd_ok): new global, listing the files
+	for which we will accept .md versions.
+	(@common_files): remove those files from there.
+	(handle_dist): check for .md if non-.md is absent.
+	(handle_minor_options): check for README-alpha.md.
+	(check_gnu_standards): accept .md version if present.
+	(check_gnits_standards): likewise.
+	(usage): output list of .md-accepted files.
+	* doc/automake.texi (Basics of Distribution): document.
+
+	* t/toplevelmd.sh: new test.
+	* t/list-of-tests.mk (handwritten_tests): add it.
+	* NEWS: mention new feature.
+
+2021-06-08  Karl Berry  <karl@freefriends.org>
+
+	doc: omit "really" from manual.
+
+	* doc/automake.texi: remove or replace "really".
+
+2021-06-07  Karl Berry  <karl@freefriends.org>
+
+	doc: --always-make doesn't work.
+
+	* doc/automake.texi (Rebuilding): the GNU Make option
+	--always-make does not work with Automake.
+	Report from Johan Persson,
+	https://lists.gnu.org/archive/html/automake/2021-06/msg00002.html.
+	Also, use "GNU Make" (capital M) more consistently.
+
+2021-05-18  Karl Berry  <karl@freefriends.org>
+
+	doc: wording.
+
+	* README:
+	* t/python-virtualenv.sh:
+	* doc/automake.texi: wording, typos, etc.
+
+2021-05-18  Karl Berry  <karl@freefriends.org>
+
+	doc: move future 2.0 incompatibilities to separate file.
+
+	* NEWS: move info to ...
+	* NEWS-2.0: ... this new file.
+	* Makefile.am (EXTRA_DIST): add it.
+
+2021-05-18  Karl Berry  <karl@freefriends.org>
+
+	python: new python-prefix test.
+
+	* t/python-prefix.sh: new test.
+	* t/list-of-tests.mk (handwritten_tests): add it.
+	* NEWS: describe new Python prefix behavior.
+
+2021-05-18  Joshua Root  <jmr@macports.org>
+
+	python: use Python's sys.prefix and sys.exec_prefix
+
+	for PYTHON_PREFIX and PYTHON_EXEC_PREFIX; new configure options
+	--with-python_prefix and --with-python_exec_prefix to set explicitly.
+
+	This change fixes https://bugs.gnu.org/35322.
+
+	* m4/python.m4 (AM_PATH_PYTHON): use Python's sys.prefix and
+	sys.exec_prefix for PYTHON_PREFIX and PYTHON_EXEC_PREFIX,
+	instead of $prefix and $exec_prefix. But use a variable
+	reference to ${prefix} if it is contained within sys.prefix;
+	similarly for exec_prefix. Also support new configure options
+	to set explicitly.
+	(PYTHON_PREFIX, PYTHON_EXEC_PREFIX): AC_SUBST these.
+	(am_cv_python_pythondir): use our new $am_cv_python_prefix,
+	substituting ${PYTHON_PREFIX}.
+	(am_cv_python_pyexecdir): likewise.
+	* doc/automake.texi (Python): PYTHON_PREFIX, PYTHON_EXEC_PREFIX,
+	document new approach.
+	* t/instmany-python.sh: set PYTHON_PREFIX as needed.
+	* t/python-vars.sh (PYTHON_EXEC_PREFIX, PYTHON_PREFIX): also set from
+	Python's sys.{exec_,}prefix; use ${PYTHON_{EXEC,}PREFIX} instead
+	of ${exec_,}prefix.
+
+2021-05-12  Karl Berry  <karl@freefriends.org>
+
+	doc: HACKING updates.
+
+	* HACKING: some additional tidbits.
+
+2021-02-27  Dirk Mueller  <josef.moellers@suse.com>
+
+	automake: sort hash keys needed for reproducible output.
+
+	This change fixes https://bugs.gnu.org/46744.
+
+	* bin/automake.in: sort keys, in: handle_LIBOBJS, handle_clean,
+	 handle_factored_dependencies, scan_autoconf_traces,
+	 lang_vala_finish.
+	* NEWS: mention this.
+
+2021-02-22  Karl Berry  <karl@freefriends.org>
+
+	doc: a_LDFLAGS always overrides AM_LDFLAGS.
+
+	This change addresses https://bugs.gnu.org/34925.
+
+	* doc/automake.texi (Program and Library Variables): document
+	that using a_LDFLAGS at all, even in the false branch of a
+	conditional, means that AM_LDFLAGS is ignored.
+
+2021-02-21  Mike Frysinger  <vapier@gentoo.org>
+
+	doc: [AM_]RUNTESTFLAGS not [AM_]RUNTESTDEFAULTFLAGS.
+
+	* doc/automake.texi (Other Variables): Change [AM_]RUNTESTDEFAULTFLAGS
+	to [AM_]RUNTESTFLAGS.
+
+2021-02-11  Karl Berry  <karl@freefriends.org>
+
+	doc: user flags last does not always allow overriding.
+
+	This change addresses https://bugs.gnu.org/35526.
+
+	* doc/automake.texi (Flag Variables Ordering): recognize that
+	user flags last does not always allow overriding.
+
+2021-01-06  Karl Berry  <karl@freefriends.org>
+
+	doc: discuss AC_* ordering a little.
+
+	* doc/automake.texi (Optional): mention that AC_CONFIG_AUX_DIR
+	must be called before AM_INIT_AUTOMAKE, and recommend that other
+	AC_CONFIG_* macros be called after.  This seems to be the most
+	common practice.  Autoconf does not currently impose ordering:
+	https://savannah.gnu.org/support/?110416
+
+2020-12-14  Zack Weinberg  <zackw@panix.com>
+
+	Fix some build and test failures with Autoconf 2.70.
+
+	Autoconf 2.70 (released last week) makes a few changes that broke Automake’s
+	expectations, mostly in the test suite.  This patch addresses two of the
+	problems:
+
+	 - autoconf now issues a warning if fed a configure script that doesn’t invoke
+	   both AC_INIT and AC_OUTPUT; this, plus a problem with system-provided
+	   tools (still under investigation) broke the *build* on macOS; it also
+	   causes a couple of spurious testsuite failures.
+
+	 - AC_PACKAGE_NAME and AC_PACKAGE_VERSION are now defined unconditionally.
+	   AM_INIT_AUTOMAKE needs to use m4_ifset instead of m4_ifdef to diagnose
+	   the obsolete use of AC_INIT with fewer than two arguments.  (This change
+	   is compatible with autoconf 2.69; m4_ifset is much older, and it means
+	   ‘defined with a non-empty value’.)
+
+	* configure.ac: Use both AC_INIT and AC_OUTPUT in test configure scripts.
+	* t/deprecated-acinit.sh, t/init.sh: Likewise.
+	* m4/init.m4 (AM_INIT_AUTOMAKE): Use m4_ifset, not m4_ifdef, to detect
+	  AC_PACKAGE_NAME and/or AC_PACKAGE_VERSION not having a value.
+
+2020-12-13  Karl Berry  <karl@freefriends.org>
+
+	python: don't assume $(...) in py-compile.
+
+	This change (very) partially fixes https://bugs.gnu.org/45205.
+
+	* lib/py-compile: use `...` instead of $(...).
+	Solaris 10 /bin/sh is still in use.
+
+2020-12-09  Karl Berry  <karl@freefriends.org>
+
+	tests: more .NOTPARALLEL tests.
+
+	* t/java-compile-run-nested.sh: .NOTPARALLEL in subdirs too.
+
+2020-12-08  Karl Berry  <karl@freefriends.org>
+
+	tests: more .NOTPARALLEL tests.
+
+	* contrib/t/multilib.sh: yet more .NOTPARALLEL for AM_TESTSUITE_MAKE,
+	found by Jim on heavier machines.
+	* t/autodist-stamp-vti.sh: likewise.
+	* t/java-compile-run-nested.sh: likewise.
+	* t/transform2.sh: likewise.
+
+2020-12-07  Karl Berry  <karl@freefriends.org>
+
+	tests: more .NOTPARALLEL tests.
+
+	* contrib/t/multilib.sh: use .NOTPARALLEL to avoid unreproducible
+	(and undebuggable, by me) test failures when running
+	  make -j$njobs AM_TESTSUITE_MAKE="make -j$njobs"
+	for some arbitrary but rather large value of $njobs.
+	The failures don't occur with just make -j; have to run the makes
+	inside the tests in parallel also.
+	* t/java-compile-install.sh: likewise.
+	* t/java-compile-run-flat.sh: likewise.
+	* t/java-uninstall.sh: likewise.
+	* t/vala-headers.sh: likewise.
+
+2020-12-05  Karl Berry  <karl@freefriends.org>
+
+	doc: comment Vala -newer test.
+
+	This change updates https://bugs.gnu.org/44772.
+
+	* bin/automake.in (lang_vala_finish_target): comment that
+	we're checking "C file not older than Vala file", and the
+	log message misleadingly says "reversed".
+
+2020-12-05  Reuben Thomas  <rrt@sc3d.org>
+
+	tags: support setting CTAGS, ETAGS, CSCOPE vars via ./configure.
+
+	This change fixes https://bugs.gnu.org/45013.
+
+	* m4/init.m4: add default settings and AC_SUBST calls for the variables
+	  `CTAGS', `ETAGS' and `CSCOPE'.
+	* lib/am/tags.am: remove default settings of the above variables.
+	* doc/automake.texi (Tags): mention and index.
+	* NEWS: mention.
+
+2020-12-03  Karl Berry  <karl@freefriends.org>
+
+	warnings: be less forceful about a missing subdir-objects option.
+
+	This change somewhat ameliorates https://bugs.gnu.org/20699.
+
+	* bin/automake.in (handle_single_transform): change
+	forward-incompatibility message for subdir-objects to be
+	less draconian and less certain that the change will ever be made.
+	* t/subobj.sh: message text has changed.
+	* doc/automake.texi (Program and Library Variables): mention
+	the unfortunate fact that one directory can clean in a sibling,
+	subdir-objects notwithstanding.
+
+2020-11-27  Karl Berry  <karl@freefriends.org>
+
+	tests: .NOTPARALLEL test-driver-create-log-dir.
+
+	* t/test-driver-create-log-dir.sh (.NOTPARALLEL): add target,
+	since the two tests under sub/ seem to have a race condition.
+	No evident way to debug or reliably reproduce. Reported by Jim.
+
+2020-11-27  Reuben Thomas  <rrt@sc3d.org>
+
+	vala: avoid wrong regeneration of C files.
+
+	This change might fix https://bugs.gnu.org/44772.
+
+	* bin/automake.in (lang_val_finish_target): reverse -newer test
+	to handle files being created at the same time causing
+	spurious rebuilds.
+
+2020-11-24  Karl Berry  <karl@freefriends.org>
+
+	doc: typo.
+
+	This change fixes https://bugs.gnu.org/44845.
+
+	* doc/automake.texi (Vala Support): zardoz.c not zardoc.c.
+
+2020-11-23  Karl Berry  <karl@freefriends.org>
+
+	tests: create log file before running the test script.
+
+	This change partially fixes https://bugs.gnu.org/35762.
+
+	* lib/test-driver: create $log_file before running the
+	test script. Also quote $log_file. Combined suggestions
+	from howaboutsynergy and Eric Blake.
+
+2020-11-22  Karl Berry  <karl@freefriends.org>
+
+	doc: mention overriding SUBDIRS= with TESTS= and recursive make.
+
+	This change palliates https://bugs.gnu.org/42883,
+	though it's not a real fix.
+
+	* doc/automake.texi (Parallel Test Harness): with recursive
+	make, when limiting the tests run, also presumably needed to
+	override SUBDIRS.
+
+2020-11-18  Jim Meyering  <meyering@fb.com>
+
+	maint: Post-release administrivia
+
+	* configure.ac (AC_INIT): Bump version number to 1.16b.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
 2020-11-18  Jim Meyering  <meyering@fb.com>
 
 	version 1.16.3
