@@ -1,3 +1,10 @@
+automake-1.16 (1:1.16.4-1) unstable; urgency=medium
+
+  * New upstream release
+  * Switch to debhelper v13
+
+ -- Eric Dorland <eric@debian.org>  Sun, 15 Aug 2021 13:25:19 -0400
+
 automake-1.16 (1:1.16.3-2) unstable; urgency=medium
 
   * Use python3 when running autopkgtest (Closes: 966434)
