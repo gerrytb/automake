@@ -3,7 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: Eric Dorland <eric@debian.org>
 Standards-Version: 4.5.1.0
-Build-Depends: debhelper-compat (= 12)
+Build-Depends: debhelper-compat (= 13)
 Build-Depends-Indep: autoconf (>= 2.65),
                      gettext,
                      help2man,
