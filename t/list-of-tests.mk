@@ -2,7 +2,7 @@
 ## testsuite.  This fragment is meant to be included by the Makefile.am,
 ## but also to be executed directly by make when bootstrapping automake.
 
-## Copyright (C) 2011-2020 Free Software Foundation, Inc.
+## Copyright (C) 2011-2021 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -410,6 +410,7 @@ t/dist-missing-m4.sh \
 t/dist-readonly.sh \
 t/dist-repeated.sh \
 t/dist-pr109765.sh \
+t/dist-no-built-sources.sh \
 t/dist-vs-built-sources.sh \
 t/distcleancheck.sh \
 t/distcom2.sh \
@@ -848,6 +849,7 @@ t/test-trs-recover.sh \
 t/test-trs-recover2.sh \
 t/test-extensions.sh \
 t/test-extensions-cond.sh \
+t/toplevelmd.sh \
 t/parse.sh \
 t/percent.sh \
 t/percent2.sh \
@@ -926,6 +928,7 @@ t/python-am-path-iftrue.sh \
 t/python-missing.sh \
 t/python-too-old.sh \
 t/python-dist.sh \
+t/python-prefix.sh \
 t/python-vars.sh \
 t/python-virtualenv.sh \
 t/python-pr10995.sh \
