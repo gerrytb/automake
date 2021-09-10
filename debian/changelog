@@ -1,3 +1,10 @@
+automake-1.16 (1:1.16.4-2) unstable; urgency=medium
+
+  * Patch to fix t/python-prefix.sh with python3. Thanks Simon McVittie.
+    (Closes: 992416)
+
+ -- Eric Dorland <eric@debian.org>  Thu, 09 Sep 2021 20:21:31 -0400
+
 automake-1.16 (1:1.16.4-1) unstable; urgency=medium
 
   * New upstream release
