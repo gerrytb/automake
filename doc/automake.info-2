@@ -1,7 +1,7 @@
 This is automake.info, produced by makeinfo version 6.8 from
 automake.texi.
 
-This manual is for GNU Automake (version 1.16.4, 16 July 2021), a
+This manual is for GNU Automake (version 1.16.5, 1 October 2021), a
 program that creates GNU standards-compliant Makefiles from template
 files.
 
@@ -814,12 +814,38 @@ directory (*note Build Directories: (autoconf)Build Directories.), and
 in particular for the ‘distcheck’ rule (*note Checking the
 Distribution::).
 
-   The ‘AM_TESTS_ENVIRONMENT’ and ‘TESTS_ENVIRONMENT’ variables can be
-used to run initialization code and set environment variables for the
-test scripts.  The former variable is developer-reserved, and can be
-defined in the ‘Makefile.am’, while the latter is reserved for the user,
-which can employ it to extend or override the settings in the former;
-for this to work portably, however, the contents of a non-empty
+   Automake ensures that each file listed in ‘TESTS’ is built before it
+is run; you can list both source and derived programs (or scripts) in
+‘TESTS’; the generated rule will look both in ‘srcdir’ and ‘‘..’’.  For
+instance, you might want to run a C program as a test.  To do this you
+would list its name in ‘TESTS’ and also in ‘check_PROGRAMS’, and then
+specify it as you would any other program.
+
+   Programs listed in ‘check_PROGRAMS’ (and ‘check_LIBRARIES’,
+‘check_LTLIBRARIES’, ...)  are only built during ‘make check’, not
+during ‘make all’.  You should list there any program needed by your
+tests that does not need to be built by ‘make all’.  The programs in
+‘check_PROGRAMS’ are _not_ automatically added to ‘TESTS’ because
+‘check_PROGRAMS’ usually lists programs used by the tests, not the tests
+themselves.  If all your programs are in fact test cases, you can set
+‘TESTS = $(check_PROGRAMS)’.
+
+* Menu:
+
+* Testsuite Environment Overrides::
+
+
+File: automake.info,  Node: Testsuite Environment Overrides,  Up: Scripts-based Testsuites
+
+15.2.1.1 Testsuite Environment Overrides
+........................................
+
+The ‘AM_TESTS_ENVIRONMENT’ and ‘TESTS_ENVIRONMENT’ variables can be used
+to run initialization code and set environment variables for the test
+scripts.  The former variable is developer-reserved, and can be defined
+in the ‘Makefile.am’, while the latter is reserved for the user, which
+can employ it to extend or override the settings in the former; for this
+to work portably, however, the contents of a non-empty
 ‘AM_TESTS_ENVIRONMENT’ _must_ be terminated by a semicolon.
 
    The ‘AM_TESTS_FD_REDIRECT’ variable can be used to define file
@@ -830,7 +856,7 @@ hurdle is constituted by Korn shells, which usually set the
 close-on-exec flag on file descriptors opened with the ‘exec’ builtin,
 thus rendering an idiom like ‘AM_TESTS_ENVIRONMENT = exec 9>&2;’
 ineffectual.  This issue also affects some Bourne shells, such as the
-HP-UX’s ‘/bin/sh’,
+HP-UX’s ‘/bin/sh’.
 
      AM_TESTS_ENVIRONMENT = \
      ## Some environment initializations are kept in a separate shell
@@ -842,36 +868,31 @@ HP-UX’s ‘/bin/sh’,
        if test -d /usr/xpg4/bin; then \
          PATH=/usr/xpg4/bin:$$PATH; export PATH; \
        fi;
+
      ## With this, the test scripts will be able to print diagnostic
      ## messages to the original standard error stream, even if the test
      ## driver redirects the stderr of the test scripts to a log file
      ## before executing them.
      AM_TESTS_FD_REDIRECT = 9>&2
 
-Note however that ‘AM_TESTS_ENVIRONMENT’ is, for historical and
-implementation reasons, _not_ supported by the serial harness (*note
-Serial Test Harness::).
+   As another example, a notice that a test is starting can be emitted
+using ‘AM_TESTS_ENVIRONMENT’ (for package maintainers) or
+‘TESTS_ENVIRONMENT’ by users:
 
-   Automake ensures that each file listed in ‘TESTS’ is built before it
-is run; you can list both source and derived programs (or scripts) in
-‘TESTS’; the generated rule will look both in ‘srcdir’ and ’‘..’’.  For
-instance, you might want to run a C program as a test.  To do this you
-would list its name in ‘TESTS’ and also in ‘check_PROGRAMS’, and then
-specify it as you would any other program.
+     make -j12 ... TESTS_ENVIRONMENT='echo RUNNING: "$$f";' check
 
-   Programs listed in ‘check_PROGRAMS’ (and ‘check_LIBRARIES’,
-‘check_LTLIBRARIES’...)  are only built during ‘make check’, not during
-‘make all’.  You should list there any program needed by your tests that
-does not need to be built by ‘make all’.  Note that ‘check_PROGRAMS’ are
-_not_ automatically added to ‘TESTS’ because ‘check_PROGRAMS’ usually
-lists programs used by the tests, not the tests themselves.  Of course
-you can set ‘TESTS = $(check_PROGRAMS)’ if all your programs are test
-cases.
+The shell variable ‘$f’ contains the test name.  (Although technically
+this is not guaranteed, in practice it is extremely unlikely to ever
+change.)  This can be helpful to see when trying to debug test failures.
+
+   Notwithstanding these benefits, ‘AM_TESTS_ENVIRONMENT’ is, for
+historical and implementation reasons, _not_ supported by the serial
+harness (*note Serial Test Harness::).
 
 
 File: automake.info,  Node: Serial Test Harness,  Next: Parallel Test Harness,  Prev: Scripts-based Testsuites,  Up: Simple Tests
 
-15.2.2 Older (and discouraged) serial test harness
+15.2.2 Older (and discouraged) Serial Test Harness
 --------------------------------------------------
 
 First, note that today the use of this harness is strongly discouraged
@@ -4953,7 +4974,7 @@ B.2 Variable Index
 * AM_JAVACFLAGS:                         Java.                (line  44)
 * AM_LDFLAGS:                            Linking.             (line  10)
 * AM_LDFLAGS <1>:                        Program Variables.   (line  59)
-* AM_LFLAGS:                             Yacc and Lex.        (line  60)
+* AM_LFLAGS:                             Yacc and Lex.        (line  65)
 * AM_LIBTOOLFLAGS:                       Libtool Flags.       (line   6)
 * AM_LOG_DRIVER_FLAGS:                   Declaring Custom Test Drivers.
                                                               (line   6)
@@ -4969,10 +4990,10 @@ B.2 Variable Index
 * AM_RUNTESTFLAGS:                       DejaGnu Tests.       (line  24)
 * AM_TESTSUITE_SUMMARY_HEADER:           Scripts-based Testsuites.
                                                               (line  69)
-* AM_TESTS_ENVIRONMENT:                  Scripts-based Testsuites.
-                                                              (line 104)
-* AM_TESTS_FD_REDIRECT:                  Scripts-based Testsuites.
-                                                              (line 112)
+* AM_TESTS_ENVIRONMENT:                  Testsuite Environment Overrides.
+                                                              (line   6)
+* AM_TESTS_FD_REDIRECT:                  Testsuite Environment Overrides.
+                                                              (line  14)
 * AM_UPCFLAGS:                           Unified Parallel C Support.
                                                               (line  21)
 * AM_UPDATE_INFO_DIR:                    Texinfo.             (line  92)
@@ -5012,6 +5033,8 @@ B.2 Variable Index
                                                               (line   6)
 * check_PROGRAMS:                        Program Sources.     (line   6)
 * check_PROGRAMS <1>:                    Default _SOURCES.    (line  28)
+* check_PROGRAMS <2>:                    Scripts-based Testsuites.
+                                                              (line 111)
 * check_SCRIPTS:                         Scripts.             (line  18)
 * CLASSPATH_ENV:                         Java.                (line  53)
 * CLEANFILES:                            Clean.               (line  13)
@@ -5125,7 +5148,7 @@ B.2 Variable Index
 * JAVAROOT:                              Java.                (line  49)
 * LDADD:                                 Linking.             (line  10)
 * LDFLAGS:                               Program Variables.   (line  12)
-* LFLAGS:                                Yacc and Lex.        (line  60)
+* LFLAGS:                                Yacc and Lex.        (line  65)
 * libexec_PROGRAMS:                      Program Sources.     (line   6)
 * libexec_SCRIPTS:                       Scripts.             (line  18)
 * LIBOBJS:                               Optional.            (line  75)
@@ -5262,16 +5285,16 @@ B.2 Variable Index
 * pkglibexec_SCRIPTS:                    Scripts.             (line  18)
 * pkglib_LIBRARIES:                      A Library.           (line   6)
 * pkglib_LTLIBRARIES:                    Libtool Libraries.   (line   6)
-* pkgpyexecdir:                          Python.              (line 104)
-* pkgpythondir:                          Python.              (line  90)
+* pkgpyexecdir:                          Python.              (line 109)
+* pkgpythondir:                          Python.              (line  95)
 * PROGRAMS:                              Uniform.             (line  17)
 * PROGRAMS <1>:                          Uniform.             (line 101)
-* pyexecdir:                             Python.              (line  95)
+* pyexecdir:                             Python.              (line 100)
 * PYTHON:                                Uniform.             (line 101)
 * PYTHON <1>:                            Python.              (line  56)
-* pythondir:                             Python.              (line  86)
+* pythondir:                             Python.              (line  91)
 * PYTHON_EXEC_PREFIX:                    Python.              (line  73)
-* PYTHON_PLATFORM:                       Python.              (line  81)
+* PYTHON_PLATFORM:                       Python.              (line  86)
 * PYTHON_PREFIX:                         Python.              (line  72)
 * PYTHON_VERSION:                        Python.              (line  68)
 * RECHECK_LOGS:                          Parallel Test Harness.
@@ -5292,7 +5315,7 @@ B.2 Variable Index
                                                               (line  73)
 * SUFFIXES:                              Suffixes.            (line   6)
 * sys.exec_prefix Python variable:       Python.              (line  74)
-* sys.platform Python variable:          Python.              (line  82)
+* sys.platform Python variable:          Python.              (line  87)
 * sys.prefix Python variable:            Python.              (line  74)
 * sys.version_info Python variable:      Python.              (line  69)
 * sysconf_DATA:                          Data.                (line   9)
@@ -5304,8 +5327,8 @@ B.2 Variable Index
                                                               (line 104)
 * TESTS <1>:                             Parallel Test Harness.
                                                               (line  12)
-* TESTS_ENVIRONMENT:                     Scripts-based Testsuites.
-                                                              (line 104)
+* TESTS_ENVIRONMENT:                     Testsuite Environment Overrides.
+                                                              (line   6)
 * TEST_EXTENSIONS:                       Parallel Test Harness.
                                                               (line  34)
 * TEST_LOGS:                             Parallel Test Harness.
@@ -5421,6 +5444,7 @@ B.3 General Index
 * --warnings:                            automake Invocation. (line 133)
 * --warnings <1>:                        aclocal Options.     (line  80)
 * --with-dmalloc:                        Public Macros.       (line 122)
+* --with-python-sys-prefix:              Python.              (line  74)
 * --with-python_exec_prefix:             Python.              (line  74)
 * --with-python_prefix:                  Python.              (line  74)
 * -a:                                    automake Invocation. (line  41)
@@ -5967,7 +5991,7 @@ B.3 General Index
 * LDFLAGS and AM_LDFLAGS:                Flag Variables Ordering.
                                                               (line  20)
 * lex problems with HP-UX 10:            Public Macros.       (line  94)
-* lex, multiple lexers:                  Yacc and Lex.        (line  68)
+* lex, multiple lexers:                  Yacc and Lex.        (line  73)
 * LFLAGS and AM_LFLAGS:                  Flag Variables Ordering.
                                                               (line  20)
 * libltdl, introduction:                 Libtool Concept.     (line  29)
@@ -5992,6 +6016,8 @@ B.3 General Index
 * Limitations of automake parser:        General Operation.   (line  33)
 * Linking Fortran 77 with C and C++:     Mixing Fortran 77 With C and C++.
                                                               (line   6)
+* Linking multiple yacc parsers:         Linking Multiple Yacc Parsers.
+                                                              (line   3)
 * LISP primary, defined:                 Emacs Lisp.          (line   6)
 * LN_S example:                          Extending.           (line  86)
 * local targets:                         Extending.           (line  37)
@@ -6051,9 +6077,9 @@ B.3 General Index
 * mostlyclean-local <1>:                 Extending.           (line  41)
 * multiple configurations, example:      VPATH Builds.        (line  48)
 * Multiple configure.ac files:           automake Invocation. (line   6)
-* Multiple lex lexers:                   Yacc and Lex.        (line  68)
+* Multiple lex lexers:                   Yacc and Lex.        (line  73)
 * multiple outputs, rules with:          Multiple Outputs.    (line   6)
-* Multiple yacc parsers:                 Yacc and Lex.        (line  68)
+* Multiple yacc parsers:                 Yacc and Lex.        (line  73)
 * Nested packages:                       Nested Packages.     (line   6)
 * Nesting packages:                      Subpackages.         (line   6)
 * no-define:                             Public Macros.       (line  54)
@@ -6189,6 +6215,8 @@ B.3 General Index
 * Overriding make variables:             General Operation.   (line  51)
 * overriding rules:                      Extending.           (line  26)
 * overriding semantics:                  Extending.           (line  26)
+* Overriding testsuite environment:      Testsuite Environment Overrides.
+                                                              (line   6)
 * PACKAGE, directory:                    Uniform.             (line  19)
 * PACKAGE, prevent definition:           Public Macros.       (line  54)
 * Packages, nested:                      Nested Packages.     (line   6)
@@ -6300,7 +6328,7 @@ B.3 General Index
 * Silent rules:                          Silencing Make.      (line   6)
 * silent rules and libtool:              Automake Silent Rules.
                                                               (line  59)
-* site-packages Python directory:        Python.              (line  87)
+* site-packages Python directory:        Python.              (line  92)
 * site.exp:                              DejaGnu Tests.       (line  26)
 * source tree and build tree:            VPATH Builds.        (line   6)
 * source tree, read-only:                VPATH Builds.        (line  91)
@@ -6383,6 +6411,8 @@ B.3 General Index
 * test-driver:                           Auxiliary Programs.  (line  73)
 * Tests, expected failure:               Scripts-based Testsuites.
                                                               (line  32)
+* Testsuite environment overrides:       Testsuite Environment Overrides.
+                                                              (line   6)
 * testsuite harness:                     Generalities about Testing.
                                                               (line  18)
 * Testsuite progress on console:         Scripts-based Testsuites.
@@ -6447,11 +6477,11 @@ B.3 General Index
                                                               (line  39)
 * xz:                                    The Types of Distributions.
                                                               (line  30)
-* yacc, multiple parsers:                Yacc and Lex.        (line  68)
+* yacc, multiple parsers:                Yacc and Lex.        (line  73)
 * YFLAGS and AM_YFLAGS:                  Flag Variables Ordering.
                                                               (line  20)
 * ylwrap:                                Auxiliary Programs.  (line  85)
-* ylwrap <1>:                            Yacc and Lex.        (line  68)
+* ylwrap <1>:                            Yacc and Lex.        (line  73)
 * zardoz example:                        Complete.            (line  35)
 * zip:                                   The Types of Distributions.
                                                               (line  37)

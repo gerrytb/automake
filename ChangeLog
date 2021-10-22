@@ -1,3 +1,179 @@
+2021-10-03  Jim Meyering  <meyering@fb.com>
+
+	version 1.16.5
+
+	* configure.ac (AC_INIT): Bump version number to 1.16.5.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+	* NEWS: Record release version.
+
+2021-10-03  Jim Meyering  <meyering@fb.com>
+
+	maint: don't use obsolescent "egrep"
+
+	* maintainer/syntax-checks.mk (sc_perl_local): Use grep -E
+	in place of "egrep".
+
+2021-10-03  Jim Meyering  <meyering@fb.com>
+
+	maint: remove trailing white space from a few files
+
+	* NEWS: Remove trailing white space.
+	* NEWS-2.0: Likewise.
+	* contrib/checklinkx: Likewise.
+	* doc/local.mk (chlx_args): Likewise.
+	* m4/python.m4: Likewise.
+	* t/test-extensions-empty.sh: Likewise.
+
+2021-09-28  Karl Berry  <karl@freefriends.org>
+
+	doc: show "RUNNING: <testname>" example using [AM_]TESTS_ENVIRONMENT.
+
+	This change addresses https://bugs.gnu.org/49309.
+
+	* doc/automake.texi (Testsuite Environment Overrides): new
+	subsubsection, separating out [AM_]TESTS_ENVIRONMENT description.
+	Add example to get "RUNNING: <testname>" when a test starts.
+
+2021-09-28  Karl Berry  <karl@freefriends.org>
+
+	doc: tweak Yacc/Lex text; subnode for the yacc linking hack.
+
+	* doc/automake.texi (Alternative): remove obsolete footnote.
+	(Yacc and Lex): tweak wording, more consistent capitalization.
+	(Linking Multiple Yacc Parsers): new subsection.
+
+	Also add @shortcontents.
+	Also update texinfo-master-menu (for the first time in ages).
+
+2021-09-26  Karl Berry  <karl@freefriends.org>
+
+	maint: Update files from upstream with 'make fetch'.
+
+	* lib/config.sub: Update.
+
+2021-09-19  Jim Meyering  <meyering@fb.com>
+
+	maint: Post-release administrivia
+
+	* configure.ac (AC_INIT): Bump version number to 1.16h.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
+2021-09-19  Jim Meyering  <meyering@fb.com>
+
+	maint: adjust version for snapshot
+
+	* configure.ac (AC_INIT): Bump version number to 1.16g for snapshot.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
+2021-09-19  Karl Berry  <karl@freefriends.org>
+
+	python: only use Python's sys.* values if the new option
+
+	--with-python-sys-prefix is specified; otherwise, return to
+	previous behavior of using the GNU ${prefix} and ${exec_prefix}.
+
+	* doc/automake.texi (Python): document the new behavior.
+	* m4/python.m4 (AM_PATH_PYTHON): conditionalize use of Python's
+	sys.* values on the new option --with-python-sys-prefix.
+	* t/python-prefix.sh: doc update.
+	* t/python-vars.sh: test both GNU and Python prefix values.
+	* NEWS: mention this.
+
+2021-09-18  Karl Berry  <karl@freefriends.org>
+
+	doc: update NEWS for yyerror const arg; update THANKS.
+
+	* THANKS: update with missed recent committer.
+	* NEWS: mention yyerror decl in our tests now uses const.
+
+2021-09-11  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: let yacc's yyerror take its argument as a const string
+
+	Some of yacc error messages are const strings; it makes no sense for
+	yyerror to take a 'char *', it should be a 'const char *' as POSIX now
+	requires.
+
+	Fixes all the failures reported by Kiyoshi Kanazawa.
+	<https://lists.gnu.org/r/bug-bison/2021-09/msg00005.html>
+	See bug#50469 <https://debbugs.gnu.org/50469>.
+
+	* t/cond35.sh, t/silent-many-languages.sh, t/silent-yacc-headers.sh,
+	* t/silent-yacc.sh, t/subpkg-yacc.sh, t/suffix10.tap, t/yacc-basic.sh,
+	* t/yacc-clean.sh, t/yacc-d-basic.sh, t/yacc-d-vpath.sh,
+	* t/yacc-deleted-headers.sh, t/yacc-depend.sh, t/yacc-depend2.sh,
+	* t/yacc-dist-nobuild-subdir.sh, t/yacc-dist-nobuild.sh, t/yacc-dry.sh,
+	* t/yacc-line.sh, t/yacc-misc.sh, t/yacc-mix-c-cxx.sh, t/yacc-nodist.sh,
+	* t/yacc-pr204.sh, t/yacc-subdir.sh, t/yacc-vpath.sh,
+	* t/yflags-cmdline-override.sh, t/yflags-force-override.sh
+	(yyerror): From 'char *' to 'const char *'.
+	Enforce consistency: prefer '{}' to '{ return; }'.
+
+2021-09-10  Jan Engelhardt  <jengelh@inai.de>
+
+	automake: consistently depend on install-libLTLIBRARIES.
+
+	Report and patch:
+	https://lists.gnu.org/archive/html/automake/2021-08/msg00016.html
+
+	* bin/automake.in (generate_makefile): depend on
+	install-libLTLIBRARIES for all PROGRAMS and LTLIBRARIES,
+	such as install-pkglibLTLIBRARIES.
+	* NEWS: mention this.
+
+2021-08-17  Nick Bowler  <nbowler@draconx.ca>
+
+	automake: fatal error on second AM_INIT_AUTOMAKE.
+
+	This change addresses https://bugs.gnu.org/50046.
+	Patch posted:
+	https://lists.gnu.org/archive/html/automake-patches/2021-08/msg00000.html
+
+	* m4/init.m4: Make attempts to expand AM_INIT_AUTOMAKE more than
+	once a fatal error at m4 time.
+
+2021-08-08  Karl Berry  <karl@freefriends.org>
+
+	maint: Update doc/help2man.
+
+	* doc/help2man: update to 1.48.24
+
+2021-08-07  Karl Berry  <karl@freefriends.org>
+
+	maint: Update doc/help2man.
+
+	* doc/help2man: update to 1.48.2.
+
+2021-08-07  Dimitri Papadopoulos  <dimitri.papadopoulos@gmail.com>
+
+	doc: typos from codespell.
+
+	* HACKING: typo from codespell.
+	* doc/local.mk: likewise.
+	* lib/am/header-vars.am: likewise.
+	* lib/am/lisp.am: likewise.
+	* t/cond24.sh: likewise.
+	* t/cond36.sh: likewise.
+	* t/dist-auxdir-many-subdirs.sh: likewise.
+	* t/link_override.sh: likewise.
+	* t/parallel-tests-console-output.sh: likewise.
+	* t/subobj11a.sh: likewise.
+	* t/subobj11b.sh: likewise.
+
+2021-07-26  Karl Berry  <karl@freefriends.org>
+
+	cosmetics: py-compile consistently use test, not [ ... ]; indentation.
+
+	* lib/py-compile: consistently use test rather than [ ... ];
+	use consistent sh indentation; check exit status consistently.
+
+2021-07-26  Jim Meyering  <meyering@fb.com>
+
+	maint: Post-release administrivia
+
+	* configure.ac (AC_INIT): Bump version number to 1.16f.
+	* m4/amversion.m4: Likewise (auto-updated by "make bootstrap").
+
 2021-07-25  Jim Meyering  <meyering@fb.com>
 
 	version 1.16.4
