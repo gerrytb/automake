@@ -4,14 +4,14 @@ Priority: optional
 Maintainer: Eric Dorland <eric@debian.org>
 Standards-Version: 4.5.1.0
 Build-Depends: debhelper-compat (= 13)
-Build-Depends-Indep: autoconf (>= 2.65),
+Build-Depends-Indep: autoconf,
                      gettext,
                      help2man,
                      install-info,
                      libtool,
                      libtool-bin,
                      pkg-config,
-                     texinfo (>= 4.9),
+                     texinfo,
 Rules-Requires-Root: no
 Homepage: https://www.gnu.org/software/automake/
 Vcs-Git: https://salsa.debian.org/eric/automake-1.16.git
@@ -21,7 +21,7 @@ Package: automake
 Architecture: all
 Multi-Arch: foreign
 Provides: automake-1.16, automaken
-Depends: autoconf (>= 2.65), autotools-dev (>= 20020320.1), ${misc:Depends}
+Depends: autoconf, autotools-dev, ${misc:Depends}
 Suggests: autoconf-doc, gnu-standards
 Description: Tool for generating GNU Standards-compliant Makefiles
  Automake is a tool for automatically generating `Makefile.in's from
