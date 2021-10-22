@@ -65,7 +65,7 @@ chlx_args = -v --sleep 8 #--exclude-url-file=/tmp/xf
 # - mailto urls, they are always forbidden.
 # - vala, redirects to a Gnome subpage and returns 403 to us.
 # - cfortran, forbidden by site's robots.txt.
-# - search.cpan.org, gets 
+# - search.cpan.org, gets
 # - debbugs.gnu.org/automake, forbidden by robots.txt.
 # - autoconf.html, forbidden by robots.txt (since served from savannah).
 # - https://fsf.org redirects to https://www.fsf.org and nothing to do
@@ -126,7 +126,7 @@ setup_autotools_paths = { \
 $(srcdir)/%D%/amhello-1.0.tar.gz: $(amhello_sources) $(srcdir)/configure.ac
 	$(AM_V_GEN)tmp=amhello-output.tmp \
 	  && $(am__cd) $(srcdir)/%D%/amhello \
-	  && : Make our	aclocal and automake avaiable before system ones. \
+	  && : Make our	aclocal and automake available before system ones. \
 	  && $(setup_autotools_paths) \
 	  && ( \
 	    { $(AM_V_P) || exec 5>&2 >$$tmp 2>&1; } \
