@@ -1,3 +1,13 @@
+automake-1.16 (1:1.16.5-1) unstable; urgency=medium
+
+  [ Eric Dorland ]
+  * New upstream release
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster
+
+ -- Eric Dorland <eric@debian.org>  Sat, 23 Oct 2021 00:35:41 -0400
+
 automake-1.16 (1:1.16.4-2) unstable; urgency=medium
 
   * Patch to fix t/python-prefix.sh with python3. Thanks Simon McVittie.
