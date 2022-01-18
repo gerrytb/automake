@@ -1,3 +1,4 @@
 0001-texi-rename.patch
 0002-Drop-SHELL.patch
 0003-t-python-prefix.sh-Respect-PYTHON-environment-variable.patch
+python3.10.patch
